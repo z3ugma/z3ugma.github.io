@@ -1,0 +1,26 @@
+# Dependencies
+markdown:         redcarpet
+highlighter:      pygments
+
+# Permalinks
+permalink:        pretty
+relative_permalinks: true
+
+# Setup
+title:            Python Monty
+tagline:          'A Jekyll theme'
+description:      'Explaining the terrible code I write as I go. Mostly in Python'
+url:              http://z3ugma.github.io
+baseurl:          /
+
+author:
+  name:           'Fred Turkington'
+  url:            http://z3ugma.github.io
+
+paginate:         5
+
+# Custom vars
+version:          2.1.0
+
+github:
+  repo:           https://github.com/z3ugma/z3ugma.github.io
