@@ -6,4 +6,6 @@ comments: true
 categories: 
 ---
 
-A new platform!
+#A new platform!
+
+I switched from Octopress to Jekyll. I find that it is cleaner, easier to understand, and doesn't require me to puzzle through Git branches and remotes.
