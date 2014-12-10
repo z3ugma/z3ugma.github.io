@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Sending an Email on Microsoft Exchange with Python &middot; Python Monty
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+          <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10565135_10103350446465307_2243295731634219240_n.jpg?oh=3ac00bd4b91147d87dcdde0c775d96a2&oe=551C5DF6&__gda__=1426461091_247303f7a3e20c9f3e67cef994dd2bf9" height="200"/>
+      <h1>
+        <a href="/">
+          Python Monty
+        </a>
+      </h1>
+      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">About</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/archive/">Archive</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Sending an Email on Microsoft Exchange with Python</h1>
+  <span class="post-date">26 Jan 2014</span>
+  <h2>Part 2: Getting the Python EWS Client to Send an Email</h2>
+
+<p>Now that I&#39;ve got a client connect to the Exchange server, I can actually use the SOAP API methods as documented in the WSDL and on <a href="http://msdn.microsoft.com/en-us/library/aa580675.aspx">Microsoft&#39;s documentation</a>.</p>
+
+<p>Suds has great built-in methods and classes for working with SOAP, but <a href="https://lists.fedoraproject.org/pipermail/suds/2010-July/001029.html">as this post confirms</a>, bugs in both Suds and EWS mean that I&#39;ll have to manually build the XML and inject it directly into the message.</p>
+
+<p>So far, I have code that will  connect a Suds client to my exchange server and send an XML message:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">ewsclient</span> <span class="c">#Changes to Suds to make it EWS compliant</span>
+<span class="kn">import</span> <span class="nn">ewsclient.monkey</span> <span class="c"># More Suds changes</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">suds.client</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">suds.transport.https</span> <span class="kn">import</span> <span class="n">WindowsHttpAuthenticated</span>
+
+<span class="c">#Uncomment below to turn on logging</span>
+<span class="c">#logging.basicConfig(level=logging.DEBUG)</span>
+
+<span class="c">#Logging on/accessing EWS SOAP API</span>
+<span class="n">domain</span> <span class="o">=</span> <span class="s">&#39;exchange server&#39;</span>
+<span class="n">username</span> <span class="o">=</span> <span class="s">r&#39;DOMAIN\username&#39;</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s">&#39;password&#39;</span>
+
+<span class="n">transport</span> <span class="o">=</span> <span class="n">WindowsHttpAuthenticated</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">suds</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="s">&quot;https://</span><span class="si">%s</span><span class="s">/EWS/Services.wsdl&quot;</span> <span class="o">%</span> <span class="n">domain</span><span class="p">,</span>
+        <span class="n">transport</span><span class="o">=</span><span class="n">transport</span><span class="p">,</span>
+        <span class="n">plugins</span><span class="o">=</span><span class="p">[</span><span class="n">ewsclient</span><span class="o">.</span><span class="n">AddService</span><span class="p">()])</span>
+
+<span class="c">#Now that the SOAP client is connected to EWS, send this XML soap message</span>
+<span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">CreateItem</span><span class="p">(</span><span class="n">__inject</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;msg&#39;</span><span class="p">:</span><span class="n">xml</span><span class="p">})</span></code></pre></div>
+
+<p>Now, we just need to tell it what to send in that message.</p>
+
+<h3>Building the XML Message</h3>
+
+<p>There are all kinds of things you can talk to EWS about, but I just want to talk about emails.</p>
+
+<p>I started with a <a href="http://msdn.microsoft.com/en-us/library/office/aa566468.aspx">template message from Microsoft</a> and changed a few things.</p>
+
+<p>First,  I wanted to place a copy in my SentItems folder, so I added</p>
+
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;SavedItemFolderId&gt;</span>
+        <span class="nt">&lt;t:DistinguishedFolderId</span> <span class="na">Id=</span><span class="s">&quot;sentitems&quot;</span> <span class="nt">/&gt;</span>
+ <span class="nt">&lt;/SavedItemFolderId&gt;</span></code></pre></div>
+
+<p>In my first iteration, I had the body sent as text but I wanted to replace it with an HTML email template to make it prettier. This was tough for me to figure out; I kept getting XML validation errors. Eventually, I learned about <a href="http://www.w3schools.com/xml/xml_cdata.asp">CDATA</a>, a tag that tells the XML parser to ignore whatever&#39;s inside it.</p>
+
+<p>I replaced the Body tag with:</p>
+
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;t:Body</span> <span class="na">BodyType=</span><span class="s">&quot;HTML&quot;</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[#Body#]]&gt;</span><span class="nt">&lt;/t:Body&gt;</span></code></pre></div>
+
+<p>And will replace the #Body# with some HTML from an email template later.
+Lastly, I put in some information about an automatic Reminder to get the final message:</p>
+
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;soap:Envelope</span> <span class="na">xmlns:soap=</span><span class="s">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>
+  <span class="na">xmlns:t=</span><span class="s">&quot;http://schemas.microsoft.com/exchange/services/2006/types&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;soap:Body&gt;</span>
+    <span class="nt">&lt;CreateItem</span> <span class="na">MessageDisposition=</span><span class="s">&quot;SendAndSaveCopy&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;http://schemas.microsoft.com/exchange/services/2006/messages&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;SavedItemFolderId&gt;</span>
+        <span class="nt">&lt;t:DistinguishedFolderId</span> <span class="na">Id=</span><span class="s">&quot;sentitems&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/SavedItemFolderId&gt;</span>
+      <span class="nt">&lt;Items&gt;</span>
+        <span class="nt">&lt;t:Message&gt;</span>
+          <span class="nt">&lt;t:ItemClass&gt;</span>IPM.Note<span class="nt">&lt;/t:ItemClass&gt;</span>
+          <span class="nt">&lt;t:Subject&gt;</span>Python EWS Bot #SubjectDate#<span class="nt">&lt;/t:Subject&gt;</span>
+          <span class="nt">&lt;t:Body</span> <span class="na">BodyType=</span><span class="s">&quot;HTML&quot;</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[#Body#]]&gt;</span><span class="nt">&lt;/t:Body&gt;</span>
+          <span class="nt">&lt;t:ReminderDueBy&gt;</span>#ReminderDate#T11:00:00-06:00<span class="nt">&lt;/t:ReminderDueBy&gt;</span>
+          <span class="nt">&lt;t:ReminderIsSet&gt;</span>1<span class="nt">&lt;/t:ReminderIsSet&gt;</span>
+          <span class="nt">&lt;t:ReminderMinutesBeforeStart&gt;</span>180<span class="nt">&lt;/t:ReminderMinutesBeforeStart&gt;</span>
+          <span class="nt">&lt;t:ToRecipients&gt;</span>
+            <span class="nt">&lt;t:Mailbox&gt;</span>
+              <span class="nt">&lt;t:EmailAddress&gt;</span>email@domain.com<span class="nt">&lt;/t:EmailAddress&gt;</span>
+            <span class="nt">&lt;/t:Mailbox&gt;</span>
+          <span class="nt">&lt;/t:ToRecipients&gt;</span>
+          <span class="nt">&lt;t:IsRead&gt;</span>false<span class="nt">&lt;/t:IsRead&gt;</span>
+        <span class="nt">&lt;/t:Message&gt;</span>
+      <span class="nt">&lt;/Items&gt;</span>
+    <span class="nt">&lt;/CreateItem&gt;</span>
+  <span class="nt">&lt;/soap:Body&gt;</span>
+<span class="nt">&lt;/soap:Envelope&gt;</span></code></pre></div>
+
+<p>Each of those #Variable# tags I put in the XML will be string-replaced on the Python side.</p>
+
+<h3>Putting Variables into the Message</h3>
+
+<p>I wrote a quick little function to take a list of tuples and a template text and replace the text in the template:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#Replacing the text in the XML SOAP message</span>
+<span class="k">def</span> <span class="nf">xmlreplace</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="c">#Make a string out of the current time</span>
+<span class="n">curdatetime</span> <span class="o">=</span>  <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%c</span><span class="s">&quot;</span><span class="p">)</span>
+
+<span class="c">#Set the Reminder Date for one week from today</span>
+<span class="n">reminderday</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">+</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="c">#Open an HTML file to use as the body</span>
+<span class="n">template</span> <span class="o">=</span> <span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="c">#List of parameters in the XML to replace: (template, replacement).</span>
+<span class="n">xmlparams</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;#SubjectDate#&#39;</span><span class="p">,</span><span class="n">curdatetime</span><span class="p">),(</span><span class="s">&#39;#Body#&#39;</span><span class="p">,</span> <span class="n">body</span><span class="p">),(</span><span class="s">&#39;#ReminderDate#&#39;</span><span class="p">,</span><span class="n">reminderday</span><span class="p">)]</span>
+
+<span class="c"># Replace everything in the XML template shown above with the new dynamic values</span>
+<span class="n">xml</span> <span class="o">=</span> <span class="n">xmlreplace</span><span class="p">(</span><span class="n">xmltemplate</span><span class="p">,</span><span class="n">xmlparams</span><span class="p">)</span></code></pre></div>
+
+<p>Now that I have XML as a big string, I can send my message:</p>
+
+<p><img src="/images/pythonewsemail.png" /></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2014/12/10/keeping-virtualbox-and-vagrant-boxes-alive-through-reboots/">
+            Keeping VirtualBox and Vagrant Boxes Alive Through Reboots
+            <small>10 Dec 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/12/07/A-new-platform/">
+            A new platform
+            <small>07 Dec 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/05/01/Find-all-the-casks/">
+            Find all the casks
+            <small>01 May 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Keeping VirtualBox and Vagrant Boxes Alive Through Reboots &middot; Python Monty
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+          <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10565135_10103350446465307_2243295731634219240_n.jpg?oh=3ac00bd4b91147d87dcdde0c775d96a2&oe=551C5DF6&__gda__=1426461091_247303f7a3e20c9f3e67cef994dd2bf9" height="200"/>
+      <h1>
+        <a href="/">
+          Python Monty
+        </a>
+      </h1>
+      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">About</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/archive/">Archive</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Keeping VirtualBox and Vagrant Boxes Alive Through Reboots</h1>
+  <span class="post-date">10 Dec 2014</span>
+  <p>I recently switched from a dedicated Windows 7 PC for my home server to a Mac Mini, mostly for the better electricity consumption and the fact the the PC was having nightly bluescreen crashes and restarting.</p>
+
+<p>I have always been a fan of RDP, and my office uses PCs - so to keep the convenient RDP access to home, I installed <a href="www.virtualbox.org">VirtualBox</a> and created a Windows VM. This has a bridged network adapter, so it just looks like another computer on my home network.</p>
+
+<p>However, when Mac OS restarts, or after a power failure, the virtual machine is powered off. This won&#39;t do.</p>
+
+<h2>Daemons in Mac OS</h2>
+
+<p>Mac OS has the usual suspects like cron, but has a neat daemon launching system, appropriately called <a href="https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html">launchd</a>, introduced in 10.4.</p>
+
+<p>Launchd works by &quot;loading&quot; (think of it like a soft-install) objects called &#39;&#39;&#39;plist&#39;&#39;&#39;. Plist is a serialized object format like JSON or XML that tells launchd the properties of how to execute a particular daemon.</p>
+
+<p>If you want to play with creating your own plists, head over to <a href="http://launched.zerowidth.com">http://launched.zerowidth.com</a>, where Nathan Witmer has created a plist generator.</p>
+
+<h2>Automatic Tasks in VirtualBox</h2>
+
+<p>VirtualBox comes with a command-line interface to automate tasks on VMs. My need is simple - just boot the box:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">VBoxHeadless -s Windows -v on</code></pre></div>
+
+<p>This follows the syntax for VBoxHeadless:</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">-s, -startvm, --startvm &lt;name|uuid&gt;   Start given VM (required argument)
+  -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don&#39;t change the setting</code></pre></div>
+
+<p>VRDE is the Virtual Remote Desktop extension, which allows RDP out of the box through a special Oracle tool.</p>
+
+<h2>Booting my VM at Login</h2>
+
+<p>launchd has multiple &quot;runlevels&quot; - there are System level daemons, and daemons for whenever a given user logs in. User daemons are stored at ~/Library/LaunchAgents/.</p>
+
+<p>With the help of the launched tool, I made a plist for my command:</p>
+
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple Computer//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span>
+<span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;dict&gt;</span>
+    <span class="nt">&lt;key&gt;</span>KeepAlive<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;true/&gt;</span>
+    <span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>io.zzzz.z3ugma.launched.windowsvirtualbox<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;array&gt;</span>
+        <span class="nt">&lt;string&gt;</span>VBoxHeadless<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;string&gt;</span>-s<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;string&gt;</span>Windows<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;string&gt;</span>-v<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;string&gt;</span>on<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;/array&gt;</span>
+    <span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;true/&gt;</span>
+    <span class="nt">&lt;key&gt;</span>UserName<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>fred<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;key&gt;</span>WorkingDirectory<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>/Users/fred<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;key&gt;</span>StandardErrorPath<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;key&gt;</span>StandardOutPath<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
+<span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/plist&gt;</span></code></pre></div>
+
+<p>Notable options in here:</p>
+
+<ul>
+<li><strong>KeepAlive = True</strong> - If the VBoxHeadless process crashes for some reason, or someone manually shuts down the box (perhap from within RDP), the box restarts itself</li>
+<li><strong>RunAtLoad = True</strong> - Run this daemon when the daemon is loaded. &quot;Loading&quot; occurs at login, and when a user manually loads the daemon.</li>
+<li><strong>WorkingDirectory</strong> &amp; <strong>UserName</strong> - These are special directives needed because of the peculiar way that VirtualBox runs. Just set it to the home folder of the user running the daemon.</li>
+</ul>
+
+<p>This xml is saved into a file in /Library/LaunchAgents. Navigate to that directory, and execute</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">launchctl load &lt;name of plist&gt;</code></pre></div>
+
+<p><em>launchctl</em> is the program that Mac OS uses to control launchd processes. Once the plist has been loaded, it should persist after reboot.</p>
+
+<p>A similar plist can be used for the command &#39;vagrant up&#39; to launch vagrant vms.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2014/12/07/A-new-platform/">
+            A new platform
+            <small>07 Dec 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/05/01/Find-all-the-casks/">
+            Find all the casks
+            <small>01 May 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/02/09/using-python-to-pay-parking-tickets/">
+            Using Python to Pay Parking Tickets
+            <small>09 Feb 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>
