@@ -4,7 +4,7 @@
  <title>Python Monty</title>
  <link href="http://z3ugma.github.io/atom.xml" rel="self"/>
  <link href="http://z3ugma.github.io/"/>
- <updated>2014-12-10T15:19:49-06:00</updated>
+ <updated>2014-12-10T21:00:51-06:00</updated>
  <id>http://z3ugma.github.io</id>
  <author>
    <name>Fred Turkington</name>
@@ -88,6 +88,91 @@
 &lt;/ul&gt;
 
 &lt;p&gt;This xml is saved into a file in /Library/LaunchAgents. Navigate to that directory, and execute&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;launchctl load &amp;lt;name of plist&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;launchctl&lt;/em&gt; is the program that Mac OS uses to control launchd processes. Once the plist has been loaded, it should persist after reboot.&lt;/p&gt;
+
+&lt;p&gt;A similar plist can be used for the command &amp;#39;vagrant up&amp;#39; to launch vagrant vms.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Keeping VirtualBox and Vagrant Boxes Alive Through Reboots</title>
+   <link href="http://z3ugma.github.io/2014/12/10/keeping%20virtualbox%20and%20vagrant%20boxes%20alive%20through%20reboots/"/>
+   <updated>2014-12-10T12:50:55-06:00</updated>
+   <id>http://z3ugma.github.io/2014/12/10/keeping virtualbox and vagrant boxes alive through reboots</id>
+   <content type="html">&lt;p&gt;I recently switched from a dedicated Windows 7 PC for my home server to a Mac Mini, mostly for the better electricity consumption and the fact the the PC was having nightly bluescreen crashes and restarting.&lt;/p&gt;
+
+&lt;p&gt;I have always been a fan of RDP, and my office uses PCs - so to keep the convenient RDP access to home, I installed &lt;a href=&quot;www.virtualbox.org&quot;&gt;VirtualBox&lt;/a&gt; and created a Windows VM. This has a bridged network adapter, so it just looks like another computer on my home network.&lt;/p&gt;
+
+&lt;p&gt;However, when Mac OS restarts, or after a power failure, the virtual machine is powered off. This won&amp;#39;t do.&lt;/p&gt;
+
+&lt;h2&gt;Daemons in Mac OS&lt;/h2&gt;
+
+&lt;p&gt;Mac OS has the usual suspects like cron, but has a neat daemon launching system, appropriately called &lt;a href=&quot;https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html&quot;&gt;launchd&lt;/a&gt;, introduced in 10.4.&lt;/p&gt;
+
+&lt;p&gt;Launchd works by &amp;quot;loading&amp;quot; (think of it like a soft-install) objects called &amp;#39;&amp;#39;&amp;#39;plist&amp;#39;&amp;#39;&amp;#39;. Plist is a serialized object format like JSON or XML that tells launchd the properties of how to execute a particular daemon.&lt;/p&gt;
+
+&lt;p&gt;If you want to play with creating your own plists, head over to &lt;a href=&quot;http://launched.zerowidth.com&quot;&gt;http://launched.zerowidth.com&lt;/a&gt;, where Nathan Witmer has created a plist generator.&lt;/p&gt;
+
+&lt;h2&gt;Automatic Tasks in VirtualBox&lt;/h2&gt;
+
+&lt;p&gt;VirtualBox comes with a command-line interface to automate tasks on VMs. My need is simple - just boot the box:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;VBoxHeadless -s Windows -v on&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This follows the syntax for VBoxHeadless:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;-s, -startvm, --startvm &amp;lt;name|uuid&amp;gt;   Start given VM (required argument)
+  -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don&amp;#39;t change the setting&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;VRDE is the Virtual Remote Desktop extension, which allows RDP out of the box through a special Oracle tool.&lt;/p&gt;
+
+&lt;h2&gt;Booting my VM at Login&lt;/h2&gt;
+
+&lt;p&gt;launchd has multiple &amp;quot;runlevels&amp;quot; - there are System level daemons, and daemons for whenever a given user logs in. User daemons are stored at ~/Library/LaunchAgents/.&lt;/p&gt;
+
+&lt;p&gt;With the help of the launched tool, I made a plist for my command:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE plist PUBLIC &amp;quot;-//Apple Computer//DTD PLIST 1.0//EN&amp;quot; &amp;quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&amp;quot;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;plist&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;version=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dict&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;KeepAlive&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;true/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;Label&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;io.zzzz.z3ugma.launched.windowsvirtualbox&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;ProgramArguments&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;array&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;VBoxHeadless&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;-s&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;Windows&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;-v&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;on&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/array&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;RunAtLoad&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;true/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;UserName&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;fred&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;WorkingDirectory&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;/Users/fred&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;StandardErrorPath&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;/Users/fred/windowsvm.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;StandardOutPath&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;/Users/fred/windowsvm.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dict&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/plist&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notable options in here:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;KeepAlive = True&lt;/strong&gt; - If the VBoxHeadless process crashes for some reason, or someone manually shuts down the box (perhap from within RDP), the box restarts itself&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RunAtLoad = True&lt;/strong&gt; - Run this daemon when the daemon is loaded. &amp;quot;Loading&amp;quot; occurs at login, and when a user manually loads the daemon.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;WorkingDirectory&lt;/strong&gt; &amp;amp; &lt;strong&gt;UserName&lt;/strong&gt; - These are special directives needed because of the peculiar way that VirtualBox runs. Just set it to the home folder of the user running the daemon.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This xml is saved into a file in ~/Library/LaunchAgents. Navigate to that directory, and execute&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;launchctl load &amp;lt;name of plist&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -781,6 +866,63 @@ binascii.Error: Incorrect padding&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Anyway, here&amp;#39;s where I&amp;#39;ll be keeping track of the fun stuff I come across while learning (mostly) Python and other programming.&lt;/p&gt;
 
 &lt;p&gt;-Fred&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Homebrew Temperature Monitoring</title>
+   <link href="http://z3ugma.github.io/2013/10/24/homebrew-temperature-monitoring/"/>
+   <updated>2013-10-24T20:50:55-05:00</updated>
+   <id>http://z3ugma.github.io/2013/10/24/homebrew-temperature-monitoring</id>
+   <content type="html">&lt;p&gt;A few weeks ago, I embarked on a project to monitor the temperature of my homebrews as they ferment and bottle-age.&lt;/p&gt;
+
+&lt;h3&gt;The Data&lt;/h3&gt;
+
+&lt;p&gt;In order to record temperatures, I ordered 3 TEMPer temperature-logging modules from eBay. These were recommended by lots of homebrewers on HomeBrewTalk as cheap and effective, although occasionally users reported large variances in temperatures and DOA sensors.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/usbtemper.png&quot; alt=&quot;The product ad&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;These are manufactured by PCsensor.com, which provides a linux command-line client to read the data of the thermometer.&lt;/p&gt;
+
+&lt;p&gt;I ordered three, and hooked them up to my brewery server.&lt;/p&gt;
+
+&lt;h3&gt;The First Hiccup&lt;/h3&gt;
+
+&lt;p&gt;The problem I encountered is that the pcsensor software was only designed to display one result at a time, and wasn&amp;#39;t configured for displaying multiple sensors. Luckily, I found &lt;a href=&quot;http://momtchil.momtchev.com/node/6&quot;&gt;a fork of the project that had been edited to allow that&lt;/a&gt; by following &lt;a href=&quot;http://webcache.googleusercontent.com/search?q=cache:www.penguinsunbound.com/User:goeko/Temp_Sensor&quot;&gt;this guide&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Using lsusb | grep TEMPer, I was able to confirm that the computer was reading my sensors. I installed the pcsensor-multi software:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;wget http://momtchil.momtchev.com/files/pcsensor-1.0.0-multi.tgz
+tar -zxvf pcsensor-1.0.0-multi.tgz
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;pcsensor-1.0.0
+make&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;(note: a backed-up copy of the pcsensor program can be found &lt;a href=&quot;/files/pcsensor-1.0.0-multi.tgz&quot;&gt;here&lt;/a&gt;)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;And moved it into /usr/bin/local.&lt;/p&gt;
+
+&lt;h3&gt;Logging Temperatures&lt;/h3&gt;
+
+&lt;p&gt;At this point, I could enter the pcsensor command and get output:&lt;/p&gt;
+
+&lt;p&gt;2011/12/08 14:09:16 Temperature 65.19F 18.44C
+2011/12/08 14:09:16 Temperature 61.59F 16.44C&lt;/p&gt;
+
+&lt;p&gt;But I wouldn&amp;#39;t be around all day to check out the temperatures. I set up a cron job to write the temperatures to a log:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# m h dom mon dow command
+* * * * * /usr/local/bin/pcsensor &amp;gt;&amp;gt; /home/fred/temperatures.log&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This reads as: ALL minutes (m) of ALL hours (h) of ALL days of the month on ALL days of the week, run the pcsensor program and add the output to the file &amp;quot;temperatures.log&amp;quot;.
+So, every minute, the server adds temperature data to the log.&lt;/p&gt;
+
+&lt;h3&gt;Graphing the Data&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/googlechart.png&quot; alt=&quot;A Google Chart graph&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;The Penguins Unbound link uses gnuplot to graph the data, an approach that I might take up in the future. However, I wanted to use the Google Charts API to generate my graphs.&lt;/p&gt;
+
+&lt;p&gt;To be continued: the exciting saga of why you don&amp;#39;t try to parse thousands of lines of text as a time-series database.&lt;/p&gt;
 </content>
  </entry>
  

@@ -11,7 +11,7 @@
 
   <title>
     
-      Hello World &middot; Python Monty
+      Homebrew Temperature Monitoring &middot; Python Monty
     
   </title>
 
@@ -85,26 +85,57 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Hello World</h1>
-  <span class="post-date">23 Jan 2014</span>
-  <h2>A First Toast</h2>
+  <h1 class="post-title">Homebrew Temperature Monitoring</h1>
+  <span class="post-date">24 Oct 2013</span>
+  <p>A few weeks ago, I embarked on a project to monitor the temperature of my homebrews as they ferment and bottle-age.</p>
 
-<p>By which, I clearly meant post. I&#39;m now using GitHub pages to serve my blog. Before, it was on a Wordpress site hosted on a laptop in my bedroom.</p>
+<h3>The Data</h3>
 
-<p>I&#39;m using a theme engine called <em>Octopress</em>. There&#39;s a link in the footer. It&#39;s a neat little static site generator. Posts are created in markdown (something else I&#39;m trying for the first time), and a ruby Rake (still not sure what that means) file takes the markdown, along with the theme&#39;s SASS, and generates a static site which is committed to the GitHub pages repository.</p>
+<p>In order to record temperatures, I ordered 3 TEMPer temperature-logging modules from eBay. These were recommended by lots of homebrewers on HomeBrewTalk as cheap and effective, although occasionally users reported large variances in temperatures and DOA sensors.</p>
 
-<p>I spent about 30 minutes installing and configuring Octopress, and another 2 hours trying to figure out how themes work.</p>
+<p><img src="/images/usbtemper.png" alt="The product ad"></p>
 
-<p><a href="http://z3ugma.github.io">Example link</a></p>
+<p>These are manufactured by PCsensor.com, which provides a linux command-line client to read the data of the thermometer.</p>
 
-<ul>
-<li>List</li>
-<li>List element 2</li>
-</ul>
+<p>I ordered three, and hooked them up to my brewery server.</p>
 
-<p>Anyway, here&#39;s where I&#39;ll be keeping track of the fun stuff I come across while learning (mostly) Python and other programming.</p>
+<h3>The First Hiccup</h3>
 
-<p>-Fred</p>
+<p>The problem I encountered is that the pcsensor software was only designed to display one result at a time, and wasn&#39;t configured for displaying multiple sensors. Luckily, I found <a href="http://momtchil.momtchev.com/node/6">a fork of the project that had been edited to allow that</a> by following <a href="http://webcache.googleusercontent.com/search?q=cache:www.penguinsunbound.com/User:goeko/Temp_Sensor">this guide</a></p>
+
+<p>Using lsusb | grep TEMPer, I was able to confirm that the computer was reading my sensors. I installed the pcsensor-multi software:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">wget http://momtchil.momtchev.com/files/pcsensor-1.0.0-multi.tgz
+tar -zxvf pcsensor-1.0.0-multi.tgz
+<span class="nb">cd </span>pcsensor-1.0.0
+make</code></pre></div>
+
+<p><em>(note: a backed-up copy of the pcsensor program can be found <a href="/files/pcsensor-1.0.0-multi.tgz">here</a>)</em></p>
+
+<p>And moved it into /usr/bin/local.</p>
+
+<h3>Logging Temperatures</h3>
+
+<p>At this point, I could enter the pcsensor command and get output:</p>
+
+<p>2011/12/08 14:09:16 Temperature 65.19F 18.44C
+2011/12/08 14:09:16 Temperature 61.59F 16.44C</p>
+
+<p>But I wouldn&#39;t be around all day to check out the temperatures. I set up a cron job to write the temperatures to a log:</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text"># m h dom mon dow command
+* * * * * /usr/local/bin/pcsensor &gt;&gt; /home/fred/temperatures.log</code></pre></div>
+
+<p>This reads as: ALL minutes (m) of ALL hours (h) of ALL days of the month on ALL days of the week, run the pcsensor program and add the output to the file &quot;temperatures.log&quot;.
+So, every minute, the server adds temperature data to the log.</p>
+
+<h3>Graphing the Data</h3>
+
+<p><img src="/images/googlechart.png" alt="A Google Chart graph"></p>
+
+<p>The Penguins Unbound link uses gnuplot to graph the data, an approach that I might take up in the future. However, I wanted to use the Google Charts API to generate my graphs.</p>
+
+<p>To be continued: the exciting saga of why you don&#39;t try to parse thousands of lines of text as a time-series database.</p>
 
 </div>
 
