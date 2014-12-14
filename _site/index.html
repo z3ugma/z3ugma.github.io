@@ -88,6 +88,163 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2014/12/13/influxdb-augments-my-homebrew-temperature-monitor/">
+        InfluxDB Augments My Homebrew Temperature Monitor
+      </a>
+    </h1>
+
+    <span class="post-date">13 Dec 2014</span>
+
+    <p><a href="http://z3ugma.github.io/2013/10/25/homebrew-temperature-monitoring/">Last October, I began recording temperatures</a> for my homebrew setup. It was early in my explorations of Python and scripting, and ran in a pretty silly fashion. It went something like this:</p>
+
+<ol>
+<li>Echo the output of a C program that read the temperatures into a log file</li>
+<li>Parse that logfile using python to create a JSON file for Google Charts to use</li>
+<li>Use PHP embedded in HTML via an AJAX callback function to parse that JSON file</li>
+<li>Display the result in Google Charts</li>
+</ol>
+
+<p>This was incredibly slow and process intensive when more than 1 week&#39;s worth of data was captured, so I moved the log to a backup file weekly, leaving a blank file for the next week&#39;s data.</p>
+
+<p><a href="http://influxdb.com/">InfluxDB</a> has been <a href="http://www.xaprb.com/blog/2014/03/02/time-series-databases-influxdb/">getting a lot of buzz</a> on HackerNews lately. It is a time-series database, which means that the <a href="http://influxdb.com/docs/v0.8/introduction/getting_started.html#writing-and-exploring-data-in-the-ui">primary key</a> of any entry is the timestamp of when the data was entered into the database. Queries are done using a SQL-like syntax, but everything is oriented around time. Queries like &quot;give me the last data value of every hour&quot; and &quot;what is the average value of this data point for the past 3 Wednesdays&quot; are difficult to do with large data sets in a traditional SQL database, but InfluxDB is designed from the ground up to handle them.</p>
+
+<p>For a future idea - how to join time-series data from Influx to regular relational data in MySQL? This is relevant for another project I&#39;m currently working on. Keep an eye out for updates on that project as well.</p>
+
+<p>What won me over to databases like InfluxDB and <a href="http://rethinkdb.com/">RethinkDB</a> is the simple, no-nonsense, easy-to-use web interface that comes ready right out of the box, and the SQL-like query language. Another big win for Influx was support from <a href="http://grafana.org/">Grafana</a>, a turnkey open-source time-series graphing platform, which I highly encourage you to check out.</p>
+
+<p>I set up InfluxDB on a Vagrant VM on my Mac server, with the Vagrantfile like so:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># -*- mode: ruby -*-</span>
+<span class="c1"># vi: set ft=ruby :</span>
+<span class="c1"># encoding: utf-8</span>
+
+<span class="c1"># Vagrantfile API/syntax version. Don&#39;t touch unless you know what you&#39;re doing!</span>
+<span class="no">VAGRANTFILE_API_VERSION</span> <span class="o">=</span> <span class="s2">&quot;2&quot;</span>
+
+<span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="no">VAGRANTFILE_API_VERSION</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+ <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;hashicorp/precise64&quot;</span>
+ 
+ <span class="n">dirname</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="no">Dir</span><span class="o">.</span><span class="n">getwd</span><span class="p">)</span>
+ <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">dirname</span>
+
+ <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">8083</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8083</span>
+ <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">8086</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8086</span>
+ <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">8090</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8090</span>
+ <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">8099</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8099</span>
+ <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8089</span>
+
+
+<span class="vg">$script</span> <span class="o">=</span> <span class="o">&lt;&lt;</span><span class="no">SCRIPT</span>
+<span class="sh">echo &quot;Provisioning InfluxDB&quot;</span>
+<span class="sh">sudo apt-get update</span>
+<span class="sh">sudo apt-get -y install python python-pip git curl upstart apache2</span>
+
+<span class="sh">sudo pip install nest-thermostat influxdb python-forecastio</span>
+
+<span class="sh">wget http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb</span>
+<span class="sh">sudo dpkg -i influxdb_latest_amd64.deb</span>
+
+<span class="sh">wget http://grafanarel.s3.amazonaws.com/grafana-1.9.0.tar.gz</span>
+<span class="sh">tar -xf grafana-1.9.0.tar.gz</span>
+<span class="sh">sudo cp -R grafana-1.9.0/* /var/www/</span>
+<span class="sh">sudo cp /vagrant/config.js /var/www/config.js</span>
+<span class="sh">sudo chmod -R 777 /var/www</span>
+
+<span class="sh">sudo service influxdb start</span>
+
+<span class="sh">sudo initctl emit vagrant-ready</span>
+<span class="no">SCRIPT</span>
+
+<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="vg">$script</span>
+<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="s2">&quot;export EDITOR=nano&quot;</span><span class="p">,</span> <span class="ss">privileged</span><span class="p">:</span> <span class="kp">false</span>
+<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="s2">&quot;(crontab -l 2&gt;/dev/null; echo </span><span class="se">\&quot;</span><span class="s2">* * * * * /usr/bin/python /vagrant/nesttemp.py</span><span class="se">\&quot;</span><span class="s2">) | crontab -&quot;</span><span class="p">,</span> <span class="ss">privileged</span><span class="p">:</span> <span class="kp">false</span>
+<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="s2">&quot;(crontab -l 2&gt;/dev/null; echo </span><span class="se">\&quot;</span><span class="s2">*/2 * * * * /usr/bin/python /vagrant/forecastweather.py</span><span class="se">\&quot;</span><span class="s2">) | crontab -&quot;</span><span class="p">,</span> <span class="ss">privileged</span><span class="p">:</span> <span class="kp">false</span>
+<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="s2">&quot;/usr/bin/python /vagrant/db_migrations.py&quot;</span><span class="p">,</span> <span class="ss">privileged</span><span class="p">:</span> <span class="kp">false</span>
+
+<span class="k">end</span></code></pre></div>
+
+<p>This forwards the InfluxDB ports, port 80 for serving Grafana, installs influx, Grafana, and python dependencies, and sets up cron jobs (see below).</p>
+
+<p>With InfluxDB running, the first step was to capture some data! Since I bought a Nest themostat, I figured that would be a good piece of time-series data to measure.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
+
+<span class="kn">import</span> <span class="nn">nest_thermostat</span>
+<span class="kn">import</span> <span class="nn">influxdb</span>
+
+<span class="n">nest</span> <span class="o">=</span> <span class="n">nest_thermostat</span><span class="o">.</span><span class="n">Nest</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
+<span class="n">nest</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+<span class="n">nest</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span>
+
+<span class="n">temp</span> <span class="o">=</span> <span class="n">nest</span><span class="o">.</span><span class="n">temp_out</span><span class="p">(</span><span class="n">nest</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s">&quot;shared&quot;</span><span class="p">][</span><span class="n">nest</span><span class="o">.</span><span class="n">serial</span><span class="p">][</span><span class="s">&quot;current_temperature&quot;</span><span class="p">])</span>
+<span class="n">mode</span> <span class="o">=</span> <span class="n">nest</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s">&quot;shared&quot;</span><span class="p">][</span><span class="n">nest</span><span class="o">.</span><span class="n">serial</span><span class="p">][</span><span class="s">&quot;target_temperature_type&quot;</span><span class="p">]</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">nest</span><span class="o">.</span><span class="n">temp_out</span><span class="p">(</span><span class="n">nest</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s">&quot;shared&quot;</span><span class="p">][</span><span class="n">nest</span><span class="o">.</span><span class="n">serial</span><span class="p">][</span><span class="s">&quot;target_temperature&quot;</span><span class="p">])</span>
+
+<span class="kn">from</span> <span class="nn">influxdb</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">influxdb</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">influxdb</span><span class="o">.</span><span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="s">&quot;points&quot;</span><span class="p">:[[</span><span class="n">temp</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mode</span><span class="p">]],</span>
+   <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;nest&quot;</span><span class="p">,</span>
+   <span class="s">&quot;columns&quot;</span><span class="p">:[</span><span class="s">&quot;temperature&quot;</span><span class="p">,</span> <span class="s">&quot;target_temperature&quot;</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+<span class="n">db</span><span class="o">.</span><span class="n">write_points</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></code></pre></div>
+
+<p>Running this every minute via cron pulls the current temperature as well as the target temperature (what the thermostat is set to) into InfluxDB, through its easy-to-use but peculiarly-structured API.</p>
+
+<p>I did the same thing with <a href="http://forecast.io/">Forecast.io</a>, my favorite weather API. This tells me the temperature outside my house:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
+<span class="kn">import</span> <span class="nn">forecastio</span>
+
+<span class="n">api_key</span> <span class="o">=</span> <span class="s">&quot;#####################&quot;</span>
+<span class="n">lat</span> <span class="o">=</span> <span class="mf">43.05660</span>
+<span class="n">lng</span> <span class="o">=</span> <span class="o">-</span><span class="mf">89.38337</span> 
+
+<span class="n">forecast</span> <span class="o">=</span> <span class="n">forecastio</span><span class="o">.</span><span class="n">load_forecast</span><span class="p">(</span><span class="n">api_key</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">)</span>
+
+<span class="n">temp</span> <span class="o">=</span> <span class="n">forecast</span><span class="o">.</span><span class="n">hourly</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span>
+
+
+<span class="kn">from</span> <span class="nn">influxdb</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">influxdb</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">influxdb</span><span class="o">.</span><span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="s">&quot;points&quot;</span><span class="p">:[[</span><span class="n">temp</span><span class="p">]],</span>
+   <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;forecastio_lakeside&quot;</span><span class="p">,</span>
+   <span class="s">&quot;columns&quot;</span><span class="p">:[</span><span class="s">&quot;temperature&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+<span class="n">db</span><span class="o">.</span><span class="n">write_points</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></code></pre></div>
+
+<p>This required me to get a Forecast.io API key, with a limit of 1000 calls per day. That&#39;s why I call it once every 2 minutes, for 720 calls per day.</p>
+
+<p>The last part of setting up the VM is to perform database migrations - set up users and databases for the temperature data to go into:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
+
+<span class="kn">import</span> <span class="nn">influxdb</span>
+
+<span class="kn">from</span> <span class="nn">influxdb</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">influxdb</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">influxdb</span><span class="o">.</span><span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">create_database</span><span class="p">(</span><span class="s">&quot;grafana&quot;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">create_database</span><span class="p">(</span><span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">switch_db</span><span class="p">(</span><span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">add_database_user</span><span class="p">(</span><span class="s">&quot;temperatures&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">set_database_admin</span><span class="p">(</span><span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;Success&quot;</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Influx DB Migrations Failed&quot;</span>
+    <span class="k">pass</span></code></pre></div>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2014/12/10/keeping-virtualbox-and-vagrant-boxes-alive-through-reboots/">
         Keeping VirtualBox and Vagrant Boxes Alive Through Reboots
       </a>
@@ -166,95 +323,6 @@
 </ul>
 
 <p>This xml is saved into a file in /Library/LaunchAgents. Navigate to that directory, and execute</p>
-
-<div class="highlight"><pre><code class="language-text" data-lang="text">launchctl load &lt;name of plist&gt;</code></pre></div>
-
-<p><em>launchctl</em> is the program that Mac OS uses to control launchd processes. Once the plist has been loaded, it should persist after reboot.</p>
-
-<p>A similar plist can be used for the command &#39;vagrant up&#39; to launch vagrant vms.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/12/10/keeping%20virtualbox%20and%20vagrant%20boxes%20alive%20through%20reboots/">
-        Keeping VirtualBox and Vagrant Boxes Alive Through Reboots
-      </a>
-    </h1>
-
-    <span class="post-date">10 Dec 2014</span>
-
-    <p>I recently switched from a dedicated Windows 7 PC for my home server to a Mac Mini, mostly for the better electricity consumption and the fact the the PC was having nightly bluescreen crashes and restarting.</p>
-
-<p>I have always been a fan of RDP, and my office uses PCs - so to keep the convenient RDP access to home, I installed <a href="www.virtualbox.org">VirtualBox</a> and created a Windows VM. This has a bridged network adapter, so it just looks like another computer on my home network.</p>
-
-<p>However, when Mac OS restarts, or after a power failure, the virtual machine is powered off. This won&#39;t do.</p>
-
-<h2>Daemons in Mac OS</h2>
-
-<p>Mac OS has the usual suspects like cron, but has a neat daemon launching system, appropriately called <a href="https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html">launchd</a>, introduced in 10.4.</p>
-
-<p>Launchd works by &quot;loading&quot; (think of it like a soft-install) objects called &#39;&#39;&#39;plist&#39;&#39;&#39;. Plist is a serialized object format like JSON or XML that tells launchd the properties of how to execute a particular daemon.</p>
-
-<p>If you want to play with creating your own plists, head over to <a href="http://launched.zerowidth.com">http://launched.zerowidth.com</a>, where Nathan Witmer has created a plist generator.</p>
-
-<h2>Automatic Tasks in VirtualBox</h2>
-
-<p>VirtualBox comes with a command-line interface to automate tasks on VMs. My need is simple - just boot the box:</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">VBoxHeadless -s Windows -v on</code></pre></div>
-
-<p>This follows the syntax for VBoxHeadless:</p>
-
-<div class="highlight"><pre><code class="language-text" data-lang="text">-s, -startvm, --startvm &lt;name|uuid&gt;   Start given VM (required argument)
-  -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don&#39;t change the setting</code></pre></div>
-
-<p>VRDE is the Virtual Remote Desktop extension, which allows RDP out of the box through a special Oracle tool.</p>
-
-<h2>Booting my VM at Login</h2>
-
-<p>launchd has multiple &quot;runlevels&quot; - there are System level daemons, and daemons for whenever a given user logs in. User daemons are stored at ~/Library/LaunchAgents/.</p>
-
-<p>With the help of the launched tool, I made a plist for my command:</p>
-
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="cp">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple Computer//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span>
-<span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
-<span class="nt">&lt;dict&gt;</span>
-    <span class="nt">&lt;key&gt;</span>KeepAlive<span class="nt">&lt;/key&gt;</span>
-        <span class="nt">&lt;true/&gt;</span>
-    <span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;string&gt;</span>io.zzzz.z3ugma.launched.windowsvirtualbox<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;array&gt;</span>
-        <span class="nt">&lt;string&gt;</span>VBoxHeadless<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;string&gt;</span>-s<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;string&gt;</span>Windows<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;string&gt;</span>-v<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;string&gt;</span>on<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;/array&gt;</span>
-    <span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;true/&gt;</span>
-    <span class="nt">&lt;key&gt;</span>UserName<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;string&gt;</span>fred<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;key&gt;</span>WorkingDirectory<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;string&gt;</span>/Users/fred<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;key&gt;</span>StandardErrorPath<span class="nt">&lt;/key&gt;</span>
-        <span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;key&gt;</span>StandardOutPath<span class="nt">&lt;/key&gt;</span>
-        <span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
-<span class="nt">&lt;/dict&gt;</span>
-<span class="nt">&lt;/plist&gt;</span></code></pre></div>
-
-<p>Notable options in here:</p>
-
-<ul>
-<li><strong>KeepAlive = True</strong> - If the VBoxHeadless process crashes for some reason, or someone manually shuts down the box (perhap from within RDP), the box restarts itself</li>
-<li><strong>RunAtLoad = True</strong> - Run this daemon when the daemon is loaded. &quot;Loading&quot; occurs at login, and when a user manually loads the daemon.</li>
-<li><strong>WorkingDirectory</strong> &amp; <strong>UserName</strong> - These are special directives needed because of the peculiar way that VirtualBox runs. Just set it to the home folder of the user running the daemon.</li>
-</ul>
-
-<p>This xml is saved into a file in ~/Library/LaunchAgents. Navigate to that directory, and execute</p>
 
 <div class="highlight"><pre><code class="language-text" data-lang="text">launchctl load &lt;name of plist&gt;</code></pre></div>
 
