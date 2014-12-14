@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+       LibUSB and Python to Overcome Bad USB Design &middot; Python Monty
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+          <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10565135_10103350446465307_2243295731634219240_n.jpg?oh=3ac00bd4b91147d87dcdde0c775d96a2&oe=551C5DF6&__gda__=1426461091_247303f7a3e20c9f3e67cef994dd2bf9" height="200"/>
+      <h1>
+        <a href="/">
+          Python Monty
+        </a>
+      </h1>
+      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/archive/">Archive</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title"> LibUSB and Python to Overcome Bad USB Design</h1>
+  <span class="post-date">13 Dec 2014</span>
+  <p><a href="http://z3ugma.github.io/2013/10/25/homebrew-temperature-monitoring/">Last October, I began recording temperatures</a> for my homebrew setup. It used a C program called pcsensor that someone reverse-engineered from the Windows version available on the CD that came with my TEMPer1v1.4 sensors.</p>
+
+<p>The problem with these sensors is that they have no unique identifier - reading the value in from pcsensor with multiple sensors installed often resulted in the data series being mixed together, because there was no &quot;order&quot; to the way data was being read into the parser.</p>
+
+<p>Here&#39;s a demonstration of what I mean:</p>
+
+<p><img src="/images/graphinterference.png" alt="Graph Interference"></p>
+
+<p>Notice how the order of the orange and red points switch a lot? This made it really difficult to analyze the temperatures in my setup, apart from using a human to look at the trendline created by the mix of points.</p>
+
+<p>I spent some time trying to create a driver for these TEMPer sensors, but in the end I was able to find <a href="https://github.com/padelt/temper-python">one by Phillip Adelt that uses libusb and pyusb</a> - libraries that allow you to talk to USB devices with Python.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git clone https://github.com/padelt/temper-python.git
+<span class="nb">cd </span>temper-python
+sudo python setup.py install</code></pre></div>
+
+<p>The ingenius thing that Phillip did was to determine the <em>port</em> and <em>bus</em> of each sensor - thus giving it a &quot;unique ID&quot; based on where it was physically plugged into the computer!</p>
+
+<p>His module installs itself as &quot;temperusb&quot;, so I wrote a quick script to read the value of the sensors:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
+<span class="c"># encoding: utf-8</span>
+
+<span class="kn">from</span> <span class="nn">temperusb</span> <span class="kn">import</span> <span class="n">TemperHandler</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">th</span> <span class="o">=</span> <span class="n">TemperHandler</span><span class="p">()</span>
+<span class="n">devs</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">get_devices</span><span class="p">()</span>
+
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dev</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">devs</span><span class="p">):</span>
+    <span class="n">temps</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_temperature</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s">&quot;fahrenheit&quot;</span><span class="p">)</span>
+    <span class="n">ports</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_ports</span><span class="p">()</span>
+    <span class="n">bus</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_bus</span><span class="p">()</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">bus</span><span class="p">,</span> <span class="n">ports</span><span class="p">,</span> <span class="n">temps</span><span class="p">)</span></code></pre></div>
+
+<p>Linux limits which users can access raw USB data, so we either need to install some <a href="http://www.reactivated.net/writing_udev_rules.html#example-pilot">udev rules</a> or run the script as superuser. Sudo is easiest for me. It outputs something like:</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">fred@brewery:~$ sudo python temper_read.py
+[sudo] password for fred:
+(2, 2, 56.8625)
+(2, 1, 22.1)
+fred@brewery:~$</code></pre></div>
+
+<p>The bus and port will be consistent, even if the <em>order</em> of the entries gets switched. Now we can depend on the results of these sensors, and send them to InfluxDB:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
+<span class="c"># encoding: utf-8</span>
+
+<span class="kn">from</span> <span class="nn">temperusb</span> <span class="kn">import</span> <span class="n">TemperHandler</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">hostname</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span>
+
+<span class="n">th</span> <span class="o">=</span> <span class="n">TemperHandler</span><span class="p">()</span>
+<span class="n">devs</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">get_devices</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">influxdb</span> <span class="kn">import</span> <span class="n">InfluxDBClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">&#39;hostname&#39;</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">&#39;root&#39;</span><span class="p">,</span> <span class="s">&#39;root&#39;</span><span class="p">,</span> <span class="s">&#39;temperatures&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dev</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">devs</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span><span class="p">[]</span>
+    <span class="n">ports</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_ports</span><span class="p">()</span>
+    <span class="n">bus</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_bus</span><span class="p">()</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s">&quot;points&quot;</span><span class="p">:[[</span><span class="n">i</span><span class="p">,</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_temperature</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s">&quot;fahrenheit&quot;</span><span class="p">),</span> <span class="n">ports</span><span class="p">,</span> <span class="n">bus</span><span class="p">]],</span> <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_temper_</span><span class="si">%s</span><span class="s">_</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hostname</span><span class="p">,</span><span class="n">ports</span><span class="p">,</span> <span class="n">bus</span><span class="p">),</span> <span class="s">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;index&quot;</span><span class="p">,</span> <span class="s">&quot;temperature&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">,</span> <span class="s">&quot;bus&quot;</span><span class="p">]})</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">write_points</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Couldn&#39;t connect to influxdb&quot;</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;Couldn&#39;t connect to InfluxDB&quot;</span>
+        <span class="k">print</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></code></pre></div>
+
+<p>I put this in the superuser&#39;s crontab:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo crontab -e</code></pre></div>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text"># m h  dom mon dow   command
+* * * * * /usr/bin/python /home/fred/temper_influx.py</code></pre></div>
+
+<p>This sends the available temperatures to InfluxDB once a minute.</p>
+
+<p>Which leaves me very happy with my temperature-monitoring setup:</p>
+
+<p><img src="/images/grafana_temperatures.png" alt="Grafana Temperatures Dashboard"></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2014/12/13/influxdb-augments-my-homebrew-temperature-monitor/">
+            InfluxDB Augments My Homebrew Temperature Monitor
+            <small>13 Dec 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/12/10/keeping-virtualbox-and-vagrant-boxes-alive-through-reboots/">
+            Keeping VirtualBox and Vagrant Boxes Alive Through Reboots
+            <small>10 Dec 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/12/07/A-new-platform/">
+            A new platform
+            <small>07 Dec 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>
