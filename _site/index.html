@@ -82,13 +82,63 @@
       
     </nav>
 
-    <p>&copy; 2014. All rights reserved.</p>
+    <p>&copy; 2015. All rights reserved.</p>
   </div>
 </div>
 
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/01/16/delicious-vegan-biscuits-and-gravy/">
+        Delicious Vegan Biscuits and Gravy
+      </a>
+    </h1>
+
+    <span class="post-date">16 Jan 2015</span>
+
+    <p>Next up, a departure from my usual programming entries to another hobby - cooking.</p>
+
+<p>It&#39;s <a href="http://www.veganuary.com">Veganuary</a>! It&#39;s a month of sacrifice for me, in the name of shedding holiday pounds.</p>
+
+<p>The single hardest thing for me about going vegan is finding quick meals to make that aren&#39;t a piece of fruit. </p>
+
+<p>I think it&#39;s similar to when I stopped eating meat. At first, I started cooking the same old meals, just with the meat removed and a vegetable or mushrooms substituted. These sometimes felt lacking. Over time, I learned to cook &quot;natively veggie&quot; meals - meals that were vegetarian from the start, whose flavors melded and combined deliciously without the need for meat.</p>
+
+<p>Now that I&#39;m not eating dairy or cheese, I find my usual meals lacking - because there&#39;s no dairy or cheese. It will take some time to learn to cook &quot;natively vegan&quot;, I&#39;m sure.</p>
+
+<p>In the meantime, however, here&#39;s an amazing, hearty, breakfast, that&#39;s totally vegan.</p>
+
+<h1>Vegan Biscuits and Gravy</h1>
+
+<p><em>Serves 4</em></p>
+
+<h2>Ingredients</h2>
+
+<ul>
+<li>12 oz Trader Joe&#39;s Soy Chorizo</li>
+<li>1 medium yellow onion, diced</li>
+<li>1 green bell pepper, diced</li>
+<li>2 oz Earth Balance buttery vegan spread</li>
+<li>2 oz whole wheat flour</li>
+<li>1 Tbsp Better than Bouillon No-Beef Base</li>
+<li>Garlic Naan or vegan english muffins</li>
+</ul>
+
+<h2>Directions</h2>
+
+<ol>
+<li>With a little olive oil, brown the chorizo, onions, and peppers in a large skillet. Once browned, move the mixture to one half of the pan.</li>
+<li>Melt the earth balance in the empty half of the pan. Add the flour and whick lightly until a pasty consistency is achieved. Allow this roux to brown for a minute.</li>
+<li>Mix bouillon and 1 cup of water. Add to the roux a little bit at a time, whisking constantly until gravy-like. Mix the chorizo mixture in with the broth. Add water to thin to your liking.</li>
+<li>Toast the garlic naan or english muffin. Slice into thin wafers and top the bread with biscuits and gravy. Yum!</li>
+</ol>
+
+<p><img src="/images/vegan_gravy.jpg" alt="Vegan Biscuits and Gravy"></p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -442,52 +492,6 @@ fred@brewery:~$</code></pre></div>
     <span class="post-date">07 Dec 2014</span>
 
     <p>I switched from Octopress to Jekyll. I find that it is cleaner, easier to understand, and doesn&#39;t require me to puzzle through Git branches and remotes.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/05/01/Find-all-the-casks/">
-        Find all the casks
-      </a>
-    </h1>
-
-    <span class="post-date">01 May 2014</span>
-
-    <p>There&#39;s a great package manager for Mac called Homebrew that acts sort of like Aptitude on Ubuntu; it makes it really easy to quickly install software for your Mac from the command line.</p>
-
-<p>The Casks platform is built on top of Homebrew - it allows you to install your commonly-used desktop apps for Mac. This makes writing a setup script for when you reformat easy.</p>
-
-<p>It also makes Casks a great place to explore to find new Mac software you didn&#39;t know existed. Unfortunately, the most you can see from the Casks master list on Github is the name of the software - you have to go into each .rb to find the URL for the website of the software.</p>
-
-<p>I wrote a quick and dirty script to go through all of these Casks and make a text file that I can put in Excel to open all the websites at once.</p>
-
-<p>First, we download all the files in the github repo to our target folder, then we run:</p>
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">listdir</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">isfile</span><span class="p">,</span> <span class="n">join</span>
-
-<span class="n">mypath</span> <span class="o">=</span> <span class="s">&#39;/path/to/target/folder&#39;</span>
-<span class="n">onlyfiles</span> <span class="o">=</span> <span class="p">[</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">listdir</span><span class="p">(</span><span class="n">mypath</span><span class="p">)</span> <span class="k">if</span> <span class="n">isfile</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">mypath</span><span class="p">,</span><span class="n">f</span><span class="p">))</span> <span class="p">]</span>
-
-<span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">onlyfiles</span><span class="p">:</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
-
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;casks.txt&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dfile</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\&#39;</span><span class="s">&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
-        <span class="k">print</span> <span class="n">text</span>
-        <span class="n">dfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-    <span class="n">dfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
-
-<p>Now we have casks.txt, ready to import into Excel to easily open all the links within and browse for new Mac apps.</p>
 
   </div>
   

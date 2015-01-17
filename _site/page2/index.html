@@ -82,13 +82,59 @@
       
     </nav>
 
-    <p>&copy; 2014. All rights reserved.</p>
+    <p>&copy; 2015. All rights reserved.</p>
   </div>
 </div>
 
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/05/01/Find-all-the-casks/">
+        Find all the casks
+      </a>
+    </h1>
+
+    <span class="post-date">01 May 2014</span>
+
+    <p>There&#39;s a great package manager for Mac called Homebrew that acts sort of like Aptitude on Ubuntu; it makes it really easy to quickly install software for your Mac from the command line.</p>
+
+<p>The Casks platform is built on top of Homebrew - it allows you to install your commonly-used desktop apps for Mac. This makes writing a setup script for when you reformat easy.</p>
+
+<p>It also makes Casks a great place to explore to find new Mac software you didn&#39;t know existed. Unfortunately, the most you can see from the Casks master list on Github is the name of the software - you have to go into each .rb to find the URL for the website of the software.</p>
+
+<p>I wrote a quick and dirty script to go through all of these Casks and make a text file that I can put in Excel to open all the websites at once.</p>
+
+<p>First, we download all the files in the github repo to our target folder, then we run:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">listdir</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">isfile</span><span class="p">,</span> <span class="n">join</span>
+
+<span class="n">mypath</span> <span class="o">=</span> <span class="s">&#39;/path/to/target/folder&#39;</span>
+<span class="n">onlyfiles</span> <span class="o">=</span> <span class="p">[</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">listdir</span><span class="p">(</span><span class="n">mypath</span><span class="p">)</span> <span class="k">if</span> <span class="n">isfile</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">mypath</span><span class="p">,</span><span class="n">f</span><span class="p">))</span> <span class="p">]</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">onlyfiles</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;casks.txt&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dfile</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\&#39;</span><span class="s">&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">text</span>
+        <span class="n">dfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">dfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+
+<p>Now we have casks.txt, ready to import into Excel to easily open all the links within and browse for new Mac apps.</p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -713,36 +759,6 @@ binascii.Error: Incorrect padding</code></pre></div>
              <span class="nv">DomainName</span> <span class="o">=</span> user_parts<span class="o">[</span>0<span class="o">]</span>.upper<span class="o">()</span></code></pre></div>
 
 <p>With these changes, made, testing authorization works and I&#39;m ready to start doing things with my client.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/01/23/hello-world/">
-        Hello World
-      </a>
-    </h1>
-
-    <span class="post-date">23 Jan 2014</span>
-
-    <h2>A First Toast</h2>
-
-<p>By which, I clearly meant post. I&#39;m now using GitHub pages to serve my blog. Before, it was on a Wordpress site hosted on a laptop in my bedroom.</p>
-
-<p>I&#39;m using a theme engine called <em>Octopress</em>. There&#39;s a link in the footer. It&#39;s a neat little static site generator. Posts are created in markdown (something else I&#39;m trying for the first time), and a ruby Rake (still not sure what that means) file takes the markdown, along with the theme&#39;s SASS, and generates a static site which is committed to the GitHub pages repository.</p>
-
-<p>I spent about 30 minutes installing and configuring Octopress, and another 2 hours trying to figure out how themes work.</p>
-
-<p><a href="http://z3ugma.github.io">Example link</a></p>
-
-<ul>
-<li>List</li>
-<li>List element 2</li>
-</ul>
-
-<p>Anyway, here&#39;s where I&#39;ll be keeping track of the fun stuff I come across while learning (mostly) Python and other programming.</p>
-
-<p>-Fred</p>
 
   </div>
   

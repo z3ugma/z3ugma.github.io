@@ -4,13 +4,59 @@
  <title>Python Monty</title>
  <link href="http://z3ugma.github.io/atom.xml" rel="self"/>
  <link href="http://z3ugma.github.io/"/>
- <updated>2014-12-14T10:17:11-06:00</updated>
+ <updated>2015-01-17T14:50:24-06:00</updated>
  <id>http://z3ugma.github.io</id>
  <author>
    <name>Fred Turkington</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Delicious Vegan Biscuits and Gravy</title>
+   <link href="http://z3ugma.github.io/2015/01/16/delicious-vegan-biscuits-and-gravy/"/>
+   <updated>2015-01-16T17:50:55-06:00</updated>
+   <id>http://z3ugma.github.io/2015/01/16/delicious-vegan-biscuits-and-gravy</id>
+   <content type="html">&lt;p&gt;Next up, a departure from my usual programming entries to another hobby - cooking.&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s &lt;a href=&quot;http://www.veganuary.com&quot;&gt;Veganuary&lt;/a&gt;! It&amp;#39;s a month of sacrifice for me, in the name of shedding holiday pounds.&lt;/p&gt;
+
+&lt;p&gt;The single hardest thing for me about going vegan is finding quick meals to make that aren&amp;#39;t a piece of fruit. &lt;/p&gt;
+
+&lt;p&gt;I think it&amp;#39;s similar to when I stopped eating meat. At first, I started cooking the same old meals, just with the meat removed and a vegetable or mushrooms substituted. These sometimes felt lacking. Over time, I learned to cook &amp;quot;natively veggie&amp;quot; meals - meals that were vegetarian from the start, whose flavors melded and combined deliciously without the need for meat.&lt;/p&gt;
+
+&lt;p&gt;Now that I&amp;#39;m not eating dairy or cheese, I find my usual meals lacking - because there&amp;#39;s no dairy or cheese. It will take some time to learn to cook &amp;quot;natively vegan&amp;quot;, I&amp;#39;m sure.&lt;/p&gt;
+
+&lt;p&gt;In the meantime, however, here&amp;#39;s an amazing, hearty, breakfast, that&amp;#39;s totally vegan.&lt;/p&gt;
+
+&lt;h1&gt;Vegan Biscuits and Gravy&lt;/h1&gt;
+
+&lt;p&gt;&lt;em&gt;Serves 4&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2&gt;Ingredients&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;12 oz Trader Joe&amp;#39;s Soy Chorizo&lt;/li&gt;
+&lt;li&gt;1 medium yellow onion, diced&lt;/li&gt;
+&lt;li&gt;1 green bell pepper, diced&lt;/li&gt;
+&lt;li&gt;2 oz Earth Balance buttery vegan spread&lt;/li&gt;
+&lt;li&gt;2 oz whole wheat flour&lt;/li&gt;
+&lt;li&gt;1 Tbsp Better than Bouillon No-Beef Base&lt;/li&gt;
+&lt;li&gt;Garlic Naan or vegan english muffins&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Directions&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;With a little olive oil, brown the chorizo, onions, and peppers in a large skillet. Once browned, move the mixture to one half of the pan.&lt;/li&gt;
+&lt;li&gt;Melt the earth balance in the empty half of the pan. Add the flour and whick lightly until a pasty consistency is achieved. Allow this roux to brown for a minute.&lt;/li&gt;
+&lt;li&gt;Mix bouillon and 1 cup of water. Add to the roux a little bit at a time, whisking constantly until gravy-like. Mix the chorizo mixture in with the broth. Add water to thin to your liking.&lt;/li&gt;
+&lt;li&gt;Toast the garlic naan or english muffin. Slice into thin wafers and top the bread with biscuits and gravy. Yum!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/vegan_gravy.jpg&quot; alt=&quot;Vegan Biscuits and Gravy&quot;&gt;&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title> LibUSB and Python to Overcome Bad USB Design</title>
