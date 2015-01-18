@@ -11,7 +11,7 @@
 
   <title>
     
-      Python Monty &middot; A Jekyll theme
+      Python Monty
     
   </title>
 
@@ -89,6 +89,164 @@
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/01/26/getting-python-working-on-microsoft-exchange/">
+        Getting Python Working on Microsoft Exchange
+      </a>
+    </h1>
+
+    <span class="post-date">26 Jan 2014</span>
+
+    <h2>Creating an Internal Emailing Wikibot in Python</h2>
+
+<p>You know how they say that when all you have is a hammer that everything looks like a nail?</p>
+
+<p>For now, Python is my hammer. I understand that C# or VB would be a better choice for this project, particularly since Microsoft Exchange plays much more nicely with them than Python, but as I&#39;m just starting out I think I&#39;m still in the phase of learning  <em>how the language works</em>, and haven&#39;t quite progressed to learning <em>what the language is good for</em>. </p>
+
+<p>I suppose there&#39;s something to be said for the fact that Python is platform-agnostic.</p>
+
+<p>Here&#39;s a project I&#39;m working on, though: the first end-goal is to:</p>
+
+<p>1.)   Find a random wiki page
+2.)   Find its owner
+3.)   Email that owner to notify them that page was chosen</p>
+
+<h2>Part 1: Connecting Python to Exchange Web Services</h2>
+
+<p>Since this is an internal wiki to my company, there is a lot of benefit to using Exchange to send the emails. Most of all that I am rolling it on my own, and not working with the network admins and therefore don&#39;t have access to the SMTP server.</p>
+
+<p>Microsoft Exchange Server has a SOAP API, called Exchange Web Services. This has been a fun experience learning SOAP for the first time.</p>
+
+<h4>What is SOAP?</h4>
+
+<p>SOAP stands for Simple Object Access protocol. It&#39;s an XML-based messaging system that servers and clients can use to talk to each other with standardized messages.  The client understand what XML tags the server uses by getting a file called the WSDL.</p>
+
+<p>I&#39;ll be using a Python SOAP library called Suds  to talk to the Exchange server.</p>
+
+<p>There are a few catches, though. EWS doesn’t play nice with Suds, so we need a few patches and other modules to get it working well. </p>
+
+<h3>Installing Suds</h3>
+
+<p>On Mac and Linux, this is trivially easy: run </p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo pip install suds</code></pre></div>
+
+<p>(If you don’t have pip on your Mac, you can run <a href="https://raw.github.com/pypa/pip/master/contrib/get-pip.py">the get-pip</a> installer file.</p>
+
+<p>On Windows, where I did it, this is a little harder, but you can still download an easy_install script and the zip file of Suds.</p>
+
+<p>Then, you boot up a SOAP client with Suds, and I didn&#39;t document this very well, but it returns an HTTP 401 error; Not Authorized.</p>
+
+<h3>Getting Suds to Work with EWS</h3>
+
+<p>Hmm. Googling for a few hours brought me to a <a href="http://mail.libexpat.org/pipermail/soap/2011-September/000583.html">good solution, first suggested on the Suds forums</a>. </p>
+
+<p>EWSClient is Daniel Holth&#39;s solution to marrying Suds to EWS.  Installing it will also intall python-ntlm, which will be important later.</p>
+
+<p>The main file in EWSClient is:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">suds.client</span>
+<span class="kn">import</span> <span class="nn">suds.plugin</span>
+<span class="kn">import</span> <span class="nn">suds.store</span>
+<span class="kn">import</span> <span class="nn">urlparse</span>
+
+<span class="k">class</span> <span class="nc">EWSClient</span><span class="p">(</span><span class="n">suds</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Client</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">AddService</span><span class="p">(</span><span class="n">suds</span><span class="o">.</span><span class="n">plugin</span><span class="o">.</span><span class="n">DocumentPlugin</span><span class="p">):</span>
+    <span class="c"># WARNING: suds hides exceptions in plugins</span>
+    <span class="k">def</span> <span class="nf">loaded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add missing service.&quot;&quot;&quot;</span>
+        <span class="n">urlprefix</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">service_url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlunparse</span><span class="p">(</span><span class="n">urlprefix</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="s">&#39;/EWS/Exchange.asmx&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
+        <span class="n">servicexml</span> <span class="o">=</span> <span class="s">u&#39;&#39;&#39;  &lt;wsdl:service name=&quot;ExchangeServices&quot;&gt;</span>
+<span class="s">    &lt;wsdl:port name=&quot;ExchangeServicePort&quot; binding=&quot;tns:ExchangeServiceBinding&quot;&gt;</span>
+<span class="s">      &lt;soap:address location=&quot;</span><span class="si">%s</span><span class="s">&quot;/&gt;</span>
+<span class="s">    &lt;/wsdl:port&gt;</span>
+<span class="s">  &lt;/wsdl:service&gt;</span>
+<span class="s">&lt;/wsdl:definitions&gt;&#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">service_url</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;&lt;/wsdl:definitions&gt;&#39;</span><span class="p">,</span> <span class="n">servicexml</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ctx</span></code></pre></div>
+
+<p>This adds a plugin to Suds that adds EWS&#39;s definitions to the end of the SOAP request. I don&#39;t quite understand how it works, given Microsoft&#39;s byzantine EWS definitions. At any rate, it works.</p>
+
+<p>EWSClient has a few other files, too, like monkey.py, which fixes an issue where the client makes a request to the often-overloaded W3C definitions for XML. It instead lets you access a locally-cached copy of the file. I disabled it because my Windows python client was causing me a headache.</p>
+
+<p>Using the example files that ewsclient provides, I try to get the WSDL specs:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">ewsclient</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">suds.client</span>
+<span class="kn">from</span> <span class="nn">suds.transport.https</span> <span class="kn">import</span> <span class="n">WindowsHttpAuthenticated</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="c">#logging.basicConfig(level=logging.DEBUG)</span>
+
+<span class="k">def</span> <span class="nf">test_basic</span><span class="p">():</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="s">&#39;exhange_server_url_goes_here&#39;</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="s">r&#39;DOMAIN/username&#39;</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="s">&#39;password&#39;</span>
+
+    <span class="n">transport</span> <span class="o">=</span> <span class="n">WindowsHttpAuthenticated</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">suds</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="s">&quot;https://</span><span class="si">%s</span><span class="s">/EWS/Services.wsdl&quot;</span> <span class="o">%</span> <span class="n">domain</span><span class="p">,</span>
+            <span class="n">transport</span><span class="o">=</span><span class="n">transport</span><span class="p">,</span>
+            <span class="n">plugins</span><span class="o">=</span><span class="p">[</span><span class="n">ewsclient</span><span class="o">.</span><span class="n">AddService</span><span class="p">()])</span>
+
+    <span class="k">return</span> <span class="n">client</span>
+
+<span class="k">print</span> <span class="n">test_basic</span><span class="p">()</span></code></pre></div>
+
+<p>And get this error as a response:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
+  File <span class="s2">&quot;test_auth.py&quot;</span>, line 18, in &lt;module&gt;
+    <span class="nv">response</span> <span class="o">=</span> urllib2.urlopen<span class="o">(</span>url<span class="o">)</span>
+  File <span class="s2">&quot;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py&quot;</span>, line 127, in urlopen
+    <span class="k">return</span> _opener.open<span class="o">(</span>url, data, timeout<span class="o">)</span>
+  File <span class="s2">&quot;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py&quot;</span>, line 410, in open
+    <span class="nv">response</span> <span class="o">=</span> meth<span class="o">(</span>req, response<span class="o">)</span>
+  File <span class="s2">&quot;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py&quot;</span>, line 523, in http_response
+    <span class="s1">&#39;http&#39;</span>, request, response, code, msg, hdrs<span class="o">)</span>
+  File <span class="s2">&quot;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py&quot;</span>, line 442, in error
+    <span class="nv">result</span> <span class="o">=</span> self._call_chain<span class="o">(</span>*args<span class="o">)</span>
+  File <span class="s2">&quot;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py&quot;</span>, line 382, in _call_chain
+    <span class="nv">result</span> <span class="o">=</span> func<span class="o">(</span>*args<span class="o">)</span>
+  File <span class="s2">&quot;/Library/Python/2.7/site-packages/ntlm/HTTPNtlmAuthHandler.py&quot;</span>, line 99, in http_error_401
+    <span class="k">return</span> self.http_error_authentication_required<span class="o">(</span><span class="s1">&#39;www-authenticate&#39;</span>, req, fp, headers<span class="o">)</span>
+  File <span class="s2">&quot;/Library/Python/2.7/site-packages/ntlm/HTTPNtlmAuthHandler.py&quot;</span>, line 35, in http_error_authentication_required
+    <span class="k">return</span> self.retry_using_http_NTLM_auth<span class="o">(</span>req, auth_header_field, None, headers<span class="o">)</span>
+  File <span class="s2">&quot;/Library/Python/2.7/site-packages/ntlm/HTTPNtlmAuthHandler.py&quot;</span>, line 69, in retry_using_http_NTLM_auth
+    <span class="o">(</span>ServerChallenge, NegotiateFlags<span class="o">)</span> <span class="o">=</span> ntlm.parse_NTLM_CHALLENGE_MESSAGE<span class="o">(</span>auth_header_value<span class="o">[</span>5:<span class="o">])</span>
+  File <span class="s2">&quot;/Library/Python/2.7/site-packages/ntlm/ntlm.py&quot;</span>, line 217, in parse_NTLM_CHALLENGE_MESSAGE
+    <span class="nv">msg2</span> <span class="o">=</span> base64.decodestring<span class="o">(</span>msg2<span class="o">)</span>
+  File <span class="s2">&quot;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/base64.py&quot;</span>, line 321, in decodestring
+    <span class="k">return</span> binascii.a2b_base64<span class="o">(</span>s<span class="o">)</span>
+binascii.Error: Incorrect padding</code></pre></div>
+
+<p>The thing to focus on is that we&#39;re authenticating with NTLM, and the auth<em>header</em>value s aren&#39;t formatted properly. There are some issues in python-ntlm that need fixing to play nicely with the encoding of domain, user, and pass.</p>
+
+<h3>Fixing NTLM to Work with our Suds Client</h3>
+
+<p><a href="https://code.google.com/p/python-ntlm/issues/detail?id=17">There&#39;s an issue documented at the python-ntm page</a>. The solution in post #3, in which we add a few lines to the code of /Library/Python/2.7/site-packages/ntlm/HTTPNtlmAuthHandler.py (on my Mac, your filepath will be different), worked for me:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">--- HTTPNtlmAuthHandler_old.py  2012-03-19 15:29:08.503699995 +0100
++++ HTTPNtlmAuthHandler.py      2012-03-19 15:30:22.459242446 +0100
+@@ -66,6 +66,8 @@
+                 headers<span class="o">[</span><span class="s1">&#39;Cookie&#39;</span><span class="o">]</span> <span class="o">=</span> r.getheader<span class="o">(</span><span class="s1">&#39;set-cookie&#39;</span><span class="o">)</span>
+             r.fp <span class="o">=</span> None <span class="c"># remove the reference to the socket, so that it can not be closed by the response object (we want to keep the socket open)</span>
+             <span class="nv">auth_header_value</span> <span class="o">=</span> r.getheader<span class="o">(</span>auth_header_field, None<span class="o">)</span>
++            <span class="k">if</span> <span class="s1">&#39;,&#39;</span> in auth_header_value:
++                auth_header_value, <span class="nv">postfix</span> <span class="o">=</span> auth_header_value.split<span class="o">(</span><span class="s1">&#39;,&#39;</span>, 1<span class="o">)</span>
+             <span class="o">(</span>ServerChallenge, NegotiateFlags<span class="o">)</span> <span class="o">=</span> ntlm.parse_NTLM_CHALLENGE_MESSAGE<span class="o">(</span>auth_header_value<span class="o">[</span>5:<span class="o">])</span>
+             <span class="nv">user_parts</span> <span class="o">=</span> user.split<span class="o">(</span><span class="s1">&#39;\\&#39;</span>, 1<span class="o">)</span>
+             <span class="nv">DomainName</span> <span class="o">=</span> user_parts<span class="o">[</span>0<span class="o">]</span>.upper<span class="o">()</span></code></pre></div>
+
+<p>With these changes, made, testing authorization works and I&#39;m ready to start doing things with my client.</p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">

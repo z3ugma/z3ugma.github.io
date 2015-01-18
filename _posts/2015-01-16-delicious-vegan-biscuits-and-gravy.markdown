@@ -33,7 +33,7 @@ _Serves 4_
 
 ##Directions##
 1. With a little olive oil, brown the chorizo, onions, and peppers in a large skillet. Once browned, move the mixture to one half of the pan.
-2. Melt the earth balance in the empty half of the pan. Add the flour and whick lightly until a pasty consistency is achieved. Allow this roux to brown for a minute.
+2. Melt the earth balance in the empty half of the pan. Add the flour and whisk lightly until a pasty consistency is achieved. Allow this roux to brown for a minute.
 3. Mix bouillon and 1 cup of water. Add to the roux a little bit at a time, whisking constantly until gravy-like. Mix the chorizo mixture in with the broth. Add water to thin to your liking.
 4. Toast the garlic naan or english muffin. Slice into thin wafers and top the bread with biscuits and gravy. Yum!
 
