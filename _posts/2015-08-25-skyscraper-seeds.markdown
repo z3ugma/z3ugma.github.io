@@ -1,16 +1,18 @@
 ---
 layout: post
-title: "Acorn, RiNo, Denver"
+title: "Skyscraper Seeds"
 date: 2015-08-25 18:50:55 -0500
 comments: true
 published: true
 tag: restaurantreview
 ---
+##Acorn, RiNo, Denver##
+
 The drive to Acorn is unreal compared to other neighborhoods in Denver. Living in Englewood, I get a gradual shift to downtown - suburbs give way to rows of old bungalows, youthful hipster neighborhoods, then sports stadiums and high-rise apartments relective of the explosive urban growth experienced by Denver.
 
-The drive from the north is diametrically different. Rolling foothills of wide-open prairiegrass are replaced by an ecstasy of interchanges, industrial buildings, train bridges, and warehouses. This is a gritter side of Denver, and feels very much like the Flats in my hometown of Cleveland. The conglomeration of skyscrapers in Denver push right up against this part of town, giving a feeling much like that of the Emerald City, like the buildings pushed up out of the ground, rainforest trees escaping a seedier understory.
+The drive from the north is diametrically different. Rolling foothills of wide-open prairiegrass are replaced by an ecstasy of interchanges, industrial buildings, train bridges, and warehouses. This is a gritter side of Denver, and feels very much like the Flats in my hometown of Cleveland. The conglomeration of skyscrapers in Denver push right up against this part of town, giving a feeling much like that of the Emerald City, like the buildings pushed up out of the ground, tall oak trees escaping a seedier understory. This is River North - RiNo - and it's becoming one of my favorite neighborhoods here.
 
-This is River North - RiNo - and it's becoming one of my favorite neighborhoods here.
+If these glittering, aspirational skyscrapers are the oak trees, then Acorn is, well, an acorn. It straddles the line between grounded and pretentious.
 
 Pulling into The Source, which is as far as I can gather a market / coworking / shared business space for all things hipster and gentrified, I park in a dirt lot after driving down a street whose shoulders are also paved with dirt.
 
