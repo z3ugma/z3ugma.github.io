@@ -53,6 +53,8 @@ With some "inspect element" I found the source files and made a tiny (just 35k) 
 </html>
 {% endhighlight %}
 
+You can [download the pirated bit from my blog](/files/tinyrain.html).
+
 
 
 
