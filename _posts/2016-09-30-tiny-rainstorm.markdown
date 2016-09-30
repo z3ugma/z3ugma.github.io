@@ -53,7 +53,7 @@ With some "inspect element" I found the source files and made a tiny (just 35k) 
 </html>
 {% endhighlight %}
 
-You can [download the pirated bit from my blog](/files/tinyrain.html).
+You can view the published webpage [here](/files/tinyrain.html) or [downloaded the raw file to use onyour site](https://raw.githubusercontent.com/z3ugma/z3ugma.github.io/master/files/tinyrain.html)
 
 
 
