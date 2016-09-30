@@ -10,6 +10,8 @@ I like listening to [RainyMood](http://www.rainymood.com) while I work to keep f
 
 With some "inspect element" I found the source files and made a tiny (just 35k) version that loops, is visually attractive, doesn't track me, and loads instantly.
 
+You can view the published webpage [here](/files/tinyrain.html) or [downloaded the raw file to use onyour site](https://raw.githubusercontent.com/z3ugma/z3ugma.github.io/master/files/tinyrain.html)
+
 {% highlight html %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -52,11 +54,3 @@ With some "inspect element" I found the source files and made a tiny (just 35k) 
     </body>
 </html>
 {% endhighlight %}
-
-You can view the published webpage [here](/files/tinyrain.html) or [downloaded the raw file to use onyour site](https://raw.githubusercontent.com/z3ugma/z3ugma.github.io/master/files/tinyrain.html)
-
-
-
-
-
-
