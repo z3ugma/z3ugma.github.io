@@ -48,7 +48,7 @@ You can view the published webpage [here](/files/tinyrain.html) or [download the
             }
         </style>
 
-        <link rel="shortcut icon" href="http://rainymood.com/favicon.ico">
+        <link rel="shortcut icon" href="https://cdn3.iconfinder.com/data/icons/weather-16/256/Rainy_Day-16.png">
     </head>
     <body>
     </body>
