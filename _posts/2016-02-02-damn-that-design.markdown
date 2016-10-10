@@ -6,7 +6,7 @@ comments: true
 published: true
 tag: restaurantreview
 ---
-##Bartaco, West Hartford, CT##
+## Bartaco, West Hartford, CT ##
 
 I grew up 10 miles from here, in the hills of northwest Connecticut. My childhood was very whitebread and suburban, but there were always plenty of woods around my house to explore. Whenever I visit, New England surprises me in how different the landscape is from Madison. I don’t expect it because the people are so similar – focus on hard work, pragmatism, and progressive ideology. The hills, woods, and the 400-year history influence the design of neighborhoods and towns in an idiosyncratic way. There are very few highways and lots of residential streets. No ranch houses are to be found but colonials abound. And instead of town squares and city centers, Connecticut seems to have lots of "districts" interspersed with little regard to town boundaries or survey lines.
 West Hartford has such a district of shops and restaurants, with a weirdly high amount of chains interspersed with unique restaurants. Bartaco doesn't seem to fit here. The storefront is authentic and welcoming - they clearly pay close attention to design in a way that no other store on the block does. A single and simple color palette unifies the whole restaurant, and the same design motifs are repeated everywhere.
