@@ -9,9 +9,9 @@ tag: restaurantreview
 
 Mel had a conference in DC this weekend, right in the Woodley Park/Adams Morgan neighborhood. This part of DC is a lot like some old parts of Madison like Vilas/Monroe and the waterfront near Atwood/Jenny St. Lots of mature, old trees, walkable streets with moderate traffic and gorgeous hundred-year-old houses that are fun to stroll by and imagine life in.
 
-We stayed right near the Metro stop in Woodley Park, which has [one of the longest escalators in the Western Hemisphere](https://www.tripadvisor.com/Travel-g28970-c56842/Washington-Dc:District-Of-Columbia:Metrorail.Trivia.html). After a late ride from the airport, we were hungry and not in the mood to travel far. Luckily, __Open City__ was just around the corner
+We stayed right near the Metro stop in Woodley Park, which has [one of the longest escalators in the Western Hemisphere](https://www.tripadvisor.com/Travel-g28970-c56842/Washington-Dc:District-Of-Columbia:Metrorail.Trivia.html). After a late ride from the airport, we were hungry and not in the mood to travel far. Luckily, Open City was just around the corner
 
-###[Open City](http://www.opencitydc.com/menu/main/), Woodley Park, Washington D.C.###
+### [Open City](http://www.opencitydc.com/menu/main/), Woodley Park, Washington D.C. ###
 
 Open City has a cloistered, cozy, shrub-lined patio out front and narrow front doors. Inside, it feels busy and vibrant and has soft lighting - I watched another customer take her phone out and use it to illuminate the menu.
 
@@ -35,7 +35,7 @@ The vegan tuna salad satisfied my inner elementary school kid. My Dad's family m
 
 The main event of my weekend with Mel was a night out in Adams Morgan with law school friends of hers, Matt and Mia. The real highlight came before drinks, though, in the form of my 2nd favorite restaurant on the whole planet.
 
-###[Smoke & Barrel](http://smokeandbarreldc.com/) - Adams Morgan, Washington D.C.###
+### [Smoke & Barrel](http://smokeandbarreldc.com/) - Adams Morgan, Washington D.C. ###
 
 I first had Smoke & Barrel last year during Mel's summer internship. We had a very pretty but kind of dippy waiter who was plainly inept. We ordered some vegan wings and took greedy first bites before looking up at each other in concern - he had obviously not heard 'vegan' when we had ordered and now we were left with mouths full of chicken and a plate of wings that would be wasted. After chewing a few more bites, the realization dawned on us that it wasn't meat, but rather the best fake meat we had ever tasted - a perfect vegan wing.
 
@@ -53,7 +53,7 @@ I got to Crème a while before Shauna and Brad and I had plenty of time to peopl
 
 Once Shauna and Brad arrived, we got our menus. Crème has a short but mighty menu, with 5 or 6 benedicts, some omelets, and breakfast carbs like pancakes. There's a unique twist though; several of the items have a Cajun influence. I think that was my favorite part about Crème. Shauna and Brad both got a Louisiana benedict, with spicy andouille sausage and shrimp. I got a mushroom benedict. They poached my egg perfectly, and the benedicts came with lightly dressed spring greens - a nice and unexpected surprise. Shauna's egg was overdone, and despite the greens there really wasn't enough there to justify the high-even-for-D.C. price. 
 
-###[Pret a Manger - K Street](https://www.pret.com/en-us/find-a-pret/1701%20K%20STREET%20DC%2020006/) - Farragut North, Washington D.C. ###
+### [Pret a Manger - K Street](https://www.pret.com/en-us/find-a-pret/1701%20K%20STREET%20DC%2020006/) - Farragut North, Washington D.C.  ###
 We rode the metro back through downtown, and I stopped at Pret a Manger on Farragut Square to get a sandwich for the plane ride home. Mel used to work in this part of town and Pret was a frequent stop of hers for lunch. I am desperate for one to come to Madison, but you can find them in Chicago and New York as well as D.C. 
 
 They specialize in grab-'n-go sandwiches, soup, housemade popcorn, desserts, and coffee drinks. The food is made simply but with high-quality ingredients. The food is made fresh in store every day, and anything left at the end of the day is donated to food banks.
