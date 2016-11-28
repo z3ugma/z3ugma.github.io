@@ -37,7 +37,7 @@ Here are the nuts and bolts of how Rethink Recipes works:
 
 ![Adding a Recipe](https://raw.githubusercontent.com/z3ugma/rethink-recipes/master/screenshot3.png)
 
-When accessing __/add__, the user is presented with 3 form fields - the title, ingredients, and directions.
+When accessing <code>/add</code>, the user is presented with 3 form fields - the title, ingredients, and directions.
 
 When the form is submitted, a bunch of things happen:
 

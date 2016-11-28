@@ -22,7 +22,7 @@ I ordered three, and hooked them up to my brewery server.
 
 The problem I encountered is that the pcsensor software was only designed to display one result at a time, and wasn't configured for displaying multiple sensors. Luckily, I found [a fork of the project that had been edited to allow that](http://momtchil.momtchev.com/node/6) by following [this guide](http://webcache.googleusercontent.com/search?q=cache:www.penguinsunbound.com/User:goeko/Temp_Sensor)
 
-Using lsusb | grep TEMPer, I was able to confirm that the computer was reading my sensors. I installed the pcsensor-multi software:
+Using <code>lsusb | grep TEMPer</code>, I was able to confirm that the computer was reading my sensors. I installed the pcsensor-multi software:
 
 {% highlight bash %}
 wget http://momtchil.momtchev.com/files/pcsensor-1.0.0-multi.tgz
