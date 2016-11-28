@@ -14,7 +14,7 @@ When I last ran into a [problem that would require this kind of measurement](/20
 
 While searching for some hardware to help me tell if my washer or dryer were running, I came up empty - it seems like any prefab way to measure this would involve either buying a new washer and dryer or buying expensive hardware. I therefore decided to make my first foray into electronics hardware.
 
-###How to Tell If an Appliance Is Running###
+### How to Tell If an Appliance Is Running
 
 The first part of getting my washer to text me that it's done is to tell when it is running. I thought of a few ways to do this:
 
@@ -28,13 +28,13 @@ The first part of getting my washer to text me that it's done is to tell when it
 4. Measure power as in option 2, but instead use a noninvasive current transformer sensor. This what whole-home monitoring solutions like [Neurio](http://neur.io/products/) use. Neurio is one of the premade options I considered, but it seems too unproven and new. CT sensors use a ring-shaped clamp that goes around one of the wires in the circuit. This has the benefit of being wholly separate from the mains current, making it safer.
 ![Neurio uses 2 CT sensors](http://neur.io/wp-content/uploads/HEM_Contents.jpg)
 
-I opted to use a CT sensor. Since I already had a Raspberry Pi available, I decided I would use it as the platform for building my device. It has the benefit of being easy to program, running a full Linux desktop environment, and having tons of forum support online. Another option is to use an [Arduino](https://openenergymonitor.org/emon/buildingblocks/how-to-build-an-arduino-energy-monitor-measuring-current-only). In the future, I'd like to try migrating to a standalone, low-power board like the [MT7688AN](http://hackerboards.com/tiny-iot-sbc-runs-openwrt-on-mediatek-mips-soc/).
+I opted to use a CT sensor. Since I already had a Raspberry Pi available, I decided I would use it as the platform for building my device. It has the benefit of being easy to program, running a full Linux desktop environment, and having tons of forum support online. Another option is to use an [Arduino](https://openenergymonitor.org/emon/buildingblocks/how-to-build-an-arduino-energy-monitor-measuring-current-only). In the future, I'd like to try migrating to a standalone, low-power board like the [ESP8266](https://www.sparkfun.com/products/13711).
 
 CT sensors are very sensitive - they can measure current to a precise degree and can be used to tell exactly how much power you're consuming. My needs are a lot simpler - I don't need to know _how much_ power is being consumed, just whether or not it is.
 
 So here are the building blocks: a Raspberry Pi to run software and send text messages; current sensors to measure the power usage, and...something in the middle.
 
-###Something in the Middle###
+### Something in the Middle
 
 One thing I quickly realized is that the Raspberry Pi does not have an analog input. Raspberry Pi's inputs, called general-purpose-input-output or GPIO, can only tell whether a voltage is above a certain threshold ("high") or below it ("low"), because they are digital inputs.
 
