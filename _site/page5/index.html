@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<!--Facebook share tags -->
+  <meta property="og:url"                content="/page5/" />
+  <meta property="og:type"               content="article" />
+  <meta property="og:title"              content="Home"/>
+  <meta property="og:description"        content="" />
+  <meta property="og:image"              content="" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Python Monty
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+          <img src="https://avatars1.githubusercontent.com/u/6099983?v=3&s=460" height="200"/>
+      <h1>
+        <a href="/">
+          Python Monty
+        </a>
+      </h1>
+      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python. Also some restaurant reviews and recipes.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/archive/">Archive</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    </nav>
+
+    <p>&copy; 2016. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2013/10/24/homebrew-temperature-monitoring/">
+        Homebrew Temperature Monitoring
+      </a>
+    </h1>
+
+    <span class="post-date">24 Oct 2013</span>
+
+    <p>A few weeks ago, I embarked on a project to monitor the temperature of my homebrews as they ferment and bottle-age.</p>
+
+<h3 id="the-data">The Data</h3>
+
+<p>In order to record temperatures, I ordered 3 TEMPer temperature-logging modules from eBay. These were recommended by lots of homebrewers on HomeBrewTalk as cheap and effective, although occasionally users reported large variances in temperatures and DOA sensors.</p>
+
+<p><img src="/images/usbtemper.png" alt="The product ad" /></p>
+
+<p>These are manufactured by PCsensor.com, which provides a linux command-line client to read the data of the thermometer.</p>
+
+<p>I ordered three, and hooked them up to my brewery server.</p>
+
+<h3 id="the-first-hiccup">The First Hiccup</h3>
+
+<p>The problem I encountered is that the pcsensor software was only designed to display one result at a time, and wasn’t configured for displaying multiple sensors. Luckily, I found <a href="http://momtchil.momtchev.com/node/6">a fork of the project that had been edited to allow that</a> by following <a href="http://webcache.googleusercontent.com/search?q=cache:www.penguinsunbound.com/User:goeko/Temp_Sensor">this guide</a></p>
+
+<p>Using <code>lsusb | grep TEMPer</code>, I was able to confirm that the computer was reading my sensors. I installed the pcsensor-multi software:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">wget http://momtchil.momtchev.com/files/pcsensor-1.0.0-multi.tgz
+tar -zxvf pcsensor-1.0.0-multi.tgz
+<span class="nb">cd </span>pcsensor-1.0.0
+make</code></pre></div>
+
+<p><em>(note: a backed-up copy of the pcsensor program can be found <a href="/files/pcsensor-1.0.0-multi.tgz">here</a>)</em></p>
+
+<p>And moved it into /usr/bin/local.</p>
+
+<h3 id="logging-temperatures">Logging Temperatures</h3>
+
+<p>At this point, I could enter the pcsensor command and get output:</p>
+
+<p>2011/12/08 14:09:16 Temperature 65.19F 18.44C
+2011/12/08 14:09:16 Temperature 61.59F 16.44C</p>
+
+<p>But I wouldn’t be around all day to check out the temperatures. I set up a cron job to write the temperatures to a log:</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text"># m h dom mon dow command
+* * * * * /usr/local/bin/pcsensor &gt;&gt; /home/fred/temperatures.log</code></pre></div>
+
+<p>This reads as: ALL minutes (m) of ALL hours (h) of ALL days of the month on ALL days of the week, run the pcsensor program and add the output to the file “temperatures.log”.
+So, every minute, the server adds temperature data to the log.</p>
+
+<h3 id="graphing-the-data">Graphing the Data</h3>
+
+<p><img src="/images/googlechart.png" alt="A Google Chart graph" /></p>
+
+<p>The Penguins Unbound link uses gnuplot to graph the data, an approach that I might take up in the future. However, I wanted to use the Google Charts API to generate my graphs.</p>
+
+<p>To be continued: the exciting saga of why you don’t try to parse thousands of lines of text as a time-series database.</p>
+
+  </div>
+  
+</div>
+
+<div class="pagination">
+  
+    <span class="pagination-item older">Older</span>
+  
+  
+    
+      <a class="pagination-item newer" href="/page4">Newer</a>
+    
+  
+</div>
+    </div>
+
+  </body>
+</html>
