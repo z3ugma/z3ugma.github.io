@@ -3,7 +3,7 @@ layout: post
 title: "WasherBot and DryerBot, Part 3: Connecting to the Pi and Building a Voltage Divider"
 date: 2016-12-03 12:35:00 -0500
 comments: true
-published: false
+published: true
 imageurl: "/images/washerdryerbot/mcp3002_after_vdiv.png"
 description: "Doing my first tests with the Pi and finding out what a voltage divider is"
 ---

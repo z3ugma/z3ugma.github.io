@@ -10,6 +10,8 @@ description: "Getting texts from my washer & dryer using a Raspberry Pi to measu
 
 The time indicators on my washer and dryer are notoriously unreliable. Also, my and Mel's busy brains occasionally forget that we started doing laundry. I wanted to build a system that would __text me when my washer or dryer finished running__.
 
+{% include washerdryerbot_links.markdown %}
+
 When I last ran into a [problem that would require this kind of measurement](/2013/10/24/homebrew-temperature-monitoring/), I turned to some [preassembled USB temperature sensors](http://www.pcsensor.com/usb-thermometers.html) and solved the problem with software only. 
 
 While searching for some hardware to help me tell if my washer or dryer were running, I came up empty - it seems like any prefab way to measure this would involve either buying a new washer and dryer or buying expensive hardware. I therefore decided to make my first foray into electronics hardware.
