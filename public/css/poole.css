@@ -183,6 +183,8 @@ pre code {
 .highlight {
   margin-bottom: 1rem;
   border-radius: 4px;
+  -webkit-margin-end: 0.5em;
+  -webkit-margin-start: 0.5em;
 }
 .highlight pre {
   margin-bottom: 0;
