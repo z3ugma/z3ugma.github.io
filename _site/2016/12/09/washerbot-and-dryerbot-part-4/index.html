@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<!--Facebook share tags -->
+  <meta property="og:url"                content="/2016/12/09/washerbot-and-dryerbot-part-4/" />
+  <meta property="og:type"               content="article" />
+  <meta property="og:title"              content="WasherBot and DryerBot, Part 4: A Low-Pass Filter and Reading From Laundry Appliances"/>
+  <meta property="og:description"        content="Adding a low-pass filter to the circuit to improve signal quality and wiring the Pi to my washer and dryer" />
+  <meta property="og:image"              content="/images/washerdryerbot/dryer_wire.jpeg" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      WasherBot and DryerBot, Part 4: A Low-Pass Filter and Reading From Laundry Appliances
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+          <img src="https://avatars1.githubusercontent.com/u/6099983?v=3&s=460" height="200"/>
+      <h1>
+        <a href="/">
+          Python Monty
+        </a>
+      </h1>
+      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python. Also some restaurant reviews and recipes.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/archive/">Archive</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    </nav>
+
+    <p>&copy; 2017. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">WasherBot and DryerBot, Part 4: A Low-Pass Filter and Reading From Laundry Appliances</h1>
+  <span class="post-date">09 Dec 2016</span>
+  <h3 id="table-of-contents">Table of Contents</h3>
+
+<ul>
+  <li><a href="/2016/11/21/washerbot-and-dryerbot-part-1/">Part 1: How to Tell If an Appliance Is Running</a></li>
+  <li><a href="/2016/11/22/washerbot-and-dryerbot-part-2/">Part 2: Current Sensors and Burden Resistors</a></li>
+  <li><a href="/2016/12/03/washerbot-and-dryerbot-part-3/">Part 3: Connecting to the Pi and Building a Voltage Divider</a></li>
+  <li><a href="/2016/12/09/washerbot-and-dryerbot-part-4/">Part 4: A Low-Pass Filter and Reading From Laundry Appliances</a></li>
+  <li><a href="/2017/04/24/washerbot-and-dryerbot-part-5/">Part 5: A Measurement Algorithm and Text Message Integration</a></li>
+</ul>
+
+<p>When I was following the <a href="https://openenergymonitor.org/emon/buildingblocks/ct-sensors-interface">OpenEnergyMon guide</a> I noticed they were including a capacitor in their circuit:</p>
+
+<p><img src="/images/washerdryerbot/wth_capacitor.png" alt="" /></p>
+
+<p>What’s that there for? It’s to provide an alternative path for some of the current to flow to the ground. Capacitors take some time to charge up and then discharge all at once, in a way that is dependent on the frequency of the current flowing through them. An arrangement like this with a resistor and a capacitor together is called a <strong><a href="http://www.electronics-tutorials.ws/filter/filter_2.html">low-pass filter</a></strong>, meaning that only signals with a low frequency will be able to pass. It will filter out excess noise.</p>
+
+<p><a href="http://openenergymonitor.blogspot.fr/2010/03/reducing-noise-adding-capacitor.html">This is another great discussion on the subject</a>.</p>
+
+<p>Let’s hook up a 10uF capacitor to our circuit:</p>
+
+<p><img src="/images/washerdryerbot/mcp3002_lowpass.png" alt="" /></p>
+
+<p>I did some experimenting by measuring the voltage signal with and without the low-pass filter.</p>
+
+<p>Across the entire range of the ADC:
+<img src="/images/washerdryerbot/lowpass_output.png" alt="" /></p>
+
+<p>and zoomed in:
+<img src="/images/washerdryerbot/lowpass_output_zoomed.png" alt="" /></p>
+
+<p>As you can see, it’s not trivial. A perfectly clean signal would measure 511 every time, but there’s some jitter. With the low-pass filter, the difference between the maximum value and the minimum is around 15. Without the filter, it’s much as 50. To a crude approximation, the filter adds around 10% accuracy to our measurement.</p>
+
+<h3 id="two-jacks-and-two-channels">Two Jacks and Two Channels</h3>
+
+<p>Up to this point, we’ve only been measuring one input at a time. With 2 channels, the MCP3002 can read 2 voltages. And with 2 laundry appliances, that’s what I need to do.</p>
+
+<p>We’ll add a second jack to the circuit:</p>
+
+<p><img src="/images/washerdryerbot/mcp3002_2jack.png" alt="" /></p>
+
+<p>We can share the same voltage divider, and direct our output to channel 1.</p>
+
+<h3 id="measuring-the-real-appliances">Measuring the Real Appliances</h3>
+
+<p>Now, in order to translate voltage readings into the state of the appliance, I need to actually measure the appliances. I turned the breaker off to the dryer, unplugged it, and took off the back cover to fit the current sensor around 1 of the wires. A 220V dryer in the US has 4 wires coming into it. The green ground, 2 phases of power (red and black) and a white neutral. After some trial and error, I found that my dryer had the heating element powered by the left phase and the motor powered by the right phase.</p>
+
+<p><img src="/images/washerdryerbot/dryer_wire.jpeg" alt="" /></p>
+
+<p>For the washer, I turned off the breaker to the outlet it was plugged into and put the current sensor around the power line inside the outlet.</p>
+
+<p>I cued up the measurement script and took some readings of the dryer:</p>
+
+<p><img src="/images/washerdryerbot/washeroff_dryeron.png" alt="" /></p>
+
+<p>It was basically perfect. I was excited here - the washer reading stays almost exactly at baseline and the dryer reading starts out there. When the dryer turns on, it is instantaneously recognizable in the graph.</p>
+
+<p>In Part 5, I’ll show you my algorithm for turning thousands of measurements into a single meaningful data point.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2017/04/24/washerbot-and-dryerbot-part-5/">
+            WasherBot and DryerBot, Part 5: A Measurement Algorithm and Text Message Integration
+            <small>24 Apr 2017</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/12/03/washerbot-and-dryerbot-part-3/">
+            WasherBot and DryerBot, Part 3: Connecting to the Pi and Building a Voltage Divider
+            <small>03 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/22/washerbot-and-dryerbot-part-2/">
+            WasherBot and DryerBot, Part 2: Current Sensors and Burden Resistors
+            <small>22 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>

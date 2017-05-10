@@ -12,7 +12,7 @@ description: "Adding a low-pass filter to the circuit to improve signal quality 
 
 When I was following the [OpenEnergyMon guide](https://openenergymonitor.org/emon/buildingblocks/ct-sensors-interface) I noticed they were including a capacitor in their circuit:
 
-![](https://openenergymonitor.org/emon/sites/default/files/Arduino%20AC%20current%20input%20A.png)
+![](/images/washerdryerbot/wth_capacitor.png)
 
 What's that there for? It's to provide an alternative path for some of the current to flow to the ground. Capacitors take some time to charge up and then discharge all at once, in a way that is dependent on the frequency of the current flowing through them. An arrangement like this with a resistor and a capacitor together is called a __[low-pass filter](http://www.electronics-tutorials.ws/filter/filter_2.html)__, meaning that only signals with a low frequency will be able to pass. It will filter out excess noise.
 

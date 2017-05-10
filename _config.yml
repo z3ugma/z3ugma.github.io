@@ -6,6 +6,7 @@ highlighter:      rouge
 permalink:        pretty
 #relative_permalinks: true # Removed in Keyll 3
 
+gems:             [jekyll-paginate]
 # Setup
 title:            Python Monty
 tagline:          'Terrible code, restaurant reviews, and recipes'
