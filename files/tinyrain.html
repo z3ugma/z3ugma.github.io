@@ -30,7 +30,39 @@
             body {
                 display: table-cell;
                 vertical-align: middle;
+                min-width:800px;
             }
+                        
+            audio::-webkit-media-controls-download-button {
+            display:none;
+            }
+
+            audio {
+              min-width: 100%;
+            }
+
+            audio::-webkit-media-controls-panel {
+              border-radius: 5;
+              min-width:100%;
+            }
+
+            audio::-webkit-media-controls-timeline {
+                background: white;
+              -webkit-transform: scale(1, 10);
+
+            }
+
+            audio::-webkit-media-controls-time-remaining-display,
+            audio::-webkit-media-controls-current-time-display {
+              color: white;
+            }
+
+            audio::-webkit-media-controls-volume-slider {  
+                -webkit-transform: scale(1, 2);
+                 -webkit-filter: grayscale(100%)   
+                }
+
+
         </style>
 
         <link rel="shortcut icon" href="https://cdn3.iconfinder.com/data/icons/weather-16/256/Rainy_Day-16.png">
