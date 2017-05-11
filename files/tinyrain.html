@@ -11,61 +11,65 @@
             window.addEvent('load', function() {
             var song = new Audio("http://rainymood.com/audio1110/0.m4a");
             song.controls = true;
+            song.controlsList = "nodownload";
             song.loop = true;
             song.autoplay = true;
             document.body.appendChild(song);
             });
         </script>
-        
+
         <style>
-            html, body {
+            html,
+            body {
                 height: 100%;
             }
-
             html {
                 display: table;
                 margin: auto;
             }
-
             body {
                 display: table-cell;
                 vertical-align: middle;
-                min-width:800px;
+                width: 50px;
+                background: #002B36;
+                zoom: 3;
             }
-                        
             audio::-webkit-media-controls-download-button {
-            display:none;
+                display: none;
             }
-
             audio {
-              min-width: 100%;
+                min-width: 100%;
+                background: #073642;
             }
-
             audio::-webkit-media-controls-panel {
-              border-radius: 5;
-              min-width:100%;
+                border-radius: 5;
+                min-width: 100%;
+                background: #073642;
             }
-
             audio::-webkit-media-controls-timeline {
-                background: white;
-              -webkit-transform: scale(1, 10);
-
+                height: 0px;
+                -webkit-filter: saturate(10) blur(5px);
+                -webkit-transform: scale(1, 10);
             }
-
+            audio::-webkit-media-controls-volume-slider {
+                -webkit-transform: scale(1, 3);
+                -webkit-filter: saturate(10);
+            }
+            audio::-webkit-media-controls-mute-button {
+                -webkit-filter: brightness(200%);
+                -webkit-transform: scale(1.5, 1.5);
+            }
+            audio::-webkit-media-controls-play-button {
+                -webkit-filter: brightness(200%);
+                -webkit-transform: scale(1.5, 1.5);
+            }
             audio::-webkit-media-controls-time-remaining-display,
             audio::-webkit-media-controls-current-time-display {
-              color: white;
+                display: none;
             }
-
-            audio::-webkit-media-controls-volume-slider {  
-                -webkit-transform: scale(1, 2);
-                 -webkit-filter: grayscale(100%)   
-                }
-
-
         </style>
 
-        <link rel="shortcut icon" href="https://cdn3.iconfinder.com/data/icons/weather-16/256/Rainy_Day-16.png">
+        <link rel="shortcut icon" href="https://cdn3.iconfinder.com/data/icons/weather-16/256/Rainy_Day-16.png" />
     </head>
     <body>
     </body>
