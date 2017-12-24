@@ -1,9 +1,8 @@
 ---
+title: Keeping VirtualBox and Vagrant Boxes Alive Through Reboots
+date: 2014-12-10 18:50:55 Z
 layout: post
-title: "Keeping VirtualBox and Vagrant Boxes Alive Through Reboots"
-date: 2014-12-10 13:50:55 -0500
 comments: true
-published: true
 ---
 
 I recently switched from a dedicated Windows 7 PC for my home server to a Mac Mini, mostly for the better electricity consumption and the fact the the PC was having nightly bluescreen crashes and restarting.

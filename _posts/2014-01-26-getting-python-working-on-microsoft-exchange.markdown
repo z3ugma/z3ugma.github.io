@@ -1,10 +1,10 @@
 ---
+title: Getting Python Working on Microsoft Exchange
+date: 2014-01-26 22:33:56 Z
 layout: post
-title: "Getting Python Working on Microsoft Exchange"
-date: 2014-01-26 16:33:56 -0600
 comments: true
-categories: 
 ---
+
 ## Creating an Internal Emailing Wikibot in Python ##
 
 You know how they say that when all you have is a hammer that everything looks like a nail?

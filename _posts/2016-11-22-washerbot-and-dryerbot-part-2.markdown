@@ -1,11 +1,11 @@
 ---
+title: 'WasherBot and DryerBot, Part 2: Current Sensors and Burden Resistors'
+date: 2016-11-22 17:35:00 Z
 layout: post
-title: "WasherBot and DryerBot, Part 2: Current Sensors and Burden Resistors"
-date: 2016-11-22 12:35:00 -0500
 comments: true
-published: true
 imageurl: "/images/washerdryerbot/solder_plug.jpg"
-description: "Finding a list of parts for WasherBot and DryerBot, soldering, and starting a circuit for the Pi"
+description: Finding a list of parts for WasherBot and DryerBot, soldering, and starting
+  a circuit for the Pi
 ---
 
 {% include washerdryerbot_links.markdown %}

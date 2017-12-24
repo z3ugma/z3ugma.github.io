@@ -1,11 +1,11 @@
 ---
+title: 'WasherBot and DryerBot, Part 5: A Measurement Algorithm and Text Message Integration'
+date: 2017-04-24 17:35:00 Z
 layout: post
-title: "WasherBot and DryerBot, Part 5: A Measurement Algorithm and Text Message Integration"
-date: 2017-04-24 12:35:00 -0500
 comments: true
-published: true
 imageurl: "/images/washerdryerbot/final_text_iphone5s_spacegrey_portrait.png"
-description: "Developing an algorithm to convert thousands of measurements into one reading; and texting the results"
+description: Developing an algorithm to convert thousands of measurements into one
+  reading; and texting the results
 ---
 
 {% include washerdryerbot_links.markdown %}
