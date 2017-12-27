@@ -1,9 +1,8 @@
 ---
+title: A Homegrown Recipe App That Helps You Cook
+date: 2015-01-17 04:50:55 Z
 layout: post
-title: "A Homegrown Recipe App That Helps You Cook"
-date: 2015-01-16 23:50:55 -0500
 comments: true
-published: true
 ---
 
 I do love to cook. All of my favorite recipes are stored in my head, are improvised off the cuff, or found in a gross stack of crinkled papers held together with a binder clip in my cabinet.

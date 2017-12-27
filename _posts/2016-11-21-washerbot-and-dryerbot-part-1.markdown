@@ -1,11 +1,11 @@
 ---
+title: 'WasherBot and DryerBot, Part 1: How to Tell If an Appliance Is Running'
+date: 2016-11-21 17:35:00 Z
 layout: post
-title: "WasherBot and DryerBot, Part 1: How to Tell If an Appliance Is Running"
-date: 2016-11-21 12:35:00 -0500
 comments: true
-published: true
-imageurl: "https://i.kinja-img.com/gawker-media/image/upload/s--NrejLvsE--/c_fit,fl_progressive,q_80,w_636/bucyzpye75xamq6yxxvm.jpg"
-description: "Getting texts from my washer & dryer using a Raspberry Pi to measure power consumption"
+imageurl: https://i.kinja-img.com/gawker-media/image/upload/s--NrejLvsE--/c_fit,fl_progressive,q_80,w_636/bucyzpye75xamq6yxxvm.jpg
+description: Getting texts from my washer & dryer using a Raspberry Pi to measure
+  power consumption
 ---
 
 The time indicators on my washer and dryer are notoriously unreliable. Also, my and Mel's busy brains occasionally forget that we started doing laundry. I wanted to build a system that would __text me when my washer or dryer finished running__.

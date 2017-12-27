@@ -1,9 +1,8 @@
 ---
+title: Hello World
+date: 2014-01-23 23:28:29 Z
 layout: post
-title: "Hello World"
-date: 2014-01-23 17:28:29 -0600
 comments: true
-categories:
 ---
 
 ## A First Toast ##

@@ -1,11 +1,12 @@
 ---
+title: 'WasherBot and DryerBot, Part 4: A Low-Pass Filter and Reading From Laundry
+  Appliances'
+date: 2016-12-09 17:35:00 Z
 layout: post
-title: "WasherBot and DryerBot, Part 4: A Low-Pass Filter and Reading From Laundry Appliances"
-date: 2016-12-09 12:35:00 -0500
 comments: true
-published: true
 imageurl: "/images/washerdryerbot/dryer_wire.jpeg"
-description: "Adding a low-pass filter to the circuit to improve signal quality and wiring the Pi to my washer and dryer"
+description: Adding a low-pass filter to the circuit to improve signal quality and
+  wiring the Pi to my washer and dryer
 ---
 
 {% include washerdryerbot_links.markdown %}

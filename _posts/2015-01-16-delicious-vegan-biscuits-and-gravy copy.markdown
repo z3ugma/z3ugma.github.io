@@ -1,10 +1,10 @@
 ---
+title: Delicious Vegan Biscuits and Gravy
+date: 2015-01-16 23:50:55 Z
 layout: post
-title: "Delicious Vegan Biscuits and Gravy"
-date: 2015-01-16 18:50:55 -0500
 comments: true
-published: true
 ---
+
 Next up, a departure from my usual programming entries to another hobby - cooking.
 
 It's [Veganuary](http://www.veganuary.com)! It's a month of sacrifice for me, in the name of shedding holiday pounds.

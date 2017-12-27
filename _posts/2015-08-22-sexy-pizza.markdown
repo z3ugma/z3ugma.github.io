@@ -1,11 +1,12 @@
 ---
+title: Sing a Song for Sixpence
+date: 2015-08-22 23:50:55 Z
+tags:
+- restaurantreview
 layout: post
-title: "Sing a Song for Sixpence"
-date: 2015-08-22 18:50:55 -0500
 comments: true
-published: true
-tag: restaurantreview
 ---
+
 I've been wanting to do this for some time, and I think I'm taking the plunge - you'll start seeing restaurant reviews on here as well as code.
 
 ##Four and Twenty, East Johnson, Madison##

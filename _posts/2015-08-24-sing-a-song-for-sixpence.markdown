@@ -1,11 +1,12 @@
 ---
+title: Sexy Pizza
+date: 2015-08-24 23:50:55 Z
+tags:
+- restaurantreview
 layout: post
-title: "Sexy Pizza"
-date: 2015-08-24 18:50:55 -0500
 comments: true
-published: true
-tag: restaurantreview
 ---
+
 ##Sexy Pizza - South Pearl, Denver##
 
 I took a 5K sunset hike in Morrison, CO, today, a solid 20 minutes beyond surburban Denver and into the foothills. Afterwards, I was starving for an uncomplicated meal, and my friend Shauna has been after me to try Sexy Pizza for some time. It was right on the way home, so I stopped in. Pearl Street was unusually quiet so late at night, and I sat near the street in front of the wide-open garage door. An aside - it's very awkward to walk into a restaurant that has a normal door adjacent to an open garage door. Which is the right entrance?

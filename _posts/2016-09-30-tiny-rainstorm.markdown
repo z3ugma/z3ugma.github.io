@@ -1,9 +1,8 @@
 ---
+title: Tiny Rainstorm
+date: 2016-09-30 17:35:00 Z
 layout: post
-title: "Tiny Rainstorm"
-date: 2016-09-30 12:35:00 -0500
 comments: true
-published: true
 ---
 
 I like listening to [RainyMood](http://www.rainymood.com) while I work to keep focused. The site isn't that big, just 327kb, but its usability isn't great and it's full of tracking code. The site hits my adblocker(s) (plural at work per GPO) and so is slow to load.

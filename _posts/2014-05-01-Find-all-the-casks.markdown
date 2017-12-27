@@ -1,9 +1,8 @@
 ---
+title: Find all the casks
+date: 2014-05-01 15:50:55 Z
 layout: post
-title: "Find all the casks"
-date: 2014-05-01 12:50:55 -0300
 comments: true
-categories: 
 ---
 
 There's a great package manager for Mac called Homebrew that acts sort of like Aptitude on Ubuntu; it makes it really easy to quickly install software for your Mac from the command line.

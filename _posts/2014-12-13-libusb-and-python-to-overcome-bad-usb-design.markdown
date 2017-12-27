@@ -1,9 +1,8 @@
 ---
-layout: post
 title: " LibUSB and Python to Overcome Bad USB Design"
-date: 2014-12-13 18:50:55 -0500
+date: 2014-12-13 23:50:55 Z
+layout: post
 comments: true
-published: true
 ---
 
 [Last October, I began recording temperatures](http://z3ugma.github.io/2013/10/25/homebrew-temperature-monitoring/) for my homebrew setup. It used a C program called pcsensor that someone reverse-engineered from the Windows version available on the CD that came with my TEMPer1v1.4 sensors.

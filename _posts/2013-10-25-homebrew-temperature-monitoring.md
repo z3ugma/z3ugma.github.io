@@ -1,9 +1,8 @@
 ---
+title: Homebrew Temperature Monitoring
+date: 2013-10-25 01:50:55 Z
 layout: post
-title: "Homebrew Temperature Monitoring"
-date: 2013-10-24 20:50:55 -0500
 comments: true
-published: true
 ---
 
 A few weeks ago, I embarked on a project to monitor the temperature of my homebrews as they ferment and bottle-age.
@@ -12,7 +11,7 @@ A few weeks ago, I embarked on a project to monitor the temperature of my homebr
 
 In order to record temperatures, I ordered 3 TEMPer temperature-logging modules from eBay. These were recommended by lots of homebrewers on HomeBrewTalk as cheap and effective, although occasionally users reported large variances in temperatures and DOA sensors.
 
-![The product ad](//images/usbtemper.png)
+![The product ad](/images/usbtemper.png)
 
 These are manufactured by PCsensor.com, which provides a linux command-line client to read the data of the thermometer.
 
@@ -20,7 +19,7 @@ I ordered three, and hooked them up to my brewery server.
 
 ###The First Hiccup###
 
-The problem I encountered is that the pcsensor software was only designed to display one result at a time, and wasn't configured for displaying multiple sensors. Luckily, I found a fork of the project that had been edited to allow that: http://momtchil.momtchev.com/node/6. Here's a good guide I followed: http://www.penguinsunbound.com/User:goeko/Temp_Sensor
+The problem I encountered is that the pcsensor software was only designed to display one result at a time, and wasn't configured for displaying multiple sensors. Luckily, I found [a fork of the project that had been edited to allow that](http://momtchil.momtchev.com/node/6) by following [this guide](http://webcache.googleusercontent.com/search?q=cache:www.penguinsunbound.com/User:goeko/Temp_Sensor)
 
 Using <code>lsusb | grep TEMPer</code>, I was able to confirm that the computer was reading my sensors. I installed the pcsensor-multi software:
 
@@ -30,6 +29,8 @@ tar -zxvf pcsensor-1.0.0-multi.tgz
 cd pcsensor-1.0.0
 make
 {% endhighlight %}
+
+*(note: a backed-up copy of the pcsensor program can be found [here](/files/pcsensor-1.0.0-multi.tgz))*
 
 And moved it into /usr/bin/local.
 
@@ -52,8 +53,8 @@ So, every minute, the server adds temperature data to the log.
 
 ###Graphing the Data###
 
-![A Google Chart graph](//images/googlechart.png)
+![A Google Chart graph](/images/googlechart.png)
 
 The Penguins Unbound link uses gnuplot to graph the data, an approach that I might take up in the future. However, I wanted to use the Google Charts API to generate my graphs.
 
-Since the temperature sensors work as USB Human Input devices.
+To be continued: the exciting saga of why you don't try to parse thousands of lines of text as a time-series database.

@@ -1,9 +1,8 @@
 ---
+title: InfluxDB Augments My Homebrew Temperature Monitor
+date: 2014-12-13 20:50:55 Z
 layout: post
-title: "InfluxDB Augments My Homebrew Temperature Monitor"
-date: 2014-12-13 15:50:55 -0500
 comments: true
-published: true
 ---
 
 [Last October, I began recording temperatures](http://z3ugma.github.io/2013/10/25/homebrew-temperature-monitoring/) for my homebrew setup. It was early in my explorations of Python and scripting, and ran in a pretty silly fashion. It went something like this:

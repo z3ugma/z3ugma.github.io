@@ -1,7 +1,8 @@
 ---
-layout: page
 title: Archive
+layout: page
 ---
+
 <ul>
   {% for post in site.posts %}
 

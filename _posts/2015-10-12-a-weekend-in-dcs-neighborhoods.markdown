@@ -1,10 +1,10 @@
 ---
+title: A Weekend in DC's Neighboroods
+date: 2015-10-12 13:00:00 Z
+tags:
+- restaurantreview
 layout: post
-title: "A Weekend in DC's Neighboroods"
-date: 2015-10-12 08:00:00 -0500
 comments: true
-published: true
-tag: restaurantreview
 ---
 
 Mel had a conference in DC this weekend, right in the Woodley Park/Adams Morgan neighborhood. This part of DC is a lot like some old parts of Madison like Vilas/Monroe and the waterfront near Atwood/Jenny St. Lots of mature, old trees, walkable streets with moderate traffic and gorgeous hundred-year-old houses that are fun to stroll by and imagine life in.

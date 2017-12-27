@@ -1,11 +1,12 @@
 ---
+title: Damn, That Design
+date: 2016-02-02 23:50:55 Z
+tags:
+- restaurantreview
 layout: post
-title: "Damn, That Design"
-date: 2016-02-02 18:50:55 -0500
 comments: true
-published: true
-tag: restaurantreview
 ---
+
 ## Bartaco, West Hartford, CT ##
 
 I grew up 10 miles from here, in the hills of northwest Connecticut. My childhood was very whitebread and suburban, but there were always plenty of woods around my house to explore. Whenever I visit, New England surprises me in how different the landscape is from Madison. I don’t expect it because the people are so similar – focus on hard work, pragmatism, and progressive ideology. The hills, woods, and the 400-year history influence the design of neighborhoods and towns in an idiosyncratic way. There are very few highways and lots of residential streets. No ranch houses are to be found but colonials abound. And instead of town squares and city centers, Connecticut seems to have lots of "districts" interspersed with little regard to town boundaries or survey lines.
