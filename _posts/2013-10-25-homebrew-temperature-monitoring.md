@@ -51,7 +51,7 @@ But I wouldn't be around all day to check out the temperatures. I set up a cron 
 This reads as: ALL minutes (m) of ALL hours (h) of ALL days of the month on ALL days of the week, run the pcsensor program and add the output to the file "temperatures.log".
 So, every minute, the server adds temperature data to the log.
 
-###Graphing the Data###
+### Graphing the Data
 
 ![A Google Chart graph](/images/googlechart.png)
 
