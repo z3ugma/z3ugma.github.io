@@ -6,6 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
+<!--Facebook share tags -->
+  <meta property="og:url"                content="/2014/12/13/influxdb-augments-my-homebrew-temperature-monitor/" />
+  <meta property="og:type"               content="article" />
+  <meta property="og:title"              content="InfluxDB Augments My Homebrew Temperature Monitor"/>
+  <meta property="og:description"        content="" />
+  <meta property="og:image"              content="" />
+
   <!-- Enable responsiveness on mobile devices-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
@@ -23,8 +30,8 @@
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
 
   <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
-                                 <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/f_favicon.png">
+                                 <link rel="shortcut icon" href="/public/f_favicon.png">
 
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
@@ -42,7 +49,7 @@
           Python Monty
         </a>
       </h1>
-      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python</p>
+      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python. Also some restaurant reviews and recipes.</p>
     </div>
 
     <nav class="sidebar-nav">
@@ -84,9 +91,13 @@
           
         
       
+        
+          
+        
+      
     </nav>
 
-    <p>&copy; 2015. All rights reserved.</p>
+    <p>&copy; 2018. All rights reserved.</p>
   </div>
 </div>
 
@@ -98,107 +109,107 @@
   <p><a href="http://z3ugma.github.io/2013/10/25/homebrew-temperature-monitoring/">Last October, I began recording temperatures</a> for my homebrew setup. It was early in my explorations of Python and scripting, and ran in a pretty silly fashion. It went something like this:</p>
 
 <ol>
-<li>Echo the output of a C program that read the temperatures into a log file</li>
-<li>Parse that logfile using python to create a JSON file for Google Charts to use</li>
-<li>Use PHP embedded in HTML via an AJAX callback function to parse that JSON file</li>
-<li>Display the result in Google Charts</li>
+  <li>Echo the output of a C program that read the temperatures into a log file</li>
+  <li>Parse that logfile using python to create a JSON file for Google Charts to use</li>
+  <li>Use PHP embedded in HTML via an AJAX callback function to parse that JSON file</li>
+  <li>Display the result in Google Charts</li>
 </ol>
 
-<p>This was incredibly slow and process intensive when more than 1 week&#39;s worth of data was captured, so I moved the log to a backup file weekly, leaving a blank file for the next week&#39;s data.</p>
+<p>This was incredibly slow and process intensive when more than 1 week’s worth of data was captured, so I moved the log to a backup file weekly, leaving a blank file for the next week’s data.</p>
 
-<p><a href="http://influxdb.com/">InfluxDB</a> has been <a href="http://www.xaprb.com/blog/2014/03/02/time-series-databases-influxdb/">getting a lot of buzz</a> on HackerNews lately. It is a time-series database, which means that the <a href="http://influxdb.com/docs/v0.8/introduction/getting_started.html#writing-and-exploring-data-in-the-ui">primary key</a> of any entry is the timestamp of when the data was entered into the database. Queries are done using a SQL-like syntax, but everything is oriented around time. Queries like &quot;give me the last data value of every hour&quot; and &quot;what is the average value of this data point for the past 3 Wednesdays&quot; are difficult to do with large data sets in a traditional SQL database, but InfluxDB is designed from the ground up to handle them.</p>
+<p><a href="http://influxdb.com/">InfluxDB</a> has been <a href="http://www.xaprb.com/blog/2014/03/02/time-series-databases-influxdb/">getting a lot of buzz</a> on HackerNews lately. It is a time-series database, which means that the <a href="http://influxdb.com/docs/v0.8/introduction/getting_started.html#writing-and-exploring-data-in-the-ui">primary key</a> of any entry is the timestamp of when the data was entered into the database. Queries are done using a SQL-like syntax, but everything is oriented around time. Queries like “give me the last data value of every hour” and “what is the average value of this data point for the past 3 Wednesdays” are difficult to do with large data sets in a traditional SQL database, but InfluxDB is designed from the ground up to handle them.</p>
 
-<p>For a future idea - how to join time-series data from Influx to regular relational data in MySQL? This is relevant for another project I&#39;m currently working on. Keep an eye out for updates on that project as well.</p>
+<p>For a future idea - how to join time-series data from Influx to regular relational data in MySQL? This is relevant for another project I’m currently working on. Keep an eye out for updates on that project as well.</p>
 
 <p>What won me over to databases like InfluxDB and <a href="http://rethinkdb.com/">RethinkDB</a> is the simple, no-nonsense, easy-to-use web interface that comes ready right out of the box, and the SQL-like query language. Another big win for Influx was support from <a href="http://grafana.org/">Grafana</a>, a turnkey open-source time-series graphing platform, which I highly encourage you to check out.</p>
 
 <p>I set up InfluxDB on a Vagrant VM on my Mac server, with the Vagrantfile like so:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># -*- mode: ruby -*-</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># -*- mode: ruby -*-</span>
 <span class="c1"># vi: set ft=ruby :</span>
 <span class="c1"># encoding: utf-8</span>
 
-<span class="c1"># Vagrantfile API/syntax version. Don&#39;t touch unless you know what you&#39;re doing!</span>
-<span class="no">VAGRANTFILE_API_VERSION</span> <span class="o">=</span> <span class="s2">&quot;2&quot;</span>
+<span class="c1"># Vagrantfile API/syntax version. Don't touch unless you know what you're doing!</span>
+<span class="no">VAGRANTFILE_API_VERSION</span> <span class="o">=</span> <span class="s2">"2"</span>
 
-<span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="no">VAGRANTFILE_API_VERSION</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
- <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;hashicorp/precise64&quot;</span>
+<span class="no">Vagrant</span><span class="p">.</span><span class="nf">configure</span><span class="p">(</span><span class="no">VAGRANTFILE_API_VERSION</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+ <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">box</span> <span class="o">=</span> <span class="s2">"hashicorp/precise64"</span>
  
- <span class="n">dirname</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="no">Dir</span><span class="o">.</span><span class="n">getwd</span><span class="p">)</span>
- <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">dirname</span>
+ <span class="n">dirname</span> <span class="o">=</span> <span class="no">File</span><span class="p">.</span><span class="nf">basename</span><span class="p">(</span><span class="no">Dir</span><span class="p">.</span><span class="nf">getwd</span><span class="p">)</span>
+ <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">hostname</span> <span class="o">=</span> <span class="n">dirname</span>
 
- <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">8083</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8083</span>
- <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">8086</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8086</span>
- <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">8090</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8090</span>
- <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">8099</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8099</span>
- <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="ss">guest</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="ss">host</span><span class="p">:</span> <span class="mi">8089</span>
+ <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">network</span> <span class="s2">"forwarded_port"</span><span class="p">,</span> <span class="ss">guest: </span><span class="mi">8083</span><span class="p">,</span> <span class="ss">host: </span><span class="mi">8083</span>
+ <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">network</span> <span class="s2">"forwarded_port"</span><span class="p">,</span> <span class="ss">guest: </span><span class="mi">8086</span><span class="p">,</span> <span class="ss">host: </span><span class="mi">8086</span>
+ <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">network</span> <span class="s2">"forwarded_port"</span><span class="p">,</span> <span class="ss">guest: </span><span class="mi">8090</span><span class="p">,</span> <span class="ss">host: </span><span class="mi">8090</span>
+ <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">network</span> <span class="s2">"forwarded_port"</span><span class="p">,</span> <span class="ss">guest: </span><span class="mi">8099</span><span class="p">,</span> <span class="ss">host: </span><span class="mi">8099</span>
+ <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">network</span> <span class="s2">"forwarded_port"</span><span class="p">,</span> <span class="ss">guest: </span><span class="mi">80</span><span class="p">,</span> <span class="ss">host: </span><span class="mi">8089</span>
 
 
-<span class="vg">$script</span> <span class="o">=</span> <span class="o">&lt;&lt;</span><span class="no">SCRIPT</span>
-<span class="sh">echo &quot;Provisioning InfluxDB&quot;</span>
-<span class="sh">sudo apt-get update</span>
-<span class="sh">sudo apt-get -y install python python-pip git curl upstart apache2</span>
+<span class="vg">$script</span> <span class="o">=</span> <span class="o">&lt;&lt;</span><span class="no">SCRIPT</span><span class="sh">
+echo "Provisioning InfluxDB"
+sudo apt-get update
+sudo apt-get -y install python python-pip git curl upstart apache2
 
-<span class="sh">sudo pip install nest-thermostat influxdb python-forecastio</span>
+sudo pip install nest-thermostat influxdb python-forecastio
 
-<span class="sh">wget http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb</span>
-<span class="sh">sudo dpkg -i influxdb_latest_amd64.deb</span>
+wget http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb
+sudo dpkg -i influxdb_latest_amd64.deb
 
-<span class="sh">wget http://grafanarel.s3.amazonaws.com/grafana-1.9.0.tar.gz</span>
-<span class="sh">tar -xf grafana-1.9.0.tar.gz</span>
-<span class="sh">sudo cp -R grafana-1.9.0/* /var/www/</span>
-<span class="sh">sudo cp /vagrant/config.js /var/www/config.js</span>
-<span class="sh">sudo chmod -R 777 /var/www</span>
+wget http://grafanarel.s3.amazonaws.com/grafana-1.9.0.tar.gz
+tar -xf grafana-1.9.0.tar.gz
+sudo cp -R grafana-1.9.0/* /var/www/
+sudo cp /vagrant/config.js /var/www/config.js
+sudo chmod -R 777 /var/www
 
-<span class="sh">sudo service influxdb start</span>
+sudo service influxdb start
 
-<span class="sh">sudo initctl emit vagrant-ready</span>
-<span class="no">SCRIPT</span>
+sudo initctl emit vagrant-ready
+</span><span class="no">SCRIPT</span>
 
-<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="vg">$script</span>
-<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="s2">&quot;export EDITOR=nano&quot;</span><span class="p">,</span> <span class="ss">privileged</span><span class="p">:</span> <span class="kp">false</span>
-<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="s2">&quot;(crontab -l 2&gt;/dev/null; echo </span><span class="se">\&quot;</span><span class="s2">* * * * * /usr/bin/python /vagrant/nesttemp.py</span><span class="se">\&quot;</span><span class="s2">) | crontab -&quot;</span><span class="p">,</span> <span class="ss">privileged</span><span class="p">:</span> <span class="kp">false</span>
-<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="s2">&quot;(crontab -l 2&gt;/dev/null; echo </span><span class="se">\&quot;</span><span class="s2">*/2 * * * * /usr/bin/python /vagrant/forecastweather.py</span><span class="se">\&quot;</span><span class="s2">) | crontab -&quot;</span><span class="p">,</span> <span class="ss">privileged</span><span class="p">:</span> <span class="kp">false</span>
-<span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="ss">inline</span><span class="p">:</span> <span class="s2">&quot;/usr/bin/python /vagrant/db_migrations.py&quot;</span><span class="p">,</span> <span class="ss">privileged</span><span class="p">:</span> <span class="kp">false</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provision</span> <span class="s2">"shell"</span><span class="p">,</span> <span class="ss">inline: </span><span class="vg">$script</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provision</span> <span class="s2">"shell"</span><span class="p">,</span> <span class="ss">inline: </span><span class="s2">"export EDITOR=nano"</span><span class="p">,</span> <span class="ss">privileged: </span><span class="kp">false</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provision</span> <span class="s2">"shell"</span><span class="p">,</span> <span class="ss">inline: </span><span class="s2">"(crontab -l 2&gt;/dev/null; echo </span><span class="se">\"</span><span class="s2">* * * * * /usr/bin/python /vagrant/nesttemp.py</span><span class="se">\"</span><span class="s2">) | crontab -"</span><span class="p">,</span> <span class="ss">privileged: </span><span class="kp">false</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provision</span> <span class="s2">"shell"</span><span class="p">,</span> <span class="ss">inline: </span><span class="s2">"(crontab -l 2&gt;/dev/null; echo </span><span class="se">\"</span><span class="s2">*/2 * * * * /usr/bin/python /vagrant/forecastweather.py</span><span class="se">\"</span><span class="s2">) | crontab -"</span><span class="p">,</span> <span class="ss">privileged: </span><span class="kp">false</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provision</span> <span class="s2">"shell"</span><span class="p">,</span> <span class="ss">inline: </span><span class="s2">"/usr/bin/python /vagrant/db_migrations.py"</span><span class="p">,</span> <span class="ss">privileged: </span><span class="kp">false</span>
 
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>This forwards the InfluxDB ports, port 80 for serving Grafana, installs influx, Grafana, and python dependencies, and sets up cron jobs (see below).</p>
 
 <p>With InfluxDB running, the first step was to capture some data! Since I bought a Nest themostat, I figured that would be a good piece of time-series data to measure.</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
 
 <span class="kn">import</span> <span class="nn">nest_thermostat</span>
 <span class="kn">import</span> <span class="nn">influxdb</span>
 
-<span class="n">nest</span> <span class="o">=</span> <span class="n">nest_thermostat</span><span class="o">.</span><span class="n">Nest</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
+<span class="n">nest</span> <span class="o">=</span> <span class="n">nest_thermostat</span><span class="o">.</span><span class="n">Nest</span><span class="p">(</span><span class="s">"username"</span><span class="p">,</span> <span class="s">"password"</span><span class="p">)</span>
 <span class="n">nest</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
 <span class="n">nest</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span>
 
-<span class="n">temp</span> <span class="o">=</span> <span class="n">nest</span><span class="o">.</span><span class="n">temp_out</span><span class="p">(</span><span class="n">nest</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s">&quot;shared&quot;</span><span class="p">][</span><span class="n">nest</span><span class="o">.</span><span class="n">serial</span><span class="p">][</span><span class="s">&quot;current_temperature&quot;</span><span class="p">])</span>
-<span class="n">mode</span> <span class="o">=</span> <span class="n">nest</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s">&quot;shared&quot;</span><span class="p">][</span><span class="n">nest</span><span class="o">.</span><span class="n">serial</span><span class="p">][</span><span class="s">&quot;target_temperature_type&quot;</span><span class="p">]</span>
-<span class="n">target</span> <span class="o">=</span> <span class="n">nest</span><span class="o">.</span><span class="n">temp_out</span><span class="p">(</span><span class="n">nest</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s">&quot;shared&quot;</span><span class="p">][</span><span class="n">nest</span><span class="o">.</span><span class="n">serial</span><span class="p">][</span><span class="s">&quot;target_temperature&quot;</span><span class="p">])</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="n">nest</span><span class="o">.</span><span class="n">temp_out</span><span class="p">(</span><span class="n">nest</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s">"shared"</span><span class="p">][</span><span class="n">nest</span><span class="o">.</span><span class="n">serial</span><span class="p">][</span><span class="s">"current_temperature"</span><span class="p">])</span>
+<span class="n">mode</span> <span class="o">=</span> <span class="n">nest</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s">"shared"</span><span class="p">][</span><span class="n">nest</span><span class="o">.</span><span class="n">serial</span><span class="p">][</span><span class="s">"target_temperature_type"</span><span class="p">]</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">nest</span><span class="o">.</span><span class="n">temp_out</span><span class="p">(</span><span class="n">nest</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s">"shared"</span><span class="p">][</span><span class="n">nest</span><span class="o">.</span><span class="n">serial</span><span class="p">][</span><span class="s">"target_temperature"</span><span class="p">])</span>
 
 <span class="kn">from</span> <span class="nn">influxdb</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">influxdb</span>
-<span class="n">db</span> <span class="o">=</span> <span class="n">influxdb</span><span class="o">.</span><span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">influxdb</span><span class="o">.</span><span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">"localhost"</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">"root"</span><span class="p">,</span> <span class="s">"root"</span><span class="p">,</span> <span class="s">"temperatures"</span><span class="p">)</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="p">{</span><span class="s">&quot;points&quot;</span><span class="p">:[[</span><span class="n">temp</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mode</span><span class="p">]],</span>
-   <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;nest&quot;</span><span class="p">,</span>
-   <span class="s">&quot;columns&quot;</span><span class="p">:[</span><span class="s">&quot;temperature&quot;</span><span class="p">,</span> <span class="s">&quot;target_temperature&quot;</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">]</span>
+  <span class="p">{</span><span class="s">"points"</span><span class="p">:[[</span><span class="n">temp</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mode</span><span class="p">]],</span>
+   <span class="s">"name"</span><span class="p">:</span><span class="s">"nest"</span><span class="p">,</span>
+   <span class="s">"columns"</span><span class="p">:[</span><span class="s">"temperature"</span><span class="p">,</span> <span class="s">"target_temperature"</span><span class="p">,</span> <span class="s">"type"</span><span class="p">]</span>
   <span class="p">}</span>
 <span class="p">]</span>
-<span class="n">db</span><span class="o">.</span><span class="n">write_points</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></code></pre></div>
+<span class="n">db</span><span class="o">.</span><span class="n">write_points</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></code></pre></figure>
 
 <p>Running this every minute via cron pulls the current temperature as well as the target temperature (what the thermostat is set to) into InfluxDB, through its easy-to-use but peculiarly-structured API.</p>
 
 <p>I did the same thing with <a href="http://forecast.io/">Forecast.io</a>, my favorite weather API. This tells me the temperature outside my house:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
 <span class="kn">import</span> <span class="nn">forecastio</span>
 
-<span class="n">api_key</span> <span class="o">=</span> <span class="s">&quot;#####################&quot;</span>
+<span class="n">api_key</span> <span class="o">=</span> <span class="s">"#####################"</span>
 <span class="n">lat</span> <span class="o">=</span> <span class="mf">43.05660</span>
 <span class="n">lng</span> <span class="o">=</span> <span class="o">-</span><span class="mf">89.38337</span> 
 
@@ -209,37 +220,38 @@
 
 <span class="kn">from</span> <span class="nn">influxdb</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">influxdb</span>
 
-<span class="n">db</span> <span class="o">=</span> <span class="n">influxdb</span><span class="o">.</span><span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">influxdb</span><span class="o">.</span><span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">"localhost"</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">"root"</span><span class="p">,</span> <span class="s">"root"</span><span class="p">,</span> <span class="s">"temperatures"</span><span class="p">)</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="p">{</span><span class="s">&quot;points&quot;</span><span class="p">:[[</span><span class="n">temp</span><span class="p">]],</span>
-   <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;forecastio_lakeside&quot;</span><span class="p">,</span>
-   <span class="s">&quot;columns&quot;</span><span class="p">:[</span><span class="s">&quot;temperature&quot;</span><span class="p">]</span>
+  <span class="p">{</span><span class="s">"points"</span><span class="p">:[[</span><span class="n">temp</span><span class="p">]],</span>
+   <span class="s">"name"</span><span class="p">:</span><span class="s">"forecastio_lakeside"</span><span class="p">,</span>
+   <span class="s">"columns"</span><span class="p">:[</span><span class="s">"temperature"</span><span class="p">]</span>
   <span class="p">}</span>
 <span class="p">]</span>
-<span class="n">db</span><span class="o">.</span><span class="n">write_points</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></code></pre></div>
+<span class="n">db</span><span class="o">.</span><span class="n">write_points</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></code></pre></figure>
 
-<p>This required me to get a Forecast.io API key, with a limit of 1000 calls per day. That&#39;s why I call it once every 2 minutes, for 720 calls per day.</p>
+<p>This required me to get a Forecast.io API key, with a limit of 1000 calls per day. That’s why I call it once every 2 minutes, for 720 calls per day.</p>
 
 <p>The last part of setting up the VM is to perform database migrations - set up users and databases for the temperature data to go into:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/python</span>
 
 <span class="kn">import</span> <span class="nn">influxdb</span>
 
 <span class="kn">from</span> <span class="nn">influxdb</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">influxdb</span>
-<span class="n">db</span> <span class="o">=</span> <span class="n">influxdb</span><span class="o">.</span><span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">influxdb</span><span class="o">.</span><span class="n">InfluxDBClient</span><span class="p">(</span><span class="s">"localhost"</span><span class="p">,</span> <span class="mi">8086</span><span class="p">,</span> <span class="s">"root"</span><span class="p">,</span> <span class="s">"root"</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">create_database</span><span class="p">(</span><span class="s">&quot;grafana&quot;</span><span class="p">)</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">create_database</span><span class="p">(</span><span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">switch_db</span><span class="p">(</span><span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">add_database_user</span><span class="p">(</span><span class="s">&quot;temperatures&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">set_database_admin</span><span class="p">(</span><span class="s">&quot;temperatures&quot;</span><span class="p">)</span>
-    <span class="k">print</span> <span class="s">&quot;Success&quot;</span>
+	<span class="n">db</span><span class="o">.</span><span class="n">create_database</span><span class="p">(</span><span class="s">"grafana"</span><span class="p">)</span>
+	<span class="n">db</span><span class="o">.</span><span class="n">create_database</span><span class="p">(</span><span class="s">"temperatures"</span><span class="p">)</span>
+	<span class="n">db</span><span class="o">.</span><span class="n">switch_db</span><span class="p">(</span><span class="s">"temperatures"</span><span class="p">)</span>
+	<span class="n">db</span><span class="o">.</span><span class="n">add_database_user</span><span class="p">(</span><span class="s">"temperatures"</span><span class="p">,</span> <span class="s">"password"</span><span class="p">)</span>
+	<span class="n">db</span><span class="o">.</span><span class="n">set_database_admin</span><span class="p">(</span><span class="s">"temperatures"</span><span class="p">)</span>
+	<span class="k">print</span> <span class="s">"Success"</span>
 <span class="k">except</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">&quot;Influx DB Migrations Failed&quot;</span>
-    <span class="k">pass</span></code></pre></div>
+	<span class="k">print</span> <span class="s">"Influx DB Migrations Failed"</span>
+	<span class="k">pass</span></code></pre></figure>
+
 
 </div>
 
@@ -249,27 +261,27 @@
     
       <li>
         <h3>
-          <a href="/2015/08/25/acorn-rino/">
-            Acorn, RiNo, Denver
-            <small>25 Aug 2015</small>
+          <a href="/2017/04/24/washerbot-and-dryerbot-part-5/">
+            WasherBot and DryerBot, Part 5: A Measurement Algorithm and Text Message Integration
+            <small>24 Apr 2017</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/08/24/sing-a-song-for-sixpence/">
-            Sexy Pizza
-            <small>24 Aug 2015</small>
+          <a href="/2016/12/09/washerbot-and-dryerbot-part-4/">
+            WasherBot and DryerBot, Part 4: A Low-Pass Filter and Reading From Laundry Appliances
+            <small>09 Dec 2016</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/08/22/sexy-pizza/">
-            Sing a Song for Sixpence
-            <small>22 Aug 2015</small>
+          <a href="/2016/12/03/washerbot-and-dryerbot-part-3/">
+            WasherBot and DryerBot, Part 3: Connecting to the Pi and Building a Voltage Divider
+            <small>03 Dec 2016</small>
           </a>
         </h3>
       </li>

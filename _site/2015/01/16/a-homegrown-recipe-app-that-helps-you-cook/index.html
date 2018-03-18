@@ -6,6 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
+<!--Facebook share tags -->
+  <meta property="og:url"                content="/2015/01/16/a-homegrown-recipe-app-that-helps-you-cook/" />
+  <meta property="og:type"               content="article" />
+  <meta property="og:title"              content="A Homegrown Recipe App That Helps You Cook"/>
+  <meta property="og:description"        content="" />
+  <meta property="og:image"              content="" />
+
   <!-- Enable responsiveness on mobile devices-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
@@ -23,8 +30,8 @@
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
 
   <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
-                                 <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/f_favicon.png">
+                                 <link rel="shortcut icon" href="/public/f_favicon.png">
 
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
@@ -42,7 +49,7 @@
           Python Monty
         </a>
       </h1>
-      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python</p>
+      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python. Also some restaurant reviews and recipes.</p>
     </div>
 
     <nav class="sidebar-nav">
@@ -84,9 +91,13 @@
           
         
       
+        
+          
+        
+      
     </nav>
 
-    <p>&copy; 2015. All rights reserved.</p>
+    <p>&copy; 2018. All rights reserved.</p>
   </div>
 </div>
 
@@ -97,87 +108,91 @@
   <span class="post-date">16 Jan 2015</span>
   <p>I do love to cook. All of my favorite recipes are stored in my head, are improvised off the cuff, or found in a gross stack of crinkled papers held together with a binder clip in my cabinet.</p>
 
-<p>I do a lot of looking up recipes online, but every recipe website I&#39;ve seen has a big flaw. These sites are not designed to help you actually read the recipe. They are designed to keep you clicking around, keep you sharing recipes on social media, keep you seeing ads.</p>
+<p>I do a lot of looking up recipes online, but every recipe website I’ve seen has a big flaw. These sites are not designed to help you actually read the recipe. They are designed to keep you clicking around, keep you sharing recipes on social media, keep you seeing ads.</p>
 
-<p>I wanted a recipe app that would just show me what I needed to gather and how to put it together to cook it all. In the meantime, I decided it wouldn&#39;t hurt it if were also pretty to look at. Lastly, I wanted it optimized for use on an iPad so that I could keep it close at hand while actually cooking.</p>
+<p>I wanted a recipe app that would just show me what I needed to gather and how to put it together to cook it all. In the meantime, I decided it wouldn’t hurt it if were also pretty to look at. Lastly, I wanted it optimized for use on an iPad so that I could keep it close at hand while actually cooking.</p>
 
-<p><img src="https://raw.githubusercontent.com/z3ugma/rethink-recipes/master/screenshot1.png" alt="Finished Recipes Webapp"></p>
+<p><img src="https://raw.githubusercontent.com/z3ugma/rethink-recipes/master/screenshot1.png" alt="Finished Recipes Webapp" /></p>
 
-<h2>Technical Design</h2>
+<h2 id="technical-design">Technical Design</h2>
 
-<p>Python is my pet language, and I wanted a database that would be easy to use with native Python types. Recipes are well-suited to a document-oriented store - each recipe has highly-variable ingredients. The only potential advantage I could see for a relational db would be to answer queries like &quot;show me all the recipes with onion as an ingredient&quot;. 
+<p>Python is my pet language, and I wanted a database that would be easy to use with native Python types. Recipes are well-suited to a document-oriented store - each recipe has highly-variable ingredients. The only potential advantage I could see for a relational db would be to answer queries like “show me all the recipes with onion as an ingredient”. 
 <a href="http://www.rethinkdb.com">RethinkDB</a> is great because it has a native web interface and a <a href="http://www.rethinkdb.com/docs/introduction-to-reql/">cool query language</a> called ReQL.</p>
 
 <p>I used Python and Flask to write the app, and Tornado to make it easy to deploy - I can never seem to get uWSGI or Gunicorn working correctly.</p>
 
-<h2>Frontend Design</h2>
+<h2 id="frontend-design">Frontend Design</h2>
 
 <p>Two design elements set Rethink Recipes apart:</p>
 
 <ol>
-<li><p>When a recipe is entered, the app finds the top 8 Google Images hits for the title of the recipe. It uses the colors found in these images to calculate a <strong>unique, indivualized color palette</strong> for each recipe.</p></li>
-<li><p>Whenever an ingredient appears verbatim in the directions, it is <strong>highlighted</strong> in the directions. This makes it easy to scan the directions for the step you should be on next.</p></li>
+  <li>
+    <p>When a recipe is entered, the app finds the top 8 Google Images hits for the title of the recipe. It uses the colors found in these images to calculate a <strong>unique, indivualized color palette</strong> for each recipe.</p>
+  </li>
+  <li>
+    <p>Whenever an ingredient appears verbatim in the directions, it is <strong>highlighted</strong> in the directions. This makes it easy to scan the directions for the step you should be on next.</p>
+  </li>
 </ol>
 
-<h2>App Routes</h2>
+<h2 id="app-routes">App Routes</h2>
 
 <p>Here are the nuts and bolts of how Rethink Recipes works:</p>
 
-<h3>Adding a Recipe</h3>
+<h3 id="adding-a-recipe">Adding a Recipe</h3>
 
-<p><img src="https://raw.githubusercontent.com/z3ugma/rethink-recipes/master/screenshot3.png" alt="Adding a Recipe"></p>
+<p><img src="https://raw.githubusercontent.com/z3ugma/rethink-recipes/master/screenshot3.png" alt="Adding a Recipe" /></p>
 
-<p>When accessing <strong>/add</strong>, the user is presented with 3 form fields - the title, ingredients, and directions.</p>
+<p>When accessing <code>/add</code>, the user is presented with 3 form fields - the title, ingredients, and directions.</p>
 
 <p>When the form is submitted, a bunch of things happen:</p>
 
 <ol>
-<li>The title of the recipe is joined with + signs. i.e. &quot;Foo bar baz pancakes&quot; -&gt; &quot;foo+bar+baz+pancakes&quot;. This is the format the Google Images api receives queries in.</li>
-<li>A Google Image API query returns a list of URLs pointing to Google Images thumbnails.</li>
-<li>A Python module called Colorific, which uses PIL (the Python Image Library), extracts the most prominent colors from each image, 5 colors per image. (I also wrote my own module to do this processing, but Colorific was already packaged and easy to install. )</li>
-<li>We&#39;re left with a list of RGB tuples. 5 colors per images times 8 images = 40 tuples long.</li>
-<li>The Lightness value of each tuple is calculated (conversion to HSV color space), and the list is reordered in order of darkest to lightest.</li>
-<li>The list is split into 4 smaller lists of 10 elements each. This roughly groups the colors into the 10 darkest, 10 next darkest, etc.</li>
-<li>The average value of the 10 RGB tuples in each list is calculated. We end up with 4 tuples to store to the db along with the recipe.</li>
-<li>The URL title is &quot;slugified&quot; - stripping out spaces and non alphanumeric punctuation to make a nice URL slug</li>
-<li>The ingredients list is calculated. For each line in the ingredients box:
-
-<ul>
-<li>Split on spaces. The first 2 pieces are the amount - &quot;1 cup&quot; for example.</li>
-<li>Everything after the amount is the &quot;what&quot;</li>
-</ul></li>
-<li>The directions list is each line of input in the dirctions box</li>
-<li>All this data is formed into a Python dictionary:
-
-<ul>
-<li>Title, URLs of image thumbs, ingredients, directions, slug, and average colors.</li>
-</ul></li>
-<li>Ingredients and directions are sanitized for disallowed entries (like null string)</li>
-<li>This Python dict is inserted into RethinkDB.</li>
-<li>The user is redirected to the newly-created recipe.</li>
+  <li>The title of the recipe is joined with + signs. i.e. “Foo bar baz pancakes” -&gt; “foo+bar+baz+pancakes”. This is the format the Google Images api receives queries in.</li>
+  <li>A Google Image API query returns a list of URLs pointing to Google Images thumbnails.</li>
+  <li>A Python module called Colorific, which uses PIL (the Python Image Library), extracts the most prominent colors from each image, 5 colors per image. (I also wrote my own module to do this processing, but Colorific was already packaged and easy to install. )</li>
+  <li>We’re left with a list of RGB tuples. 5 colors per images times 8 images = 40 tuples long.</li>
+  <li>The Lightness value of each tuple is calculated (conversion to HSV color space), and the list is reordered in order of darkest to lightest.</li>
+  <li>The list is split into 4 smaller lists of 10 elements each. This roughly groups the colors into the 10 darkest, 10 next darkest, etc.</li>
+  <li>The average value of the 10 RGB tuples in each list is calculated. We end up with 4 tuples to store to the db along with the recipe.</li>
+  <li>The URL title is “slugified” - stripping out spaces and non alphanumeric punctuation to make a nice URL slug</li>
+  <li>The ingredients list is calculated. For each line in the ingredients box:
+    <ul>
+      <li>Split on spaces. The first 2 pieces are the amount - “1 cup” for example.</li>
+      <li>Everything after the amount is the “what”</li>
+    </ul>
+  </li>
+  <li>The directions list is each line of input in the dirctions box</li>
+  <li>All this data is formed into a Python dictionary:
+    <ul>
+      <li>Title, URLs of image thumbs, ingredients, directions, slug, and average colors.</li>
+    </ul>
+  </li>
+  <li>Ingredients and directions are sanitized for disallowed entries (like null string)</li>
+  <li>This Python dict is inserted into RethinkDB.</li>
+  <li>The user is redirected to the newly-created recipe.</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">get_gimages</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">get_gimages</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
     <span class="n">answer</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">):</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s">&#39;https://ajax.googleapis.com/ajax/services/search/images?v=1.0&amp;q=</span><span class="si">%s</span><span class="s">&amp;start=</span><span class="si">%d</span><span class="s">&amp;imgsz=large&amp;imgtype=photo&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s">'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&amp;q=</span><span class="si">%</span><span class="s">s&amp;start=</span><span class="si">%</span><span class="s">d&amp;imgsz=large&amp;imgtype=photo'</span> <span class="o">%</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="s">&#39;responseData&#39;</span><span class="p">][</span><span class="s">&#39;results&#39;</span><span class="p">]:</span>
-             <span class="n">answer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="s">&#39;tbUrl&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="s">'responseData'</span><span class="p">][</span><span class="s">'results'</span><span class="p">]:</span>
+             <span class="n">answer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="s">'tbUrl'</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">answer</span>
 
 
-<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/add&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">'/add'</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s">'GET'</span><span class="p">,</span> <span class="s">'POST'</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">():</span>
     <span class="n">form</span> <span class="o">=</span> <span class="n">RecipeForm</span><span class="p">()</span>
-    <span class="c">#form.ingredients.data = &quot;1c ingredient\nenter ingredients here  &quot;</span>
+    <span class="c">#form.ingredients.data = "1c ingredient\nenter ingredients here  "</span>
 
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span> <span class="ow">and</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span> <span class="ow">and</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">():</span>
 
         <span class="n">lightness</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">rainbow</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">resp</span><span class="o">=</span><span class="p">[]</span>
-        <span class="n">urls</span> <span class="o">=</span> <span class="n">get_gimages</span><span class="p">(</span><span class="s">&quot;+&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+        <span class="n">urls</span> <span class="o">=</span> <span class="n">get_gimages</span><span class="p">(</span><span class="s">"+"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
         <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
             <span class="n">i</span> <span class="o">=</span> <span class="n">cStringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
             <span class="n">quiche</span> <span class="o">=</span> <span class="n">colorific</span><span class="o">.</span><span class="n">extract_colors</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">max_colors</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -192,92 +207,91 @@
 
         <span class="n">slug</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
-        <span class="n">recipe</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="n">form</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="s">&#39;ingredients&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&#39;amount&#39;</span><span class="p">:</span> <span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ingredient</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]),</span> <span class="s">&#39;what&#39;</span><span class="p">:</span> <span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ingredient</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">:])}</span> <span class="k">for</span> <span class="n">ingredient</span> <span class="ow">in</span> <span class="n">form</span><span class="o">.</span><span class="n">ingredients</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">)],</span> <span class="s">&#39;directions&#39;</span><span class="p">:</span> <span class="n">form</span><span class="o">.</span><span class="n">directions</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">),</span> <span class="s">&#39;urls&#39;</span><span class="p">:</span> <span class="n">urls</span><span class="p">,</span> <span class="s">&#39;slug&#39;</span><span class="p">:</span> <span class="n">slug</span><span class="p">,</span> <span class="s">&#39;avgcolors&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rainbow</span><span class="p">]}</span>
+        <span class="n">recipe</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'title'</span><span class="p">:</span> <span class="n">form</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="s">'ingredients'</span><span class="p">:</span> <span class="p">[{</span><span class="s">'amount'</span><span class="p">:</span> <span class="s">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ingredient</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]),</span> <span class="s">'what'</span><span class="p">:</span> <span class="s">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ingredient</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">:])}</span> <span class="k">for</span> <span class="n">ingredient</span> <span class="ow">in</span> <span class="n">form</span><span class="o">.</span><span class="n">ingredients</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\r\n</span><span class="s">'</span><span class="p">)],</span> <span class="s">'directions'</span><span class="p">:</span> <span class="n">form</span><span class="o">.</span><span class="n">directions</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\r\n</span><span class="s">'</span><span class="p">),</span> <span class="s">'urls'</span><span class="p">:</span> <span class="n">urls</span><span class="p">,</span> <span class="s">'slug'</span><span class="p">:</span> <span class="n">slug</span><span class="p">,</span> <span class="s">'avgcolors'</span><span class="p">:</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rainbow</span><span class="p">]}</span>
 
-        <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;ingredients&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;ingredients&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="p">[</span><span class="s">&#39;what&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;&#39;</span><span class="p">]</span>
-        <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;directions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;directions&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="o">==</span><span class="s">&#39;&#39;</span><span class="p">]</span>
+        <span class="n">recipe</span><span class="p">[</span><span class="s">'ingredients'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'ingredients'</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="p">[</span><span class="s">'what'</span><span class="p">]</span><span class="o">==</span><span class="s">''</span><span class="p">]</span>
+        <span class="n">recipe</span><span class="p">[</span><span class="s">'directions'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'directions'</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="o">==</span><span class="s">''</span><span class="p">]</span>
 
-        <span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">&#39;recipes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">recipe</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">'recipes'</span><span class="p">)</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">recipe</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;recipe&#39;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">slug</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">'recipe'</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">slug</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&quot;add.html&quot;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span></code></pre></div>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">"add.html"</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span></code></pre></figure>
 
-<h3>Editing a Recipe</h3>
+<h3 id="editing-a-recipe">Editing a Recipe</h3>
+<p>The same form from /add is rendered, with the data from the existing recipe filled in. Once the form is submitted, the same process as adding happens. Instead of inserting the new recipe, however, the existing recipe’s record is updated.</p>
 
-<p>The same form from /add is rendered, with the data from the existing recipe filled in. Once the form is submitted, the same process as adding happens. Instead of inserting the new recipe, however, the existing recipe&#39;s record is updated.</p>
+<p>The slug of the recipe appears in the URL of the page. We use that slug to get the first recipe in the db that matches that slug. Note that there’s no guarantee of uniqueness for a slug - RethinkDB doesn’t have unique indexing.</p>
 
-<p>The slug of the recipe appears in the URL of the page. We use that slug to get the first recipe in the db that matches that slug. Note that there&#39;s no guarantee of uniqueness for a slug - RethinkDB doesn&#39;t have unique indexing.</p>
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/&lt;query&gt;/edit&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nd">@app.route</span><span class="p">(</span><span class="s">'/&lt;query&gt;/edit'</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s">'GET'</span><span class="p">,</span> <span class="s">'POST'</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
 
 
     <span class="n">form</span> <span class="o">=</span> <span class="n">RecipeForm</span><span class="p">()</span>
-    <span class="n">recipe</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">&#39;recipes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">({</span><span class="s">&#39;slug&#39;</span><span class="p">:</span> <span class="n">query</span><span class="p">})</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">))</span>
+    <span class="n">recipe</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">'recipes'</span><span class="p">)</span><span class="o">.</span><span class="nb">filter</span><span class="p">({</span><span class="s">'slug'</span><span class="p">:</span> <span class="n">query</span><span class="p">})</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">recipe</span><span class="p">:</span>
         <span class="n">recipe</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'GET'</span><span class="p">:</span>
 
-        <span class="n">form</span><span class="o">.</span><span class="n">ingredients</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([(</span><span class="n">i</span><span class="p">[</span><span class="s">&#39;amount&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="p">[</span><span class="s">&#39;what&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;ingredients&#39;</span><span class="p">]])</span>
-        <span class="n">form</span><span class="o">.</span><span class="n">directions</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;directions&#39;</span><span class="p">])</span>
-        <span class="n">form</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span>
+        <span class="n">form</span><span class="o">.</span><span class="n">ingredients</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s">"</span><span class="se">\r\n</span><span class="s">"</span><span class="o">.</span><span class="n">join</span><span class="p">([(</span><span class="n">i</span><span class="p">[</span><span class="s">'amount'</span><span class="p">]</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">i</span><span class="p">[</span><span class="s">'what'</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'ingredients'</span><span class="p">]])</span>
+        <span class="n">form</span><span class="o">.</span><span class="n">directions</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s">"</span><span class="se">\r\n</span><span class="s">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'directions'</span><span class="p">])</span>
+        <span class="n">form</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'title'</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&quot;edit.html&quot;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span> <span class="n">recipe</span><span class="o">=</span><span class="n">recipe</span><span class="p">)</span></code></pre></div>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">"edit.html"</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span> <span class="n">recipe</span><span class="o">=</span><span class="n">recipe</span><span class="p">)</span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">id</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">        <span class="nb">id</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'id'</span><span class="p">]</span>
 
-        <span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">&#39;recipes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">recipe</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">'recipes'</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">recipe</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;recipe&#39;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">slug</span><span class="p">))</span></code></pre></div>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">'recipe'</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">slug</span><span class="p">))</span></code></pre></figure>
 
-<h3>Deleting a Recipe</h3>
+<h3 id="deleting-a-recipe">Deleting a Recipe</h3>
 
-<p><img src="https://raw.githubusercontent.com/z3ugma/rethink-recipes/master/screenshot4.png" alt="Deleting a Recipe"></p>
+<p><img src="https://raw.githubusercontent.com/z3ugma/rethink-recipes/master/screenshot4.png" alt="Deleting a Recipe" /></p>
 
-<p>The recipe&#39;s slug is in the URL. The user clicks &quot;Delete&quot;, is prompted with a checkbox to confirm, and then recipes with slugs matching the URL are deleted:</p>
+<p>The recipe’s slug is in the URL. The user clicks “Delete”, is prompted with a checkbox to confirm, and then recipes with slugs matching the URL are deleted:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/&lt;query&gt;/delete&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nd">@app.route</span><span class="p">(</span><span class="s">'/&lt;query&gt;/delete'</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s">'GET'</span><span class="p">,</span> <span class="s">'POST'</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
     <span class="n">form</span> <span class="o">=</span> <span class="n">DeleteForm</span><span class="p">()</span>
-    <span class="n">recipe</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">&#39;recipes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">({</span><span class="s">&#39;slug&#39;</span><span class="p">:</span> <span class="n">query</span><span class="p">})</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">))</span>
+    <span class="n">recipe</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">'recipes'</span><span class="p">)</span><span class="o">.</span><span class="nb">filter</span><span class="p">({</span><span class="s">'slug'</span><span class="p">:</span> <span class="n">query</span><span class="p">})</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">recipe</span><span class="p">:</span>
         <span class="n">recipe</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'GET'</span><span class="p">:</span>
 
-        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&quot;delete.html&quot;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">recipe</span><span class="o">=</span><span class="n">recipe</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">"delete.html"</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">recipe</span><span class="o">=</span><span class="n">recipe</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s">&#39;deleterecipe&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">'deleterecipe'</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
 
-            <span class="nb">id</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'id'</span><span class="p">]</span>
 
-            <span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">&#39;recipes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;index&#39;</span><span class="p">))</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">'recipes'</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">'index'</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">flash</span><span class="p">(</span><span class="s">&quot;Are you sure? Check the box&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&quot;delete.html&quot;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">recipe</span><span class="o">=</span><span class="n">recipe</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span></code></pre></div>
+            <span class="n">flash</span><span class="p">(</span><span class="s">"Are you sure? Check the box"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">"delete.html"</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">recipe</span><span class="o">=</span><span class="n">recipe</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span></code></pre></figure>
 
-<h3>Displaying a Recipe</h3>
+<h3 id="displaying-a-recipe">Displaying a Recipe</h3>
 
-<p>When a recipe&#39;s slug appears alone in the URL, the recipe is displayed.</p>
+<p>When a recipe’s slug appears alone in the URL, the recipe is displayed.</p>
 
-<p>The first recipe in the db with a matching slug is displayed. We take the &quot;what&quot; from each ingredient, and only take the portion before a comma. This allows for things like &quot;onions, diced&quot; to appear in the recipe, but still highlight the word &quot;onions&quot; in the directions. If the word appears in the directions, then the word in the directions is wrapped in kbd tags, which stand out in Bootstrap.</p>
+<p>The first recipe in the db with a matching slug is displayed. We take the “what” from each ingredient, and only take the portion before a comma. This allows for things like “onions, diced” to appear in the recipe, but still highlight the word “onions” in the directions. If the word appears in the directions, then the word in the directions is wrapped in kbd tags, which stand out in Bootstrap.</p>
 
-<p>You&#39;ll recall that each recipe has 8 URLs of Google images and 4 RBG tuples of colors to use in displaying the page. When the page is rendered, the darkest of the RGB colors is used as the background of the header, the lightest is used for the page background and header text, and the 2nd darkest is used for the panel headers. The 4th one is reserved for future use.</p>
+<p>You’ll recall that each recipe has 8 URLs of Google images and 4 RBG tuples of colors to use in displaying the page. When the page is rendered, the darkest of the RGB colors is used as the background of the header, the lightest is used for the page background and header text, and the 2nd darkest is used for the panel headers. The 4th one is reserved for future use.</p>
 
-<p>Along with the 8 Google images thumbnails in place, this makes each recipe page have the unique colors corresponding to the food you&#39;re making! So a raspberry pie has bright reds and rich tans, and a chili recipe has lots of earthy tones.</p>
+<p>Along with the 8 Google images thumbnails in place, this makes each recipe page have the unique colors corresponding to the food you’re making! So a raspberry pie has bright reds and rich tans, and a chili recipe has lots of earthy tones.</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/&lt;query&gt;&#39;</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nd">@app.route</span><span class="p">(</span><span class="s">'/&lt;query&gt;'</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">recipe</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
-    <span class="n">recipe</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">&#39;recipes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">({</span><span class="s">&#39;slug&#39;</span><span class="p">:</span> <span class="n">query</span><span class="p">})</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">))</span>
+    <span class="n">recipe</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s">'recipes'</span><span class="p">)</span><span class="o">.</span><span class="nb">filter</span><span class="p">({</span><span class="s">'slug'</span><span class="p">:</span> <span class="n">query</span><span class="p">})</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">rdb_conn</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">recipe</span><span class="p">:</span>
         <span class="n">recipe</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -285,26 +299,26 @@
         <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
 
     <span class="n">steps</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;directions&#39;</span><span class="p">]:</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="s">&#39;what&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;ingredients&#39;</span><span class="p">]]:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;&lt;kbd&gt;&quot;</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="s">&quot;&lt;/kbd&gt;&quot;</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'directions'</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="s">'what'</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">","</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'ingredients'</span><span class="p">]]:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="s">"&lt;kbd&gt;"</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="s">"&lt;/kbd&gt;"</span><span class="p">))</span>
         <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Markup</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 
-    <span class="n">rainbow</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;avgcolors&#39;</span><span class="p">]]</span>
+    <span class="n">rainbow</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'avgcolors'</span><span class="p">]]</span>
 
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&quot;recipes.html&quot;</span><span class="p">,</span> <span class="n">urls</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;urls&#39;</span><span class="p">],</span> <span class="n">avg</span><span class="o">=</span><span class="n">rainbow</span><span class="p">,</span> <span class="n">ingredients</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">&#39;ingredients&#39;</span><span class="p">],</span> <span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">recipe</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">],</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">)</span></code></pre></div>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">"recipes.html"</span><span class="p">,</span> <span class="n">urls</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'urls'</span><span class="p">],</span> <span class="n">avg</span><span class="o">=</span><span class="n">rainbow</span><span class="p">,</span> <span class="n">ingredients</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s">'ingredients'</span><span class="p">],</span> <span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">recipe</span><span class="p">[</span><span class="s">'title'</span><span class="p">],</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">)</span></code></pre></figure>
 
 <p>The end result of this is an iPad-optimized recipe database, customizable for your own personal recipes. Not great for importing directly from recipe sites, but great for saving your time-tested recipes in a user-friendly format.</p>
 
-<h3>Futures</h3>
+<p>###Futures###</p>
 
 <p>I would like to expand this to being multi-user. I think each user would get their own RethinkDB table, and add a users table with hashed passwords.</p>
 
-<h3>Check It Out</h3>
+<p>###Check It Out###
+You can download and set it up for yourself in a virtual machine - see the <a href="https://github.com/z3ugma/rethink-recipes">Github repo for the project</a></p>
 
-<p>You can download and set it up for yourself in a virtual machine - see the <a href="https://github.com/z3ugma/rethink-recipes">Github repo for the project</a></p>
+<p>You can also see my local copy of the app, at <a href="http://z3ugma.zzzz.io:5025">http://z3ugma.zzzz.io:5025</a>. Feel free to add your own recipes, but don’t delete mine :)</p>
 
-<p>You can also see my local copy of the app, at <a href="http://z3ugma.zzzz.io:5025">http://z3ugma.zzzz.io:5025</a>. Feel free to add your own recipes, but don&#39;t delete mine :)</p>
 
 </div>
 
@@ -314,27 +328,27 @@
     
       <li>
         <h3>
-          <a href="/2015/08/25/acorn-rino/">
-            Acorn, RiNo, Denver
-            <small>25 Aug 2015</small>
+          <a href="/2017/04/24/washerbot-and-dryerbot-part-5/">
+            WasherBot and DryerBot, Part 5: A Measurement Algorithm and Text Message Integration
+            <small>24 Apr 2017</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/08/24/sing-a-song-for-sixpence/">
-            Sexy Pizza
-            <small>24 Aug 2015</small>
+          <a href="/2016/12/09/washerbot-and-dryerbot-part-4/">
+            WasherBot and DryerBot, Part 4: A Low-Pass Filter and Reading From Laundry Appliances
+            <small>09 Dec 2016</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/08/22/sexy-pizza/">
-            Sing a Song for Sixpence
-            <small>22 Aug 2015</small>
+          <a href="/2016/12/03/washerbot-and-dryerbot-part-3/">
+            WasherBot and DryerBot, Part 3: Connecting to the Pi and Building a Voltage Divider
+            <small>03 Dec 2016</small>
           </a>
         </h3>
       </li>

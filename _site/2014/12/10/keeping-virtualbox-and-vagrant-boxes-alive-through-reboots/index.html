@@ -6,6 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
+<!--Facebook share tags -->
+  <meta property="og:url"                content="/2014/12/10/keeping-virtualbox-and-vagrant-boxes-alive-through-reboots/" />
+  <meta property="og:type"               content="article" />
+  <meta property="og:title"              content="Keeping VirtualBox and Vagrant Boxes Alive Through Reboots"/>
+  <meta property="og:description"        content="" />
+  <meta property="og:image"              content="" />
+
   <!-- Enable responsiveness on mobile devices-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
@@ -23,8 +30,8 @@
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
 
   <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
-                                 <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/f_favicon.png">
+                                 <link rel="shortcut icon" href="/public/f_favicon.png">
 
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
@@ -42,7 +49,7 @@
           Python Monty
         </a>
       </h1>
-      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python</p>
+      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python. Also some restaurant reviews and recipes.</p>
     </div>
 
     <nav class="sidebar-nav">
@@ -84,9 +91,13 @@
           
         
       
+        
+          
+        
+      
     </nav>
 
-    <p>&copy; 2015. All rights reserved.</p>
+    <p>&copy; 2018. All rights reserved.</p>
   </div>
 </div>
 
@@ -99,79 +110,80 @@
 
 <p>I have always been a fan of RDP, and my office uses PCs - so to keep the convenient RDP access to home, I installed <a href="www.virtualbox.org">VirtualBox</a> and created a Windows VM. This has a bridged network adapter, so it just looks like another computer on my home network.</p>
 
-<p>However, when Mac OS restarts, or after a power failure, the virtual machine is powered off. This won&#39;t do.</p>
+<p>However, when Mac OS restarts, or after a power failure, the virtual machine is powered off. This won’t do.</p>
 
-<h2>Daemons in Mac OS</h2>
+<p>##Daemons in Mac OS##</p>
 
 <p>Mac OS has the usual suspects like cron, but has a neat daemon launching system, appropriately called <a href="https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html">launchd</a>, introduced in 10.4.</p>
 
-<p>Launchd works by &quot;loading&quot; (think of it like a soft-install) objects called &#39;&#39;&#39;plist&#39;&#39;&#39;. Plist is a serialized object format like JSON or XML that tells launchd the properties of how to execute a particular daemon.</p>
+<p>Launchd works by “loading” (think of it like a soft-install) objects called ‘'’plist’’’. Plist is a serialized object format like JSON or XML that tells launchd the properties of how to execute a particular daemon.</p>
 
 <p>If you want to play with creating your own plists, head over to <a href="http://launched.zerowidth.com">http://launched.zerowidth.com</a>, where Nathan Witmer has created a plist generator.</p>
 
-<h2>Automatic Tasks in VirtualBox</h2>
+<p>##Automatic Tasks in VirtualBox##</p>
 
 <p>VirtualBox comes with a command-line interface to automate tasks on VMs. My need is simple - just boot the box:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">VBoxHeadless -s Windows -v on</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">VBoxHeadless <span class="nt">-s</span> Windows <span class="nt">-v</span> on</code></pre></figure>
 
 <p>This follows the syntax for VBoxHeadless:</p>
 
-<div class="highlight"><pre><code class="language-text" data-lang="text">-s, -startvm, --startvm &lt;name|uuid&gt;   Start given VM (required argument)
-  -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don&#39;t change the setting</code></pre></div>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">  -s, -startvm, --startvm &lt;name|uuid&gt;   Start given VM (required argument)
+  -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don't change the setting</code></pre></figure>
 
 <p>VRDE is the Virtual Remote Desktop extension, which allows RDP out of the box through a special Oracle tool.</p>
 
-<h2>Booting my VM at Login</h2>
+<p>##Booting my VM at Login##</p>
 
-<p>launchd has multiple &quot;runlevels&quot; - there are System level daemons, and daemons for whenever a given user logs in. User daemons are stored at ~/Library/LaunchAgents/.</p>
+<p>launchd has multiple “runlevels” - there are System level daemons, and daemons for whenever a given user logs in. User daemons are stored at ~/Library/LaunchAgents/.</p>
 
 <p>With the help of the launched tool, I made a plist for my command:</p>
 
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="cp">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple Computer//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span>
-<span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;dict&gt;</span>
-    <span class="nt">&lt;key&gt;</span>KeepAlive<span class="nt">&lt;/key&gt;</span>
-        <span class="nt">&lt;true/&gt;</span>
-    <span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;string&gt;</span>io.zzzz.z3ugma.launched.windowsvirtualbox<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;array&gt;</span>
-        <span class="nt">&lt;string&gt;</span>VBoxHeadless<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;string&gt;</span>-s<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;string&gt;</span>Windows<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;string&gt;</span>-v<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;string&gt;</span>on<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;/array&gt;</span>
-    <span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;true/&gt;</span>
-    <span class="nt">&lt;key&gt;</span>UserName<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;string&gt;</span>fred<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;key&gt;</span>WorkingDirectory<span class="nt">&lt;/key&gt;</span>
-    <span class="nt">&lt;string&gt;</span>/Users/fred<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;key&gt;</span>StandardErrorPath<span class="nt">&lt;/key&gt;</span>
-        <span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
-        <span class="nt">&lt;key&gt;</span>StandardOutPath<span class="nt">&lt;/key&gt;</span>
-        <span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
+	<span class="nt">&lt;key&gt;</span>KeepAlive<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;true/&gt;</span>
+	<span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;string&gt;</span>io.zzzz.z3ugma.launched.windowsvirtualbox<span class="nt">&lt;/string&gt;</span>
+	<span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;array&gt;</span>
+		<span class="nt">&lt;string&gt;</span>VBoxHeadless<span class="nt">&lt;/string&gt;</span>
+		<span class="nt">&lt;string&gt;</span>-s<span class="nt">&lt;/string&gt;</span>
+		<span class="nt">&lt;string&gt;</span>Windows<span class="nt">&lt;/string&gt;</span>
+		<span class="nt">&lt;string&gt;</span>-v<span class="nt">&lt;/string&gt;</span>
+		<span class="nt">&lt;string&gt;</span>on<span class="nt">&lt;/string&gt;</span>
+	<span class="nt">&lt;/array&gt;</span>
+	<span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;true/&gt;</span>
+	<span class="nt">&lt;key&gt;</span>UserName<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;string&gt;</span>fred<span class="nt">&lt;/string&gt;</span>
+	<span class="nt">&lt;key&gt;</span>WorkingDirectory<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;string&gt;</span>/Users/fred<span class="nt">&lt;/string&gt;</span>
+	<span class="nt">&lt;key&gt;</span>StandardErrorPath<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>StandardOutPath<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
 <span class="nt">&lt;/dict&gt;</span>
-<span class="nt">&lt;/plist&gt;</span></code></pre></div>
+<span class="nt">&lt;/plist&gt;</span></code></pre></figure>
 
 <p>Notable options in here:</p>
 
 <ul>
-<li><strong>KeepAlive = True</strong> - If the VBoxHeadless process crashes for some reason, or someone manually shuts down the box (perhap from within RDP), the box restarts itself</li>
-<li><strong>RunAtLoad = True</strong> - Run this daemon when the daemon is loaded. &quot;Loading&quot; occurs at login, and when a user manually loads the daemon.</li>
-<li><strong>WorkingDirectory</strong> &amp; <strong>UserName</strong> - These are special directives needed because of the peculiar way that VirtualBox runs. Just set it to the home folder of the user running the daemon.</li>
+  <li><strong>KeepAlive = True</strong> - If the VBoxHeadless process crashes for some reason, or someone manually shuts down the box (perhap from within RDP), the box restarts itself</li>
+  <li><strong>RunAtLoad = True</strong> - Run this daemon when the daemon is loaded. “Loading” occurs at login, and when a user manually loads the daemon.</li>
+  <li><strong>WorkingDirectory</strong> &amp; <strong>UserName</strong> - These are special directives needed because of the peculiar way that VirtualBox runs. Just set it to the home folder of the user running the daemon.</li>
 </ul>
 
 <p>This xml is saved into a file in /Library/LaunchAgents. Navigate to that directory, and execute</p>
 
-<div class="highlight"><pre><code class="language-text" data-lang="text">launchctl load &lt;name of plist&gt;</code></pre></div>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">launchctl load &lt;name of plist&gt;</code></pre></figure>
 
 <p><em>launchctl</em> is the program that Mac OS uses to control launchd processes. Once the plist has been loaded, it should persist after reboot.</p>
 
-<p>A similar plist can be used for the command &#39;vagrant up&#39; to launch vagrant vms.</p>
+<p>A similar plist can be used for the command ‘vagrant up’ to launch vagrant vms.</p>
+
 
 </div>
 
@@ -181,27 +193,27 @@
     
       <li>
         <h3>
-          <a href="/2015/08/25/acorn-rino/">
-            Acorn, RiNo, Denver
-            <small>25 Aug 2015</small>
+          <a href="/2017/04/24/washerbot-and-dryerbot-part-5/">
+            WasherBot and DryerBot, Part 5: A Measurement Algorithm and Text Message Integration
+            <small>24 Apr 2017</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/08/24/sing-a-song-for-sixpence/">
-            Sexy Pizza
-            <small>24 Aug 2015</small>
+          <a href="/2016/12/09/washerbot-and-dryerbot-part-4/">
+            WasherBot and DryerBot, Part 4: A Low-Pass Filter and Reading From Laundry Appliances
+            <small>09 Dec 2016</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/08/22/sexy-pizza/">
-            Sing a Song for Sixpence
-            <small>22 Aug 2015</small>
+          <a href="/2016/12/03/washerbot-and-dryerbot-part-3/">
+            WasherBot and DryerBot, Part 3: Connecting to the Pi and Building a Voltage Divider
+            <small>03 Dec 2016</small>
           </a>
         </h3>
       </li>

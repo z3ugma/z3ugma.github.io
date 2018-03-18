@@ -6,6 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
+<!--Facebook share tags -->
+  <meta property="og:url"                content="/2014/02/09/using-python-to-pay-parking-tickets/" />
+  <meta property="og:type"               content="article" />
+  <meta property="og:title"              content="Using Python to Pay Parking Tickets"/>
+  <meta property="og:description"        content="" />
+  <meta property="og:image"              content="" />
+
   <!-- Enable responsiveness on mobile devices-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
@@ -23,8 +30,8 @@
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
 
   <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
-                                 <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/f_favicon.png">
+                                 <link rel="shortcut icon" href="/public/f_favicon.png">
 
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
@@ -42,7 +49,7 @@
           Python Monty
         </a>
       </h1>
-      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python</p>
+      <p class="lead">Explaining the terrible code I write as I go. Mostly in Python. Also some restaurant reviews and recipes.</p>
     </div>
 
     <nav class="sidebar-nav">
@@ -84,9 +91,13 @@
           
         
       
+        
+          
+        
+      
     </nav>
 
-    <p>&copy; 2015. All rights reserved.</p>
+    <p>&copy; 2018. All rights reserved.</p>
   </div>
 </div>
 
@@ -95,19 +106,19 @@
       <div class="post">
   <h1 class="post-title">Using Python to Pay Parking Tickets</h1>
   <span class="post-date">09 Feb 2014</span>
-  <h2>Using Python to Pay Parking Tickets</h2>
+  <p>##Using Python to Pay Parking Tickets ##</p>
 
 <p>An enterprising fellow from Milwaukee built a site to automatically pay parking tickets in his city and in Madison. Unfortunately, the city of Madison changed around their ticket-payment website, so the site is not working. I thought it would be a good programing challenge for me.</p>
 
-<h3>How Do You Work with Web Services When They Have No API?</h3>
+<h3 id="how-do-you-work-with-web-services-when-they-have-no-api">How Do You Work with Web Services When They Have No API?</h3>
 
-<p>Since the City of Madison doesn&#39;t have an API on their website, it&#39;s not a simple matter of sending a query and getting back a nicely-formatted JSON response to use in my app. So how can I get the information that I need from the website? </p>
+<p>Since the City of Madison doesn’t have an API on their website, it’s not a simple matter of sending a query and getting back a nicely-formatted JSON response to use in my app. So how can I get the information that I need from the website?</p>
 
-<p>Fortunately, all websites have at least one available point of entry - via the web, as a user! There&#39;s a Python package to emulate user behavior in a browser and return the HTTP response, which we can further manipulate as we want.</p>
+<p>Fortunately, all websites have at least one available point of entry - via the web, as a user! There’s a Python package to emulate user behavior in a browser and return the HTTP response, which we can further manipulate as we want.</p>
 
-<p>This is <a href="https://pypi.python.org/pypi/mechanize/">Mechanize</a>, originally developed for Perl. I install the Python package and make a script to go to the City of Madison&#39;s parking ticket payment site at https://www.cityofmadison.com/epayment/parkingTicket/. I based this on an example at http://stockrt.github.io/p/emulating-a-browser-in-python-with-mechanize/.</p>
+<p>This is <a href="https://pypi.python.org/pypi/mechanize/">Mechanize</a>, originally developed for Perl. I install the Python package and make a script to go to the City of Madison’s parking ticket payment site at https://www.cityofmadison.com/epayment/parkingTicket/. I based this on an example at http://stockrt.github.io/p/emulating-a-browser-in-python-with-mechanize/.</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">mechanize</span>
 <span class="kn">import</span> <span class="nn">cookielib</span>
@@ -134,29 +145,29 @@
 <span class="c">#br.set_debug_responses(True)</span>
 
 <span class="c"># User-Agent (this is cheating, ok?)</span>
-<span class="n">br</span><span class="o">.</span><span class="n">addheaders</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;User-agent&#39;</span><span class="p">,</span> <span class="s">&#39;Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1&#39;</span><span class="p">)]</span>
+<span class="n">br</span><span class="o">.</span><span class="n">addheaders</span> <span class="o">=</span> <span class="p">[(</span><span class="s">'User-agent'</span><span class="p">,</span> <span class="s">'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'</span><span class="p">)]</span>
 
-<span class="c"># Open some site, let&#39;s pick a random one, the first that pops in mind:</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;https://www.cityofmadison.com/epayment/parkingTicket/search.cfm&#39;</span><span class="p">)</span>
+<span class="c"># Open some site, let's pick a random one, the first that pops in mind:</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'https://www.cityofmadison.com/epayment/parkingTicket/search.cfm'</span><span class="p">)</span>
 
 <span class="n">html</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
 <span class="c"># Show the source</span>
-<span class="c">#print html</span></code></pre></div>
+<span class="c">#print html</span></code></pre></figure>
 
-<p>This returns us the html of the city&#39;s parking ticket page as a big string of HTML.</p>
+<p>This returns us the html of the city’s parking ticket page as a big string of HTML.</p>
 
 <p><img src="/images/msnticket/1.png" /></p>
 
-<h2>Searching for Tickets</h2>
+<h2 id="searching-for-tickets">Searching for Tickets</h2>
 
 <p>In order to search for a parking ticket, it looks like I need to first accept the terms and continue.</p>
 
-<p>Since Mechanize is &#39;stateful&#39; - it acts like a browser tab that a user would have open - I can submit this form and continue working with my browser class.</p>
+<p>Since Mechanize is ‘stateful’ - it acts like a browser tab that a user would have open - I can submit this form and continue working with my browser class.</p>
 
 <p>Before we do that, here are some other things you can do with Mechanize:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Show the source</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Show the source</span>
 <span class="c">#print html</span>
 <span class="c"># or</span>
 
@@ -173,20 +184,20 @@
 <span class="c">#Show the available forms</span>
 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">br</span><span class="o">.</span><span class="n">forms</span><span class="p">():</span>
     <span class="k">print</span> <span class="n">f</span>
-    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span></code></pre></div>
+    <span class="k">print</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span></code></pre></figure>
 
 <p>Back to the main objective. We need to first:</p>
 
 <ul>
-<li>Find the form on the page with the checkbox</li>
-<li>Select the checkbox</li>
-<li>Submit the form to continue</li>
+  <li>Find the form on the page with the checkbox</li>
+  <li>Select the checkbox</li>
+  <li>Submit the form to continue</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#fet First hurdle: Accepting the terms. Here we find a form, click a checkbox, and submit the form to load the next page into mechanize</span>
-<span class="n">br</span><span class="o">.</span><span class="n">select_form</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;termsAcceptance&#39;</span><span class="p">)</span>
-<span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;acceptTerms&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;1&quot;</span><span class="p">]</span>
-<span class="n">br</span><span class="o">.</span><span class="n">submit</span><span class="p">()</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#fet First hurdle: Accepting the terms. Here we find a form, click a checkbox, and submit the form to load the next page into mechanize</span>
+<span class="n">br</span><span class="o">.</span><span class="n">select_form</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'termsAcceptance'</span><span class="p">)</span>
+<span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"acceptTerms"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">"1"</span><span class="p">]</span>
+<span class="n">br</span><span class="o">.</span><span class="n">submit</span><span class="p">()</span></code></pre></figure>
 
 <p>In order to do this, I needed to find the name of the form and the checkbox control. I used Chrome Developer tools to inspect it:</p>
 
@@ -199,181 +210,180 @@
 
 <p>Great news! This is where we can enter our first dynamic input - a license plate to test. I do a similar inspection and find the names of the form and controls I need to manipulate:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">br</span><span class="o">.</span><span class="n">select_form</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;plateSearch&#39;</span><span class="p">)</span>
-<span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Plate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#39;123ABC&#39;</span>
-<span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;State&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;WI&quot;</span><span class="p">]</span>
-<span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;VehTyp&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;PC&quot;</span><span class="p">]</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">br</span><span class="o">.</span><span class="n">select_form</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'plateSearch'</span><span class="p">)</span>
+<span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Plate"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s">'123ABC'</span>
+<span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"State"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">"WI"</span><span class="p">]</span>
+<span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"VehTyp"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">"PC"</span><span class="p">]</span>
 <span class="n">br</span><span class="o">.</span><span class="n">submit</span><span class="p">()</span>
 <span class="n">text</span> <span class="o">=</span>  <span class="n">br</span><span class="o">.</span><span class="n">response</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
 <span class="c">#fet For inspection, we can write the text of the page that loads to a file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;msnticketresponse.html&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'msnticketresponse.html'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></figure>
 
-<p>Here&#39;s what the HTML of the search returns for a plate with existing tickets:</p>
+<p>Here’s what the HTML of the search returns for a plate with existing tickets:</p>
 
 <p><img src="/images/msnticket/5.png" /></p>
 
-<h3>Manipulating the HTML Search Results to Work With Them in Python</h3>
-
+<h3 id="manipulating-the-html-search-results-to-work-with-them-in-python">Manipulating the HTML Search Results to Work With Them in Python</h3>
 <p>We need to take the HTML output and parse the page. The problem is that the output is not always regular. We need something like regular expressions that will let us recognize certain, sometimes repeated parts of the page.</p>
 
-<p>The <a href="http://lxml.de/">LXML</a> library is a good starting place to process XML and HTML in Python. </p>
+<p>The <a href="http://lxml.de/">LXML</a> library is a good starting place to process XML and HTML in Python.</p>
 
-<p>We&#39;ll also take advantage of <a href="http://www.w3schools.com/xpath/">XPATH, which is like regex for XML</a>:
-Let&#39;s inspect the HTML of the search results to find what is regular about these ticket results.
-I&#39;ve skipped over the header of the page and gone right to the meat of where the tickets are:</p>
+<p>We’ll also take advantage of <a href="http://www.w3schools.com/xpath/">XPATH, which is like regex for XML</a>:
+Let’s inspect the HTML of the search results to find what is regular about these ticket results.
+I’ve skipped over the header of the page and gone right to the meat of where the tickets are:</p>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">&quot;main&quot;</span> <span class="na">cellspacing=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;tr&gt;</span>
-        <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">&quot;2&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;/images/ePayment.jpg&quot;</span> <span class="na">width=</span><span class="s">&quot;740&quot;</span> <span class="na">height=</span><span class="s">&quot;106&quot;</span><span class="nt">&gt;&lt;/td&gt;</span>
-    <span class="nt">&lt;/tr&gt;</span>
-    <span class="nt">&lt;tr&gt;</span>
-        <span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">&quot;sidebar&quot;</span><span class="nt">&gt;</span>
-            <span class="c">&lt;!-- InstanceBeginEditable name=&quot;Sidebar&quot; --&gt;</span>
-            
-            <span class="c">&lt;!-- InstanceEndEditable --&gt;</span>
-        <span class="nt">&lt;/td&gt;</span>
-        <span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
-            <span class="c">&lt;!-- InstanceBeginEditable name=&quot;Content&quot; --&gt;</span>
-            <span class="nt">&lt;h1</span> <span class="na">style=</span><span class="s">&quot;float:left;&quot;</span><span class="nt">&gt;</span>Parking Ticket Information<span class="nt">&lt;/h1&gt;</span>
-            <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;float:right;margin-bottom:10px;&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">class=</span><span class="s">&quot;linkButton&quot;</span> <span class="na">href=</span><span class="s">&quot;index.cfm&quot;</span> <span class="na">style=</span><span class="s">&quot;width:200px;&quot;</span><span class="nt">&gt;</span>Parking Ticket Payment Home<span class="nt">&lt;/a&gt;</span> <span class="ni">&amp;nbsp;&amp;nbsp;</span><span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;linkButton&quot;</span> <span class="na">href=</span><span class="s">&quot;search.cfm&quot;</span> <span class="na">style=</span><span class="s">&quot;width:100px;&quot;</span><span class="nt">&gt;</span>New Search<span class="nt">&lt;/a&gt;&lt;/div&gt;</span>
-            <span class="nt">&lt;br</span> <span class="na">clear=</span><span class="s">&quot;all&quot;</span> <span class="nt">/&gt;</span>
-            
-            
-            <span class="nt">&lt;form</span> <span class="na">name=</span><span class="s">&quot;Payments&quot;</span> <span class="na">id=</span><span class="s">&quot;Payments&quot;</span> <span class="na">action=</span><span class="s">&quot;ticketPayments.cfm&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">onsubmit=</span><span class="s">&quot;return _CF_checkPayments(this)&quot;</span><span class="nt">&gt;</span>
-                    <span class="nt">&lt;table</span> <span class="na">cellpadding=</span><span class="s">&quot;0&quot;</span> <span class="na">cellspacing=</span><span class="s">&quot;0&quot;</span> <span class="na">border=</span><span class="s">&quot;0&quot;</span> <span class="na">width=</span><span class="s">&quot;100%&quot;</span> <span class="na">style=</span><span class="s">&quot;border: 1px solid #CCCCCC;&quot;</span><span class="nt">&gt;</span>
-                        <span class="nt">&lt;tr&gt;</span>
-                                <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">&quot;7&quot;</span> <span class="na">class=</span><span class="s">&quot;RequiredLabel&quot;</span><span class="nt">&gt;&lt;br&gt;</span>(* indicates required field)<span class="nt">&lt;br&gt;&lt;br&gt;&lt;/td&gt;</span>
-                            <span class="nt">&lt;/tr&gt;</span>
-                        <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;backgroundMedium&quot;</span><span class="nt">&gt;</span>
-                            
-                            <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;12%&quot;</span><span class="nt">&gt;</span>Ticket No<span class="nt">&lt;/td&gt;</span>
-                            <span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;12%&quot;</span><span class="nt">&gt;</span>Date of Violation<span class="nt">&lt;/TD&gt;</span> 
-                            <span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;12%&quot;</span><span class="nt">&gt;</span>Plate No<span class="nt">&lt;/TD&gt;</span>
-                            <span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;10%&quot;</span><span class="nt">&gt;</span>State<span class="nt">&lt;/TD&gt;</span>
-                            <span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;19%&quot;</span><span class="nt">&gt;</span>Vehicle<span class="nt">&lt;/TD&gt;</span>
-                            <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;10%&quot;</span><span class="nt">&gt;</span>Amount Due<span class="nt">&lt;/td&gt;</span>
-                            <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;25%&quot;</span><span class="nt">&gt;</span>Payment Amount<span class="nt">&lt;/td&gt;</span>
-                        <span class="nt">&lt;/tr&gt;</span>
-                        
-                        
-                        
-                            <span class="nt">&lt;tr</span> <span class="nt">&gt;</span>
-                                
-                                <span class="nt">&lt;td&gt;</span> S123456 <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>09/27/2013 <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>123ABC   <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>Wisconsin <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>Standard Passenger Car Plate <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>
-                                    $55.00  
-                                <span class="nt">&lt;/td&gt;</span>
-                                
-                                
-                                    <span class="nt">&lt;td&gt;</span>
-                                        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;p_S123456&quot;</span> <span class="na">value=</span><span class="s">&quot;BalanceDue&quot;</span> <span class="nt">&gt;</span>Balance Due ($55.00)<span class="nt">&lt;br&gt;</span>
-                                            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;p_S123456&quot;</span> <span class="na">value=</span><span class="s">&quot;Other&quot;</span> <span class="nt">&gt;</span>Other $<span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;pOther_S123456&quot;</span> <span class="na">id=</span><span class="s">&quot;pOther_S123456&quot;</span>  <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">maxlength=</span><span class="s">&quot;14&quot;</span>  <span class="na">size=</span><span class="s">&quot;10&quot;</span>  <span class="nt">/&gt;</span>
-                                    <span class="nt">&lt;/td&gt;</span>
-                                
-                            <span class="nt">&lt;/tr&gt;</span>
-                            
-                            <span class="nt">&lt;tr</span>  <span class="na">class=</span><span class="s">&quot;backgroundLight&quot;</span><span class="nt">&gt;</span>
-                                
-                                <span class="nt">&lt;td&gt;</span> S123457 <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>12/08/2013 <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>123ABC   <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>Wisconsin <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>Standard Passenger Car Plate <span class="nt">&lt;/td&gt;</span>
-                                <span class="nt">&lt;td&gt;</span>
-                                    $20.00  
-                                <span class="nt">&lt;/td&gt;</span>
-                                
-                                
-                                    <span class="nt">&lt;td&gt;</span>
-                                        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;p_S123457&quot;</span> <span class="na">value=</span><span class="s">&quot;BalanceDue&quot;</span> <span class="nt">&gt;</span>Balance Due ($20.00)<span class="nt">&lt;br&gt;</span>
-                                            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;p_S123457&quot;</span> <span class="na">value=</span><span class="s">&quot;Other&quot;</span> <span class="nt">&gt;</span>Other $<span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;pOther_S123457&quot;</span> <span class="na">id=</span><span class="s">&quot;pOther_S123457&quot;</span>  <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">maxlength=</span><span class="s">&quot;14&quot;</span>  <span class="na">size=</span><span class="s">&quot;10&quot;</span>  <span class="nt">/&gt;</span>
-                                    <span class="nt">&lt;/td&gt;</span>
-                                
-                            <span class="nt">&lt;/tr&gt;</span>
-                                                                
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"main"</span> <span class="na">cellspacing=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;tr&gt;</span>
+		<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"2"</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">"/images/ePayment.jpg"</span> <span class="na">width=</span><span class="s">"740"</span> <span class="na">height=</span><span class="s">"106"</span><span class="nt">&gt;&lt;/td&gt;</span>
+	<span class="nt">&lt;/tr&gt;</span>
+	<span class="nt">&lt;tr&gt;</span>
+		<span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">"sidebar"</span><span class="nt">&gt;</span>
+			<span class="c">&lt;!-- InstanceBeginEditable name="Sidebar" --&gt;</span>
+			
+			<span class="c">&lt;!-- InstanceEndEditable --&gt;</span>
+		<span class="nt">&lt;/td&gt;</span>
+		<span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">"content"</span><span class="nt">&gt;</span>
+			<span class="c">&lt;!-- InstanceBeginEditable name="Content" --&gt;</span>
+			<span class="nt">&lt;h1</span> <span class="na">style=</span><span class="s">"float:left;"</span><span class="nt">&gt;</span>Parking Ticket Information<span class="nt">&lt;/h1&gt;</span>
+			<span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">"float:right;margin-bottom:10px;"</span><span class="nt">&gt;&lt;a</span> <span class="na">class=</span><span class="s">"linkButton"</span> <span class="na">href=</span><span class="s">"index.cfm"</span> <span class="na">style=</span><span class="s">"width:200px;"</span><span class="nt">&gt;</span>Parking Ticket Payment Home<span class="nt">&lt;/a&gt;</span> <span class="ni">&amp;nbsp;&amp;nbsp;</span><span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"linkButton"</span> <span class="na">href=</span><span class="s">"search.cfm"</span> <span class="na">style=</span><span class="s">"width:100px;"</span><span class="nt">&gt;</span>New Search<span class="nt">&lt;/a&gt;&lt;/div&gt;</span>
+			<span class="nt">&lt;br</span> <span class="na">clear=</span><span class="s">"all"</span> <span class="nt">/&gt;</span>
+			
+			
+			<span class="nt">&lt;form</span> <span class="na">name=</span><span class="s">"Payments"</span> <span class="na">id=</span><span class="s">"Payments"</span> <span class="na">action=</span><span class="s">"ticketPayments.cfm"</span> <span class="na">method=</span><span class="s">"post"</span> <span class="na">onsubmit=</span><span class="s">"return _CF_checkPayments(this)"</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;table</span> <span class="na">cellpadding=</span><span class="s">"0"</span> <span class="na">cellspacing=</span><span class="s">"0"</span> <span class="na">border=</span><span class="s">"0"</span> <span class="na">width=</span><span class="s">"100%"</span> <span class="na">style=</span><span class="s">"border: 1px solid #CCCCCC;"</span><span class="nt">&gt;</span>
+						<span class="nt">&lt;tr&gt;</span>
+								<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"7"</span> <span class="na">class=</span><span class="s">"RequiredLabel"</span><span class="nt">&gt;&lt;br&gt;</span>(* indicates required field)<span class="nt">&lt;br&gt;&lt;br&gt;&lt;/td&gt;</span>
+							<span class="nt">&lt;/tr&gt;</span>
+						<span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">"backgroundMedium"</span><span class="nt">&gt;</span>
+							
+							<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"12%"</span><span class="nt">&gt;</span>Ticket No<span class="nt">&lt;/td&gt;</span>
+							<span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"12%"</span><span class="nt">&gt;</span>Date of Violation<span class="nt">&lt;/TD&gt;</span> 
+							<span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"12%"</span><span class="nt">&gt;</span>Plate No<span class="nt">&lt;/TD&gt;</span>
+							<span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"10%"</span><span class="nt">&gt;</span>State<span class="nt">&lt;/TD&gt;</span>
+							<span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"19%"</span><span class="nt">&gt;</span>Vehicle<span class="nt">&lt;/TD&gt;</span>
+							<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"10%"</span><span class="nt">&gt;</span>Amount Due<span class="nt">&lt;/td&gt;</span>
+							<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"25%"</span><span class="nt">&gt;</span>Payment Amount<span class="nt">&lt;/td&gt;</span>
+						<span class="nt">&lt;/tr&gt;</span>
+						
+						
+						
+							<span class="nt">&lt;tr</span> <span class="nt">&gt;</span>
+								
+								<span class="nt">&lt;td&gt;</span> S123456 <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>09/27/2013 <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>123ABC   <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>Wisconsin <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>Standard Passenger Car Plate <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>
+									$55.00  
+								<span class="nt">&lt;/td&gt;</span>
+								
+								
+									<span class="nt">&lt;td&gt;</span>
+										<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"radio"</span> <span class="na">name=</span><span class="s">"p_S123456"</span> <span class="na">value=</span><span class="s">"BalanceDue"</span> <span class="nt">&gt;</span>Balance Due ($55.00)<span class="nt">&lt;br&gt;</span>
+											<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"radio"</span> <span class="na">name=</span><span class="s">"p_S123456"</span> <span class="na">value=</span><span class="s">"Other"</span> <span class="nt">&gt;</span>Other $<span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"pOther_S123456"</span> <span class="na">id=</span><span class="s">"pOther_S123456"</span>  <span class="na">type=</span><span class="s">"text"</span> <span class="na">maxlength=</span><span class="s">"14"</span>  <span class="na">size=</span><span class="s">"10"</span>  <span class="nt">/&gt;</span>
+									<span class="nt">&lt;/td&gt;</span>
+								
+							<span class="nt">&lt;/tr&gt;</span>
+							
+							<span class="nt">&lt;tr</span>  <span class="na">class=</span><span class="s">"backgroundLight"</span><span class="nt">&gt;</span>
+								
+								<span class="nt">&lt;td&gt;</span> S123457 <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>12/08/2013 <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>123ABC   <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>Wisconsin <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>Standard Passenger Car Plate <span class="nt">&lt;/td&gt;</span>
+								<span class="nt">&lt;td&gt;</span>
+									$20.00  
+								<span class="nt">&lt;/td&gt;</span>
+								
+								
+									<span class="nt">&lt;td&gt;</span>
+										<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"radio"</span> <span class="na">name=</span><span class="s">"p_S123457"</span> <span class="na">value=</span><span class="s">"BalanceDue"</span> <span class="nt">&gt;</span>Balance Due ($20.00)<span class="nt">&lt;br&gt;</span>
+											<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"radio"</span> <span class="na">name=</span><span class="s">"p_S123457"</span> <span class="na">value=</span><span class="s">"Other"</span> <span class="nt">&gt;</span>Other $<span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"pOther_S123457"</span> <span class="na">id=</span><span class="s">"pOther_S123457"</span>  <span class="na">type=</span><span class="s">"text"</span> <span class="na">maxlength=</span><span class="s">"14"</span>  <span class="na">size=</span><span class="s">"10"</span>  <span class="nt">/&gt;</span>
+									<span class="nt">&lt;/td&gt;</span>
+								
+							<span class="nt">&lt;/tr&gt;</span>
+																
 
-                        
-                        <span class="nt">&lt;tr&gt;</span>
-                            <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">&quot;2&quot;</span><span class="nt">&gt;</span>Email Address: <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;RequiredLabel&quot;</span><span class="nt">&gt;</span>*<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;/td&gt;</span>
-                            <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">&quot;5&quot;</span><span class="nt">&gt;</span>
-                                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;email&quot;</span> <span class="na">size=</span><span class="s">&quot;35&quot;</span> <span class="na">maxlength=</span><span class="s">&quot;50&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
-                            <span class="nt">&lt;/td&gt;</span>
-                        <span class="nt">&lt;/tr&gt;</span>
-                    <span class="nt">&lt;/table&gt;</span>
-                    <span class="nt">&lt;div</span> <span class="na">align=</span><span class="s">&quot;center&quot;</span> <span class="na">style=</span><span class="s">&quot;margin-top: 8px;&quot;</span><span class="nt">&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;ticketPayments&quot;</span> <span class="na">value=</span><span class="s">&quot;Continue&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-                <span class="nt">&lt;/form&gt;</span>
+						
+						<span class="nt">&lt;tr&gt;</span>
+							<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"2"</span><span class="nt">&gt;</span>Email Address: <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"RequiredLabel"</span><span class="nt">&gt;</span>*<span class="nt">&lt;/span&gt;</span>	<span class="nt">&lt;/td&gt;</span>
+							<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"5"</span><span class="nt">&gt;</span>
+								<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"email"</span> <span class="na">size=</span><span class="s">"35"</span> <span class="na">maxlength=</span><span class="s">"50"</span> <span class="na">value=</span><span class="s">""</span><span class="nt">&gt;</span>
+							<span class="nt">&lt;/td&gt;</span>
+						<span class="nt">&lt;/tr&gt;</span>
+					<span class="nt">&lt;/table&gt;</span>
+					<span class="nt">&lt;div</span> <span class="na">align=</span><span class="s">"center"</span> <span class="na">style=</span><span class="s">"margin-top: 8px;"</span><span class="nt">&gt;&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"ticketPayments"</span> <span class="na">value=</span><span class="s">"Continue"</span><span class="nt">&gt;&lt;/div&gt;</span>
+				<span class="nt">&lt;/form&gt;</span>
 
-                <span class="c">&lt;!-- InstanceEndEditable --&gt;</span>
-            
-        <span class="nt">&lt;/td&gt;</span>
-    <span class="nt">&lt;/tr&gt;</span>
-<span class="nt">&lt;/table&gt;</span></code></pre></div>
+				<span class="c">&lt;!-- InstanceEndEditable --&gt;</span>
+			
+		<span class="nt">&lt;/td&gt;</span>
+	<span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;/table&gt;</span></code></pre></figure>
 
-<p>We see that each discrete piece of data about each ticket is contained in a table cell <code>&lt;td&gt;</code>, and that each of these is the child of a <code>&lt;tr&gt;</code> that stands for each ticket. To get each ticket, we&#39;ll figure out what is common to those <code>&lt;tr&gt;</code>s. </p>
+<p>We see that each discrete piece of data about each ticket is contained in a table cell <code class="highlighter-rouge">&lt;td&gt;</code>, and that each of these is the child of a <code class="highlighter-rouge">&lt;tr&gt;</code> that stands for each ticket. To get each ticket, we’ll figure out what is common to those <code class="highlighter-rouge">&lt;tr&gt;</code>s.</p>
 
-<p>Each is the direct child of a form. Since there&#39;s only one form on the page, we can start there. Note that XPATH requires some strict syntax and won&#39;t necessarily follow the design of your element nesting here.</p>
+<p>Each is the direct child of a form. Since there’s only one form on the page, we can start there. Note that XPATH requires some strict syntax and won’t necessarily follow the design of your element nesting here.</p>
 
-<p>Here&#39;s the XPATH syntax that finally worked to return each ticket and nothing else:</p>
+<p>Here’s the XPATH syntax that finally worked to return each ticket and nothing else:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">tickets</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">&#39;//form/table/tr[position()&gt;2]//td//text()&#39;</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">tickets</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//form/table/tr[position()&gt;2]//td//text()'</span><span class="p">)</span></code></pre></figure>
 
-<p>Here&#39;s how we read this, from right to left:</p>
-
-<ul>
-<li>//text()
+<p>Here’s how we read this, from right to left:</p>
 
 <ul>
-<li>Two slashes: <em>Select ALL of</em></li>
-<li>text() - Select the text inside this element (as opposed to the class, or the href, or another attribute)</li>
-</ul></li>
-<li>//td - Select ALL <td> elements (even if they&#39;re not the direct child)</li>
-<li>/tr[position()&gt;2] - <a href="http://www.w3schools.com/xpath/xpath_syntax.asp">This is the complicated one</a>. Select <code>&lt;tr&gt;</code>s that are the direct children of the parent (one slash). Only select <code>&lt;tr&gt;</code>s that are the 3rd or greater <code>&lt;tr&gt;</code> child of their parent. This is to accommodate for these two <code>&lt;tr&gt;</code>s in our page that come before the tickets:</li>
+  <li>//text()
+    <ul>
+      <li>Two slashes: <em>Select ALL of</em></li>
+      <li>text() - Select the text inside this element (as opposed to the class, or the href, or another attribute)</li>
+    </ul>
+  </li>
+  <li>//td - Select ALL &lt;td&gt; elements (even if they’re not the direct child)</li>
+  <li>/tr[position()&gt;2] - <a href="http://www.w3schools.com/xpath/xpath_syntax.asp">This is the complicated one</a>. Select <code class="highlighter-rouge">&lt;tr&gt;</code>s that are the direct children of the parent (one slash). Only select <code class="highlighter-rouge">&lt;tr&gt;</code>s that are the 3rd or greater <code class="highlighter-rouge">&lt;tr&gt;</code> child of their parent. This is to accommodate for these two <code class="highlighter-rouge">&lt;tr&gt;</code>s in our page that come before the tickets:</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;tr&gt;</span>
-        <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">&quot;7&quot;</span> <span class="na">class=</span><span class="s">&quot;RequiredLabel&quot;</span><span class="nt">&gt;&lt;br&gt;</span>(* indicates required field)<span class="nt">&lt;br&gt;&lt;br&gt;&lt;/td&gt;</span>
-    <span class="nt">&lt;/tr&gt;</span>
-<span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;backgroundMedium&quot;</span><span class="nt">&gt;</span>
-    
-    <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;12%&quot;</span><span class="nt">&gt;</span>Ticket No<span class="nt">&lt;/td&gt;</span>
-    <span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;12%&quot;</span><span class="nt">&gt;</span>Date of Violation<span class="nt">&lt;/TD&gt;</span> 
-    <span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;12%&quot;</span><span class="nt">&gt;</span>Plate No<span class="nt">&lt;/TD&gt;</span>
-    <span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;10%&quot;</span><span class="nt">&gt;</span>State<span class="nt">&lt;/TD&gt;</span>
-    <span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;19%&quot;</span><span class="nt">&gt;</span>Vehicle<span class="nt">&lt;/TD&gt;</span>
-    <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;10%&quot;</span><span class="nt">&gt;</span>Amount Due<span class="nt">&lt;/td&gt;</span>
-    <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">&quot;Heading14Bold&quot;</span> <span class="na">width=</span><span class="s">&quot;25%&quot;</span><span class="nt">&gt;</span>Payment Amount<span class="nt">&lt;/td&gt;</span>
-<span class="nt">&lt;/tr&gt;</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;tr&gt;</span>
+		<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"7"</span> <span class="na">class=</span><span class="s">"RequiredLabel"</span><span class="nt">&gt;&lt;br&gt;</span>(* indicates required field)<span class="nt">&lt;br&gt;&lt;br&gt;&lt;/td&gt;</span>
+	<span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">"backgroundMedium"</span><span class="nt">&gt;</span>
+	
+	<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"12%"</span><span class="nt">&gt;</span>Ticket No<span class="nt">&lt;/td&gt;</span>
+	<span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"12%"</span><span class="nt">&gt;</span>Date of Violation<span class="nt">&lt;/TD&gt;</span> 
+	<span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"12%"</span><span class="nt">&gt;</span>Plate No<span class="nt">&lt;/TD&gt;</span>
+	<span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"10%"</span><span class="nt">&gt;</span>State<span class="nt">&lt;/TD&gt;</span>
+	<span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"19%"</span><span class="nt">&gt;</span>Vehicle<span class="nt">&lt;/TD&gt;</span>
+	<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"10%"</span><span class="nt">&gt;</span>Amount Due<span class="nt">&lt;/td&gt;</span>
+	<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"25%"</span><span class="nt">&gt;</span>Payment Amount<span class="nt">&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span></code></pre></figure>
 
 <ul>
-<li>//form/table - Select tables that are the direct children of ALL forms on the page.</li>
+  <li>//form/table - Select tables that are the direct children of ALL forms on the page.</li>
 </ul>
 
 <p>Whew.</p>
 
 <p>This give us (semi) nice lists like:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[</span><span class="s">&#39; S123456 &#39;</span><span class="p">,</span> <span class="s">&#39;09/27/2013 &#39;</span><span class="p">,</span> <span class="s">&#39;123ABC   &#39;</span><span class="p">,</span> <span class="s">&#39;Wisconsin &#39;</span><span class="p">,</span> <span class="s">&#39;Standard Passenger Car</span>
- <span class="n">Plate</span> <span class="s">&#39;, &#39;</span>\<span class="n">r</span>\<span class="n">n</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span><span class="err">$</span><span class="mf">65.00</span>  \<span class="n">r</span>\<span class="n">n</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span><span class="s">&#39;, &#39;</span>\<span class="n">r</span>\<span class="n">n</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\
-<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span><span class="s">&#39;, &#39;</span><span class="n">Balance</span> <span class="n">Due</span> <span class="p">(</span><span class="err">$</span><span class="mf">65.00</span><span class="p">)</span><span class="s">&#39;, &#39;</span><span class="n">Other</span> <span class="err">$</span><span class="s">&#39;, &#39;</span> <span class="n">S123457</span> <span class="s">&#39;, &#39;</span><span class="mi">12</span><span class="o">/</span><span class="mi">08</span><span class="o">/</span><span class="mi">2013</span> <span class="s">&#39;, &#39;</span><span class="mi">123</span>
-<span class="n">ABC</span>   <span class="s">&#39;, &#39;</span><span class="n">Wisconsin</span> <span class="s">&#39;, &#39;</span><span class="n">Standard</span> <span class="n">Passenger</span> <span class="n">Car</span> <span class="n">Plate</span> <span class="s">&#39;, &#39;</span>\<span class="n">r</span>\<span class="n">n</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span><span class="err">$</span>
-<span class="mf">30.00</span>  \<span class="n">r</span>\<span class="n">n</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span><span class="s">&#39;, &#39;</span>\<span class="n">r</span>\<span class="n">n</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span>\<span class="n">t</span><span class="s">&#39;, &#39;</span><span class="n">Balance</span> <span class="n">Due</span> <span class="p">(</span><span class="err">$</span><span class="mf">30.00</span><span class="p">)</span><span class="s">&#39;</span>
-<span class="p">,</span> <span class="s">&#39;Other $&#39;</span><span class="p">,</span> <span class="s">&#39;Email Address: &#39;</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\r\n\t\t\t\t\t\t\t\t</span><span class="s">&#39;</span><span class="p">]</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[</span><span class="s">' S123456 '</span><span class="p">,</span> <span class="s">'09/27/2013 '</span><span class="p">,</span> <span class="s">'123ABC   '</span><span class="p">,</span> <span class="s">'Wisconsin '</span><span class="p">,</span> <span class="s">'Standard Passenger Car</span><span class="err">
+</span><span class="s"> Plate '</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\t\t\t\t</span><span class="s">$65.00  </span><span class="se">\r\n\t\t\t\t\t\t\t\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\
+</span><span class="s">t</span><span class="se">\t\t\t\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'Balance Due ($65.00)'</span><span class="p">,</span> <span class="s">'Other $'</span><span class="p">,</span> <span class="s">' S123457 '</span><span class="p">,</span> <span class="s">'12/08/2013 '</span><span class="p">,</span> <span class="s">'123</span><span class="err">
+</span><span class="s">ABC   '</span><span class="p">,</span> <span class="s">'Wisconsin '</span><span class="p">,</span> <span class="s">'Standard Passenger Car Plate '</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\t\t\t\t</span><span class="s">$</span><span class="err">
+</span><span class="s">30.00  </span><span class="se">\r\n\t\t\t\t\t\t\t\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\t\t\t\t\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'Balance Due ($30.00)'</span>
+<span class="p">,</span> <span class="s">'Other $'</span><span class="p">,</span> <span class="s">'Email Address: '</span><span class="p">,</span> <span class="s">'*'</span><span class="p">,</span> <span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\t\t\t</span><span class="s">'</span><span class="p">]</span></code></pre></figure>
 
-<p>There&#39;s a lot of garbage in there, like carriage returns, tabs, and spaces. Additionally, we&#39;re only interested in <em>some</em> of the list elements:</p>
+<p>There’s a lot of garbage in there, like carriage returns, tabs, and spaces. Additionally, we’re only interested in <em>some</em> of the list elements:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#Strip out extra spaces, newlines, tabs. </span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#Strip out extra spaces, newlines, tabs. </span>
 <span class="c">#For each of these characters, replace itself with null in every element in tickets. </span>
 <span class="c">#Redefine tickets as this new string-replaced list.</span>
-<span class="n">chlist</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span><span class="s">&#39;</span><span class="se">\r</span><span class="s">&#39;</span><span class="p">,</span><span class="s">&#39;\s&#39;</span><span class="p">,</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">]</span>
+<span class="n">chlist</span> <span class="o">=</span> <span class="p">[</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">,</span><span class="s">'</span><span class="se">\r</span><span class="s">'</span><span class="p">,</span><span class="s">'</span><span class="err">\</span><span class="s">s'</span><span class="p">,</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">chlist</span><span class="p">:</span>
-    <span class="n">tickets</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">tickets</span><span class="p">]</span>
+	<span class="n">tickets</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span><span class="s">''</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">tickets</span><span class="p">]</span>
 
 <span class="c">#Build a dictionary, d. Parse the list of all tickets, organize them ordinally in a dictionary. </span>
 <span class="c">#Each dictionary entry will be a list. Pop the first 9 values off of tickets and create a new dictionary entry. </span>
@@ -381,27 +391,27 @@ I&#39;ve skipped over the header of the page and gone right to the meat of where
 <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="c">#Counter</span>
 <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">tickets</span><span class="p">)</span><span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
-    <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tickets</span><span class="p">[:</span><span class="mi">9</span><span class="p">]</span>
-    <span class="n">tickets</span> <span class="o">=</span> <span class="n">tickets</span><span class="p">[</span><span class="mi">9</span><span class="p">:]</span>
-    <span class="c">#Increment the counter</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+	<span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tickets</span><span class="p">[:</span><span class="mi">9</span><span class="p">]</span>
+	<span class="n">tickets</span> <span class="o">=</span> <span class="n">tickets</span><span class="p">[</span><span class="mi">9</span><span class="p">:]</span>
+	<span class="c">#Increment the counter</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
 
 <span class="c">#Neatly printing our output:</span>
 <span class="c">#Define our output template</span>
 
-<span class="n">template</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;Ticket No: </span><span class="si">%s</span><span class="s"></span>
-<span class="s">Date of Violation: </span><span class="si">%s</span><span class="s"></span>
-<span class="s">Plate No: </span><span class="si">%s</span><span class="s"></span>
-<span class="s">State: </span><span class="si">%s</span><span class="s"></span>
-<span class="s">Vehicle: </span><span class="si">%s</span><span class="s"></span>
-<span class="s">Amount Due: </span><span class="si">%s</span><span class="s">&#39;&#39;&#39;</span>
+<span class="n">template</span> <span class="o">=</span> <span class="s">'''Ticket No: </span><span class="si">%</span><span class="s">s
+Date of Violation: </span><span class="si">%</span><span class="s">s
+Plate No: </span><span class="si">%</span><span class="s">s
+State: </span><span class="si">%</span><span class="s">s
+Vehicle: </span><span class="si">%</span><span class="s">s
+Amount Due: </span><span class="si">%</span><span class="s">s'''</span>
 
 <span class="c"># For each entry in the dictionary, replace the template with the real values and insert a new line.</span>
 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-    <span class="n">results</span> <span class="o">+=</span> <span class="n">template</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
-<span class="k">print</span> <span class="n">results</span></code></pre></div>
+	<span class="n">results</span> <span class="o">+=</span> <span class="n">template</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="o">+</span> <span class="s">'</span><span class="se">\n\n</span><span class="s">'</span>
+<span class="k">print</span> <span class="n">results</span></code></pre></figure>
 
-<p>Apart from the neatly printed output, we also now have a dictionary of tickets. We&#39;ve achieved the goal of a fake &#39;API&#39; for searching for parking tickets.</p>
+<p>Apart from the neatly printed output, we also now have a dictionary of tickets. We’ve achieved the goal of a fake ‘API’ for searching for parking tickets.</p>
 
 <p>Stay tuned for actually <em>paying</em> them.</p>
 
@@ -413,27 +423,27 @@ I&#39;ve skipped over the header of the page and gone right to the meat of where
     
       <li>
         <h3>
-          <a href="/2015/08/25/acorn-rino/">
-            Acorn, RiNo, Denver
-            <small>25 Aug 2015</small>
+          <a href="/2017/04/24/washerbot-and-dryerbot-part-5/">
+            WasherBot and DryerBot, Part 5: A Measurement Algorithm and Text Message Integration
+            <small>24 Apr 2017</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/08/24/sing-a-song-for-sixpence/">
-            Sexy Pizza
-            <small>24 Aug 2015</small>
+          <a href="/2016/12/09/washerbot-and-dryerbot-part-4/">
+            WasherBot and DryerBot, Part 4: A Low-Pass Filter and Reading From Laundry Appliances
+            <small>09 Dec 2016</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/08/22/sexy-pizza/">
-            Sing a Song for Sixpence
-            <small>22 Aug 2015</small>
+          <a href="/2016/12/03/washerbot-and-dryerbot-part-3/">
+            WasherBot and DryerBot, Part 3: Connecting to the Pi and Building a Voltage Divider
+            <small>03 Dec 2016</small>
           </a>
         </h3>
       </li>

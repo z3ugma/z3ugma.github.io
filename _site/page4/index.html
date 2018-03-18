@@ -30,8 +30,8 @@
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
 
   <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
-                                 <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/f_favicon.png">
+                                 <link rel="shortcut icon" href="/public/f_favicon.png">
 
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
@@ -97,13 +97,162 @@
       
     </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2018. All rights reserved.</p>
   </div>
 </div>
 
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/12/10/keeping-virtualbox-and-vagrant-boxes-alive-through-reboots/">
+        Keeping VirtualBox and Vagrant Boxes Alive Through Reboots
+      </a>
+    </h1>
+
+    <span class="post-date">10 Dec 2014</span>
+
+    <p>I recently switched from a dedicated Windows 7 PC for my home server to a Mac Mini, mostly for the better electricity consumption and the fact the the PC was having nightly bluescreen crashes and restarting.</p>
+
+<p>I have always been a fan of RDP, and my office uses PCs - so to keep the convenient RDP access to home, I installed <a href="www.virtualbox.org">VirtualBox</a> and created a Windows VM. This has a bridged network adapter, so it just looks like another computer on my home network.</p>
+
+<p>However, when Mac OS restarts, or after a power failure, the virtual machine is powered off. This won’t do.</p>
+
+<p>##Daemons in Mac OS##</p>
+
+<p>Mac OS has the usual suspects like cron, but has a neat daemon launching system, appropriately called <a href="https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html">launchd</a>, introduced in 10.4.</p>
+
+<p>Launchd works by “loading” (think of it like a soft-install) objects called ‘'’plist’’’. Plist is a serialized object format like JSON or XML that tells launchd the properties of how to execute a particular daemon.</p>
+
+<p>If you want to play with creating your own plists, head over to <a href="http://launched.zerowidth.com">http://launched.zerowidth.com</a>, where Nathan Witmer has created a plist generator.</p>
+
+<p>##Automatic Tasks in VirtualBox##</p>
+
+<p>VirtualBox comes with a command-line interface to automate tasks on VMs. My need is simple - just boot the box:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">VBoxHeadless <span class="nt">-s</span> Windows <span class="nt">-v</span> on</code></pre></figure>
+
+<p>This follows the syntax for VBoxHeadless:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">  -s, -startvm, --startvm &lt;name|uuid&gt;   Start given VM (required argument)
+  -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don't change the setting</code></pre></figure>
+
+<p>VRDE is the Virtual Remote Desktop extension, which allows RDP out of the box through a special Oracle tool.</p>
+
+<p>##Booting my VM at Login##</p>
+
+<p>launchd has multiple “runlevels” - there are System level daemons, and daemons for whenever a given user logs in. User daemons are stored at ~/Library/LaunchAgents/.</p>
+
+<p>With the help of the launched tool, I made a plist for my command:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;dict&gt;</span>
+	<span class="nt">&lt;key&gt;</span>KeepAlive<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;true/&gt;</span>
+	<span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;string&gt;</span>io.zzzz.z3ugma.launched.windowsvirtualbox<span class="nt">&lt;/string&gt;</span>
+	<span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;array&gt;</span>
+		<span class="nt">&lt;string&gt;</span>VBoxHeadless<span class="nt">&lt;/string&gt;</span>
+		<span class="nt">&lt;string&gt;</span>-s<span class="nt">&lt;/string&gt;</span>
+		<span class="nt">&lt;string&gt;</span>Windows<span class="nt">&lt;/string&gt;</span>
+		<span class="nt">&lt;string&gt;</span>-v<span class="nt">&lt;/string&gt;</span>
+		<span class="nt">&lt;string&gt;</span>on<span class="nt">&lt;/string&gt;</span>
+	<span class="nt">&lt;/array&gt;</span>
+	<span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;true/&gt;</span>
+	<span class="nt">&lt;key&gt;</span>UserName<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;string&gt;</span>fred<span class="nt">&lt;/string&gt;</span>
+	<span class="nt">&lt;key&gt;</span>WorkingDirectory<span class="nt">&lt;/key&gt;</span>
+	<span class="nt">&lt;string&gt;</span>/Users/fred<span class="nt">&lt;/string&gt;</span>
+	<span class="nt">&lt;key&gt;</span>StandardErrorPath<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>StandardOutPath<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>/Users/fred/windowsvm.log<span class="nt">&lt;/string&gt;</span>
+<span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/plist&gt;</span></code></pre></figure>
+
+<p>Notable options in here:</p>
+
+<ul>
+  <li><strong>KeepAlive = True</strong> - If the VBoxHeadless process crashes for some reason, or someone manually shuts down the box (perhap from within RDP), the box restarts itself</li>
+  <li><strong>RunAtLoad = True</strong> - Run this daemon when the daemon is loaded. “Loading” occurs at login, and when a user manually loads the daemon.</li>
+  <li><strong>WorkingDirectory</strong> &amp; <strong>UserName</strong> - These are special directives needed because of the peculiar way that VirtualBox runs. Just set it to the home folder of the user running the daemon.</li>
+</ul>
+
+<p>This xml is saved into a file in /Library/LaunchAgents. Navigate to that directory, and execute</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">launchctl load &lt;name of plist&gt;</code></pre></figure>
+
+<p><em>launchctl</em> is the program that Mac OS uses to control launchd processes. Once the plist has been loaded, it should persist after reboot.</p>
+
+<p>A similar plist can be used for the command ‘vagrant up’ to launch vagrant vms.</p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/12/07/A-new-platform/">
+        A new platform
+      </a>
+    </h1>
+
+    <span class="post-date">07 Dec 2014</span>
+
+    <p>I switched from Octopress to Jekyll. I find that it is cleaner, easier to understand, and doesn’t require me to puzzle through Git branches and remotes.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/05/01/Find-all-the-casks/">
+        Find all the casks
+      </a>
+    </h1>
+
+    <span class="post-date">01 May 2014</span>
+
+    <p>There’s a great package manager for Mac called Homebrew that acts sort of like Aptitude on Ubuntu; it makes it really easy to quickly install software for your Mac from the command line.</p>
+
+<p>The Casks platform is built on top of Homebrew - it allows you to install your commonly-used desktop apps for Mac. This makes writing a setup script for when you reformat easy.</p>
+
+<p>It also makes Casks a great place to explore to find new Mac software you didn’t know existed. Unfortunately, the most you can see from the Casks master list on Github is the name of the software - you have to go into each .rb to find the URL for the website of the software.</p>
+
+<p>I wrote a quick and dirty script to go through all of these Casks and make a text file that I can put in Excel to open all the websites at once.</p>
+
+<p>First, we download all the files in the github repo to our target folder, then we run:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">listdir</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">isfile</span><span class="p">,</span> <span class="n">join</span>
+
+<span class="n">mypath</span> <span class="o">=</span> <span class="s">'/path/to/target/folder'</span>
+<span class="n">onlyfiles</span> <span class="o">=</span> <span class="p">[</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">listdir</span><span class="p">(</span><span class="n">mypath</span><span class="p">)</span> <span class="k">if</span> <span class="n">isfile</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">mypath</span><span class="p">,</span><span class="n">f</span><span class="p">))</span> <span class="p">]</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">onlyfiles</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'casks.txt'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">dfile</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">'</span><span class="se">\t</span><span class="s">'</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="s">'</span><span class="se">\t</span><span class="s">'</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'</span><span class="se">\'</span><span class="s">'</span><span class="p">,</span><span class="s">''</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">text</span>
+        <span class="n">dfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">dfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></figure>
+
+<p>Now we have casks.txt, ready to import into Excel to easily open all the links within and browse for new Mac apps.</p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -114,19 +263,19 @@
 
     <span class="post-date">09 Feb 2014</span>
 
-    <h2 id="using-python-to-pay-parking-tickets">Using Python to Pay Parking Tickets</h2>
+    <p>##Using Python to Pay Parking Tickets ##</p>
 
 <p>An enterprising fellow from Milwaukee built a site to automatically pay parking tickets in his city and in Madison. Unfortunately, the city of Madison changed around their ticket-payment website, so the site is not working. I thought it would be a good programing challenge for me.</p>
 
 <h3 id="how-do-you-work-with-web-services-when-they-have-no-api">How Do You Work with Web Services When They Have No API?</h3>
 
-<p>Since the City of Madison doesn’t have an API on their website, it’s not a simple matter of sending a query and getting back a nicely-formatted JSON response to use in my app. So how can I get the information that I need from the website? </p>
+<p>Since the City of Madison doesn’t have an API on their website, it’s not a simple matter of sending a query and getting back a nicely-formatted JSON response to use in my app. So how can I get the information that I need from the website?</p>
 
 <p>Fortunately, all websites have at least one available point of entry - via the web, as a user! There’s a Python package to emulate user behavior in a browser and return the HTTP response, which we can further manipulate as we want.</p>
 
 <p>This is <a href="https://pypi.python.org/pypi/mechanize/">Mechanize</a>, originally developed for Perl. I install the Python package and make a script to go to the City of Madison’s parking ticket payment site at https://www.cityofmadison.com/epayment/parkingTicket/. I based this on an example at http://stockrt.github.io/p/emulating-a-browser-in-python-with-mechanize/.</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">mechanize</span>
 <span class="kn">import</span> <span class="nn">cookielib</span>
@@ -161,7 +310,7 @@
 <span class="n">html</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
 <span class="c"># Show the source</span>
-<span class="c">#print html</span></code></pre></div>
+<span class="c">#print html</span></code></pre></figure>
 
 <p>This returns us the html of the city’s parking ticket page as a big string of HTML.</p>
 
@@ -175,7 +324,7 @@
 
 <p>Before we do that, here are some other things you can do with Mechanize:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Show the source</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Show the source</span>
 <span class="c">#print html</span>
 <span class="c"># or</span>
 
@@ -192,7 +341,7 @@
 <span class="c">#Show the available forms</span>
 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">br</span><span class="o">.</span><span class="n">forms</span><span class="p">():</span>
     <span class="k">print</span> <span class="n">f</span>
-    <span class="k">print</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span></code></pre></div>
+    <span class="k">print</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span></code></pre></figure>
 
 <p>Back to the main objective. We need to first:</p>
 
@@ -202,10 +351,10 @@
   <li>Submit the form to continue</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#fet First hurdle: Accepting the terms. Here we find a form, click a checkbox, and submit the form to load the next page into mechanize</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#fet First hurdle: Accepting the terms. Here we find a form, click a checkbox, and submit the form to load the next page into mechanize</span>
 <span class="n">br</span><span class="o">.</span><span class="n">select_form</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'termsAcceptance'</span><span class="p">)</span>
 <span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"acceptTerms"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">"1"</span><span class="p">]</span>
-<span class="n">br</span><span class="o">.</span><span class="n">submit</span><span class="p">()</span></code></pre></div>
+<span class="n">br</span><span class="o">.</span><span class="n">submit</span><span class="p">()</span></code></pre></figure>
 
 <p>In order to do this, I needed to find the name of the form and the checkbox control. I used Chrome Developer tools to inspect it:</p>
 
@@ -218,7 +367,7 @@
 
 <p>Great news! This is where we can enter our first dynamic input - a license plate to test. I do a similar inspection and find the names of the form and controls I need to manipulate:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">br</span><span class="o">.</span><span class="n">select_form</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'plateSearch'</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">br</span><span class="o">.</span><span class="n">select_form</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'plateSearch'</span><span class="p">)</span>
 <span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Plate"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s">'123ABC'</span>
 <span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"State"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">"WI"</span><span class="p">]</span>
 <span class="n">br</span><span class="o">.</span><span class="n">find_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"VehTyp"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">"PC"</span><span class="p">]</span>
@@ -228,7 +377,7 @@
 <span class="c">#fet For inspection, we can write the text of the page that loads to a file</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'msnticketresponse.html'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></figure>
 
 <p>Here’s what the HTML of the search returns for a plate with existing tickets:</p>
 
@@ -237,13 +386,13 @@
 <h3 id="manipulating-the-html-search-results-to-work-with-them-in-python">Manipulating the HTML Search Results to Work With Them in Python</h3>
 <p>We need to take the HTML output and parse the page. The problem is that the output is not always regular. We need something like regular expressions that will let us recognize certain, sometimes repeated parts of the page.</p>
 
-<p>The <a href="http://lxml.de/">LXML</a> library is a good starting place to process XML and HTML in Python. </p>
+<p>The <a href="http://lxml.de/">LXML</a> library is a good starting place to process XML and HTML in Python.</p>
 
 <p>We’ll also take advantage of <a href="http://www.w3schools.com/xpath/">XPATH, which is like regex for XML</a>:
 Let’s inspect the HTML of the search results to find what is regular about these ticket results.
 I’ve skipped over the header of the page and gone right to the meat of where the tickets are:</p>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"main"</span> <span class="na">cellspacing=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"main"</span> <span class="na">cellspacing=</span><span class="s">"0"</span><span class="nt">&gt;</span>
 	<span class="nt">&lt;tr&gt;</span>
 		<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"2"</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">"/images/ePayment.jpg"</span> <span class="na">width=</span><span class="s">"740"</span> <span class="na">height=</span><span class="s">"106"</span><span class="nt">&gt;&lt;/td&gt;</span>
 	<span class="nt">&lt;/tr&gt;</span>
@@ -332,15 +481,15 @@ I’ve skipped over the header of the page and gone right to the meat of where t
 			
 		<span class="nt">&lt;/td&gt;</span>
 	<span class="nt">&lt;/tr&gt;</span>
-<span class="nt">&lt;/table&gt;</span></code></pre></div>
+<span class="nt">&lt;/table&gt;</span></code></pre></figure>
 
-<p>We see that each discrete piece of data about each ticket is contained in a table cell <code>&lt;td&gt;</code>, and that each of these is the child of a <code>&lt;tr&gt;</code> that stands for each ticket. To get each ticket, we’ll figure out what is common to those <code>&lt;tr&gt;</code>s. </p>
+<p>We see that each discrete piece of data about each ticket is contained in a table cell <code class="highlighter-rouge">&lt;td&gt;</code>, and that each of these is the child of a <code class="highlighter-rouge">&lt;tr&gt;</code> that stands for each ticket. To get each ticket, we’ll figure out what is common to those <code class="highlighter-rouge">&lt;tr&gt;</code>s.</p>
 
 <p>Each is the direct child of a form. Since there’s only one form on the page, we can start there. Note that XPATH requires some strict syntax and won’t necessarily follow the design of your element nesting here.</p>
 
 <p>Here’s the XPATH syntax that finally worked to return each ticket and nothing else:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">tickets</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//form/table/tr[position()&gt;2]//td//text()'</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">tickets</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//form/table/tr[position()&gt;2]//td//text()'</span><span class="p">)</span></code></pre></figure>
 
 <p>Here’s how we read this, from right to left:</p>
 
@@ -352,10 +501,10 @@ I’ve skipped over the header of the page and gone right to the meat of where t
     </ul>
   </li>
   <li>//td - Select ALL &lt;td&gt; elements (even if they’re not the direct child)</li>
-  <li>/tr[position()&gt;2] - <a href="http://www.w3schools.com/xpath/xpath_syntax.asp">This is the complicated one</a>. Select <code>&lt;tr&gt;</code>s that are the direct children of the parent (one slash). Only select <code>&lt;tr&gt;</code>s that are the 3rd or greater <code>&lt;tr&gt;</code> child of their parent. This is to accommodate for these two <code>&lt;tr&gt;</code>s in our page that come before the tickets:</li>
+  <li>/tr[position()&gt;2] - <a href="http://www.w3schools.com/xpath/xpath_syntax.asp">This is the complicated one</a>. Select <code class="highlighter-rouge">&lt;tr&gt;</code>s that are the direct children of the parent (one slash). Only select <code class="highlighter-rouge">&lt;tr&gt;</code>s that are the 3rd or greater <code class="highlighter-rouge">&lt;tr&gt;</code> child of their parent. This is to accommodate for these two <code class="highlighter-rouge">&lt;tr&gt;</code>s in our page that come before the tickets:</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;tr&gt;</span>
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;tr&gt;</span>
 		<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"7"</span> <span class="na">class=</span><span class="s">"RequiredLabel"</span><span class="nt">&gt;&lt;br&gt;</span>(* indicates required field)<span class="nt">&lt;br&gt;&lt;br&gt;&lt;/td&gt;</span>
 	<span class="nt">&lt;/tr&gt;</span>
 <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">"backgroundMedium"</span><span class="nt">&gt;</span>
@@ -367,7 +516,7 @@ I’ve skipped over the header of the page and gone right to the meat of where t
 	<span class="nt">&lt;TD</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"19%"</span><span class="nt">&gt;</span>Vehicle<span class="nt">&lt;/TD&gt;</span>
 	<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"10%"</span><span class="nt">&gt;</span>Amount Due<span class="nt">&lt;/td&gt;</span>
 	<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"Heading14Bold"</span> <span class="na">width=</span><span class="s">"25%"</span><span class="nt">&gt;</span>Payment Amount<span class="nt">&lt;/td&gt;</span>
-<span class="nt">&lt;/tr&gt;</span></code></pre></div>
+<span class="nt">&lt;/tr&gt;</span></code></pre></figure>
 
 <ul>
   <li>//form/table - Select tables that are the direct children of ALL forms on the page.</li>
@@ -377,16 +526,16 @@ I’ve skipped over the header of the page and gone right to the meat of where t
 
 <p>This give us (semi) nice lists like:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[</span><span class="s">' S123456 '</span><span class="p">,</span> <span class="s">'09/27/2013 '</span><span class="p">,</span> <span class="s">'123ABC   '</span><span class="p">,</span> <span class="s">'Wisconsin '</span><span class="p">,</span> <span class="s">'Standard Passenger Car</span><span class="err">
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[</span><span class="s">' S123456 '</span><span class="p">,</span> <span class="s">'09/27/2013 '</span><span class="p">,</span> <span class="s">'123ABC   '</span><span class="p">,</span> <span class="s">'Wisconsin '</span><span class="p">,</span> <span class="s">'Standard Passenger Car</span><span class="err">
 </span><span class="s"> Plate '</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\t\t\t\t</span><span class="s">$65.00  </span><span class="se">\r\n\t\t\t\t\t\t\t\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\
 </span><span class="s">t</span><span class="se">\t\t\t\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'Balance Due ($65.00)'</span><span class="p">,</span> <span class="s">'Other $'</span><span class="p">,</span> <span class="s">' S123457 '</span><span class="p">,</span> <span class="s">'12/08/2013 '</span><span class="p">,</span> <span class="s">'123</span><span class="err">
 </span><span class="s">ABC   '</span><span class="p">,</span> <span class="s">'Wisconsin '</span><span class="p">,</span> <span class="s">'Standard Passenger Car Plate '</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\t\t\t\t</span><span class="s">$</span><span class="err">
 </span><span class="s">30.00  </span><span class="se">\r\n\t\t\t\t\t\t\t\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\t\t\t\t\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'Balance Due ($30.00)'</span>
-<span class="p">,</span> <span class="s">'Other $'</span><span class="p">,</span> <span class="s">'Email Address: '</span><span class="p">,</span> <span class="s">'*'</span><span class="p">,</span> <span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\t\t\t</span><span class="s">'</span><span class="p">]</span></code></pre></div>
+<span class="p">,</span> <span class="s">'Other $'</span><span class="p">,</span> <span class="s">'Email Address: '</span><span class="p">,</span> <span class="s">'*'</span><span class="p">,</span> <span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">,</span> <span class="s">'</span><span class="se">\r\n\t\t\t\t\t\t\t\t</span><span class="s">'</span><span class="p">]</span></code></pre></figure>
 
 <p>There’s a lot of garbage in there, like carriage returns, tabs, and spaces. Additionally, we’re only interested in <em>some</em> of the list elements:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#Strip out extra spaces, newlines, tabs. </span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#Strip out extra spaces, newlines, tabs. </span>
 <span class="c">#For each of these characters, replace itself with null in every element in tickets. </span>
 <span class="c">#Redefine tickets as this new string-replaced list.</span>
 <span class="n">chlist</span> <span class="o">=</span> <span class="p">[</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">,</span><span class="s">'</span><span class="se">\r</span><span class="s">'</span><span class="p">,</span><span class="s">'</span><span class="err">\</span><span class="s">s'</span><span class="p">,</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">]</span>
@@ -417,7 +566,7 @@ Amount Due: </span><span class="si">%</span><span class="s">s'''</span>
 <span class="c"># For each entry in the dictionary, replace the template with the real values and insert a new line.</span>
 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
 	<span class="n">results</span> <span class="o">+=</span> <span class="n">template</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="o">+</span> <span class="s">'</span><span class="se">\n\n</span><span class="s">'</span>
-<span class="k">print</span> <span class="n">results</span></code></pre></div>
+<span class="k">print</span> <span class="n">results</span></code></pre></figure>
 
 <p>Apart from the neatly printed output, we also now have a dictionary of tickets. We’ve achieved the goal of a fake ‘API’ for searching for parking tickets.</p>
 
@@ -442,7 +591,7 @@ Amount Due: </span><span class="si">%</span><span class="s">s'''</span>
 
 <p>So far, I have code that will  connect a Suds client to my exchange server and send an XML message:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">ewsclient</span> <span class="c">#Changes to Suds to make it EWS compliant</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">ewsclient</span> <span class="c">#Changes to Suds to make it EWS compliant</span>
 <span class="kn">import</span> <span class="nn">ewsclient.monkey</span> <span class="c"># More Suds changes</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -457,7 +606,7 @@ Amount Due: </span><span class="si">%</span><span class="s">s'''</span>
 
 <span class="c">#Logging on/accessing EWS SOAP API</span>
 <span class="n">domain</span> <span class="o">=</span> <span class="s">'exchange server'</span>
-<span class="n">username</span> <span class="o">=</span> <span class="s">r'DOMAIN</span><span class="err">\</span><span class="s">username'</span>
+<span class="n">username</span> <span class="o">=</span> <span class="s">r'DOMAIN\username'</span>
 <span class="n">password</span> <span class="o">=</span> <span class="s">'password'</span>
 
 <span class="n">transport</span> <span class="o">=</span> <span class="n">WindowsHttpAuthenticated</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
@@ -467,7 +616,7 @@ Amount Due: </span><span class="si">%</span><span class="s">s'''</span>
         <span class="n">plugins</span><span class="o">=</span><span class="p">[</span><span class="n">ewsclient</span><span class="o">.</span><span class="n">AddService</span><span class="p">()])</span>
 
 <span class="c">#Now that the SOAP client is connected to EWS, send this XML soap message</span>
-<span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">CreateItem</span><span class="p">(</span><span class="n">__inject</span><span class="o">=</span><span class="p">{</span><span class="s">'msg'</span><span class="p">:</span><span class="n">xml</span><span class="p">})</span></code></pre></div>
+<span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">CreateItem</span><span class="p">(</span><span class="n">__inject</span><span class="o">=</span><span class="p">{</span><span class="s">'msg'</span><span class="p">:</span><span class="n">xml</span><span class="p">})</span></code></pre></figure>
 
 <p>Now, we just need to tell it what to send in that message.</p>
 
@@ -479,20 +628,20 @@ Amount Due: </span><span class="si">%</span><span class="s">s'''</span>
 
 <p>First,  I wanted to place a copy in my SentItems folder, so I added</p>
 
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;SavedItemFolderId&gt;</span>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"> <span class="nt">&lt;SavedItemFolderId&gt;</span>
         <span class="nt">&lt;t:DistinguishedFolderId</span> <span class="na">Id=</span><span class="s">"sentitems"</span> <span class="nt">/&gt;</span>
- <span class="nt">&lt;/SavedItemFolderId&gt;</span></code></pre></div>
+ <span class="nt">&lt;/SavedItemFolderId&gt;</span></code></pre></figure>
 
 <p>In my first iteration, I had the body sent as text but I wanted to replace it with an HTML email template to make it prettier. This was tough for me to figure out; I kept getting XML validation errors. Eventually, I learned about <a href="http://www.w3schools.com/xml/xml_cdata.asp">CDATA</a>, a tag that tells the XML parser to ignore whatever’s inside it.</p>
 
 <p>I replaced the Body tag with:</p>
 
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;t:Body</span> <span class="na">BodyType=</span><span class="s">"HTML"</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[#Body#]]&gt;</span><span class="nt">&lt;/t:Body&gt;</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;t:Body</span> <span class="na">BodyType=</span><span class="s">"HTML"</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[#Body#]]&gt;</span><span class="nt">&lt;/t:Body&gt;</span></code></pre></figure>
 
 <p>And will replace the #Body# with some HTML from an email template later.
 Lastly, I put in some information about an automatic Reminder to get the final message:</p>
 
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
 <span class="nt">&lt;soap:Envelope</span> <span class="na">xmlns:soap=</span><span class="s">"http://schemas.xmlsoap.org/soap/envelope/"</span>
   <span class="na">xmlns:t=</span><span class="s">"http://schemas.microsoft.com/exchange/services/2006/types"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;soap:Body&gt;</span>
@@ -518,7 +667,7 @@ Lastly, I put in some information about an automatic Reminder to get the final m
       <span class="nt">&lt;/Items&gt;</span>
     <span class="nt">&lt;/CreateItem&gt;</span>
   <span class="nt">&lt;/soap:Body&gt;</span>
-<span class="nt">&lt;/soap:Envelope&gt;</span></code></pre></div>
+<span class="nt">&lt;/soap:Envelope&gt;</span></code></pre></figure>
 
 <p>Each of those #Variable# tags I put in the XML will be string-replaced on the Python side.</p>
 
@@ -526,7 +675,7 @@ Lastly, I put in some information about an automatic Reminder to get the final m
 
 <p>I wrote a quick little function to take a list of tuples and a template text and replace the text in the template:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#Replacing the text in the XML SOAP message</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#Replacing the text in the XML SOAP message</span>
 <span class="k">def</span> <span class="nf">xmlreplace</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
@@ -547,215 +696,11 @@ Lastly, I put in some information about an automatic Reminder to get the final m
 <span class="n">xmlparams</span><span class="o">=</span><span class="p">[(</span><span class="s">'#SubjectDate#'</span><span class="p">,</span><span class="n">curdatetime</span><span class="p">),(</span><span class="s">'#Body#'</span><span class="p">,</span> <span class="n">body</span><span class="p">),(</span><span class="s">'#ReminderDate#'</span><span class="p">,</span><span class="n">reminderday</span><span class="p">)]</span>
 
 <span class="c"># Replace everything in the XML template shown above with the new dynamic values</span>
-<span class="n">xml</span> <span class="o">=</span> <span class="n">xmlreplace</span><span class="p">(</span><span class="n">xmltemplate</span><span class="p">,</span><span class="n">xmlparams</span><span class="p">)</span></code></pre></div>
+<span class="n">xml</span> <span class="o">=</span> <span class="n">xmlreplace</span><span class="p">(</span><span class="n">xmltemplate</span><span class="p">,</span><span class="n">xmlparams</span><span class="p">)</span></code></pre></figure>
 
 <p>Now that I have XML as a big string, I can send my message:</p>
 
 <p><img src="/images/pythonewsemail.png" /></p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/01/26/using-curl-to-test-exchange-web-services/">
-        Using cURL To Test Exchange Web Services
-      </a>
-    </h1>
-
-    <span class="post-date">26 Jan 2014</span>
-
-    <p>From <a href="http://blogs.msdn.com/b/exchangedev/archive/2009/02/05/quick-and-dirty-unix-shell-scripting-with-ews.aspx">this post</a>, I learned how to write a little shell script that uses cURL to check to see if I’m connecting to the Exchange Web Services server correctly. This made testing my Python EWS script easier, especially when I accidentally connected to the wrong WiFi network and couldn’t contact the EWS server.</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl -u username@domain:password -L https://exchange_server/ews/exchange.asmx -H <span class="s2">"Content-Type:text/xml"</span>    --ntlm</code></pre></div>
-
-<p>This will read back the schema from the WSDL file if you’ve successfully connected to the server.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/01/26/getting-python-working-on-microsoft-exchange/">
-        Getting Python Working on Microsoft Exchange
-      </a>
-    </h1>
-
-    <span class="post-date">26 Jan 2014</span>
-
-    <h2 id="creating-an-internal-emailing-wikibot-in-python">Creating an Internal Emailing Wikibot in Python</h2>
-
-<p>You know how they say that when all you have is a hammer that everything looks like a nail?</p>
-
-<p>For now, Python is my hammer. I understand that C# or VB would be a better choice for this project, particularly since Microsoft Exchange plays much more nicely with them than Python, but as I’m just starting out I think I’m still in the phase of learning  <em>how the language works</em>, and haven’t quite progressed to learning <em>what the language is good for</em>. </p>
-
-<p>I suppose there’s something to be said for the fact that Python is platform-agnostic.</p>
-
-<p>Here’s a project I’m working on, though: the first end-goal is to:</p>
-
-<p>1.)   Find a random wiki page
-2.)   Find its owner
-3.)   Email that owner to notify them that page was chosen</p>
-
-<h2 id="part-1-connecting-python-to-exchange-web-services">Part 1: Connecting Python to Exchange Web Services</h2>
-
-<p>Since this is an internal wiki to my company, there is a lot of benefit to using Exchange to send the emails. Most of all that I am rolling it on my own, and not working with the network admins and therefore don’t have access to the SMTP server.</p>
-
-<p>Microsoft Exchange Server has a SOAP API, called Exchange Web Services. This has been a fun experience learning SOAP for the first time.</p>
-
-<h4 id="what-is-soap">What is SOAP?</h4>
-<p>SOAP stands for Simple Object Access protocol. It’s an XML-based messaging system that servers and clients can use to talk to each other with standardized messages.  The client understand what XML tags the server uses by getting a file called the WSDL.</p>
-
-<p>I’ll be using a Python SOAP library called Suds  to talk to the Exchange server.</p>
-
-<p>There are a few catches, though. EWS doesn’t play nice with Suds, so we need a few patches and other modules to get it working well. </p>
-
-<h3 id="installing-suds">Installing Suds</h3>
-
-<p>On Mac and Linux, this is trivially easy: run </p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo pip install suds</code></pre></div>
-
-<p>(If you don’t have pip on your Mac, you can run <a href="https://raw.github.com/pypa/pip/master/contrib/get-pip.py">the get-pip</a> installer file.</p>
-
-<p>On Windows, where I did it, this is a little harder, but you can still download an easy_install script and the zip file of Suds.</p>
-
-<p>Then, you boot up a SOAP client with Suds, and I didn’t document this very well, but it returns an HTTP 401 error; Not Authorized.</p>
-
-<h3 id="getting-suds-to-work-with-ews">Getting Suds to Work with EWS</h3>
-
-<p>Hmm. Googling for a few hours brought me to a <a href="http://mail.libexpat.org/pipermail/soap/2011-September/000583.html">good solution, first suggested on the Suds forums</a>. </p>
-
-<p>EWSClient is Daniel Holth’s solution to marrying Suds to EWS.  Installing it will also intall python-ntlm, which will be important later.</p>
-
-<p>The main file in EWSClient is:</p>
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">suds.client</span>
-<span class="kn">import</span> <span class="nn">suds.plugin</span>
-<span class="kn">import</span> <span class="nn">suds.store</span>
-<span class="kn">import</span> <span class="nn">urlparse</span>
-
-<span class="k">class</span> <span class="nc">EWSClient</span><span class="p">(</span><span class="n">suds</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Client</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-<span class="k">class</span> <span class="nc">AddService</span><span class="p">(</span><span class="n">suds</span><span class="o">.</span><span class="n">plugin</span><span class="o">.</span><span class="n">DocumentPlugin</span><span class="p">):</span>
-    <span class="c"># WARNING: suds hides exceptions in plugins</span>
-    <span class="k">def</span> <span class="nf">loaded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
-        <span class="s">"""Add missing service."""</span>
-        <span class="n">urlprefix</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
-        <span class="n">service_url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlunparse</span><span class="p">(</span><span class="n">urlprefix</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="s">'/EWS/Exchange.asmx'</span><span class="p">,</span> <span class="s">''</span><span class="p">,</span> <span class="s">''</span><span class="p">,</span> <span class="s">''</span><span class="p">))</span>
-        <span class="n">servicexml</span> <span class="o">=</span> <span class="s">u'''  &lt;wsdl:service name="ExchangeServices"&gt;
-    &lt;wsdl:port name="ExchangeServicePort" binding="tns:ExchangeServiceBinding"&gt;
-      &lt;soap:address location="</span><span class="si">%</span><span class="s">s"/&gt;
-    &lt;/wsdl:port&gt;
-  &lt;/wsdl:service&gt;
-&lt;/wsdl:definitions&gt;'''</span> <span class="o">%</span> <span class="n">service_url</span>
-        <span class="n">ctx</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'&lt;/wsdl:definitions&gt;'</span><span class="p">,</span> <span class="n">servicexml</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">ctx</span></code></pre></div>
-
-<p>This adds a plugin to Suds that adds EWS’s definitions to the end of the SOAP request. I don’t quite understand how it works, given Microsoft’s byzantine EWS definitions. At any rate, it works.</p>
-
-<p>EWSClient has a few other files, too, like monkey.py, which fixes an issue where the client makes a request to the often-overloaded W3C definitions for XML. It instead lets you access a locally-cached copy of the file. I disabled it because my Windows python client was causing me a headache.</p>
-
-<p>Using the example files that ewsclient provides, I try to get the WSDL specs:</p>
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">ewsclient</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">suds.client</span>
-<span class="kn">from</span> <span class="nn">suds.transport.https</span> <span class="kn">import</span> <span class="n">WindowsHttpAuthenticated</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-
-<span class="c">#logging.basicConfig(level=logging.DEBUG)</span>
-
-<span class="k">def</span> <span class="nf">test_basic</span><span class="p">():</span>
-    <span class="n">domain</span> <span class="o">=</span> <span class="s">'exhange_server_url_goes_here'</span>
-    <span class="n">username</span> <span class="o">=</span> <span class="s">r'DOMAIN/username'</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="s">'password'</span>
-
-    <span class="n">transport</span> <span class="o">=</span> <span class="n">WindowsHttpAuthenticated</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
-            <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
-    <span class="n">client</span> <span class="o">=</span> <span class="n">suds</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="s">"https://</span><span class="si">%</span><span class="s">s/EWS/Services.wsdl"</span> <span class="o">%</span> <span class="n">domain</span><span class="p">,</span>
-            <span class="n">transport</span><span class="o">=</span><span class="n">transport</span><span class="p">,</span>
-            <span class="n">plugins</span><span class="o">=</span><span class="p">[</span><span class="n">ewsclient</span><span class="o">.</span><span class="n">AddService</span><span class="p">()])</span>
-
-    <span class="k">return</span> <span class="n">client</span>
-
-<span class="k">print</span> <span class="n">test_basic</span><span class="p">()</span></code></pre></div>
-
-<p>And get this error as a response:</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
-  File <span class="s2">"test_auth.py"</span>, line 18, <span class="k">in</span> &lt;module&gt;
-    response <span class="o">=</span> urllib2.urlopen<span class="o">(</span>url<span class="o">)</span>
-  File <span class="s2">"/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py"</span>, line 127, <span class="k">in </span>urlopen
-    <span class="k">return </span>_opener.open<span class="o">(</span>url, data, timeout<span class="o">)</span>
-  File <span class="s2">"/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py"</span>, line 410, <span class="k">in </span>open
-    response <span class="o">=</span> meth<span class="o">(</span>req, response<span class="o">)</span>
-  File <span class="s2">"/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py"</span>, line 523, <span class="k">in </span>http_response
-    <span class="s1">'http'</span>, request, response, code, msg, hdrs<span class="o">)</span>
-  File <span class="s2">"/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py"</span>, line 442, <span class="k">in </span>error
-    result <span class="o">=</span> self._call_chain<span class="o">(</span><span class="k">*</span>args<span class="o">)</span>
-  File <span class="s2">"/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py"</span>, line 382, <span class="k">in </span>_call_chain
-    result <span class="o">=</span> func<span class="o">(</span><span class="k">*</span>args<span class="o">)</span>
-  File <span class="s2">"/Library/Python/2.7/site-packages/ntlm/HTTPNtlmAuthHandler.py"</span>, line 99, <span class="k">in </span>http_error_401
-    <span class="k">return </span>self.http_error_authentication_required<span class="o">(</span><span class="s1">'www-authenticate'</span>, req, fp, headers<span class="o">)</span>
-  File <span class="s2">"/Library/Python/2.7/site-packages/ntlm/HTTPNtlmAuthHandler.py"</span>, line 35, <span class="k">in </span>http_error_authentication_required
-    <span class="k">return </span>self.retry_using_http_NTLM_auth<span class="o">(</span>req, auth_header_field, None, headers<span class="o">)</span>
-  File <span class="s2">"/Library/Python/2.7/site-packages/ntlm/HTTPNtlmAuthHandler.py"</span>, line 69, <span class="k">in </span>retry_using_http_NTLM_auth
-    <span class="o">(</span>ServerChallenge, NegotiateFlags<span class="o">)</span> <span class="o">=</span> ntlm.parse_NTLM_CHALLENGE_MESSAGE<span class="o">(</span>auth_header_value[5:]<span class="o">)</span>
-  File <span class="s2">"/Library/Python/2.7/site-packages/ntlm/ntlm.py"</span>, line 217, <span class="k">in </span>parse_NTLM_CHALLENGE_MESSAGE
-    msg2 <span class="o">=</span> base64.decodestring<span class="o">(</span>msg2<span class="o">)</span>
-  File <span class="s2">"/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/base64.py"</span>, line 321, <span class="k">in </span>decodestring
-    <span class="k">return </span>binascii.a2b_base64<span class="o">(</span>s<span class="o">)</span>
-binascii.Error: Incorrect padding</code></pre></div>
-
-<p>The thing to focus on is that we’re authenticating with NTLM, and the auth_header_value s aren’t formatted properly. There are some issues in python-ntlm that need fixing to play nicely with the encoding of domain, user, and pass.</p>
-
-<h3 id="fixing-ntlm-to-work-with-our-suds-client">Fixing NTLM to Work with our Suds Client</h3>
-
-<p><a href="https://code.google.com/p/python-ntlm/issues/detail?id=17">There’s an issue documented at the python-ntm page</a>. The solution in post #3, in which we add a few lines to the code of /Library/Python/2.7/site-packages/ntlm/HTTPNtlmAuthHandler.py (on my Mac, your filepath will be different), worked for me:</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">--- HTTPNtlmAuthHandler_old.py  2012-03-19 15:29:08.503699995 +0100
-+++ HTTPNtlmAuthHandler.py      2012-03-19 15:30:22.459242446 +0100
-@@ -66,6 +66,8 @@
-                 headers[<span class="s1">'Cookie'</span><span class="o">]</span> <span class="o">=</span> r.getheader<span class="o">(</span><span class="s1">'set-cookie'</span><span class="o">)</span>
-             r.fp <span class="o">=</span> None <span class="c"># remove the reference to the socket, so that it can not be closed by the response object (we want to keep the socket open)</span>
-             auth_header_value <span class="o">=</span> r.getheader<span class="o">(</span>auth_header_field, None<span class="o">)</span>
-+            <span class="k">if</span> <span class="s1">','</span> <span class="k">in </span>auth_header_value:
-+                auth_header_value, postfix <span class="o">=</span> auth_header_value.split<span class="o">(</span><span class="s1">','</span>, 1<span class="o">)</span>
-             <span class="o">(</span>ServerChallenge, NegotiateFlags<span class="o">)</span> <span class="o">=</span> ntlm.parse_NTLM_CHALLENGE_MESSAGE<span class="o">(</span>auth_header_value[5:]<span class="o">)</span>
-             user_parts <span class="o">=</span> user.split<span class="o">(</span><span class="s1">'\\'</span>, 1<span class="o">)</span>
-             DomainName <span class="o">=</span> user_parts[0].upper<span class="o">()</span></code></pre></div>
-
-<p>With these changes, made, testing authorization works and I’m ready to start doing things with my client.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/01/23/hello-world/">
-        Hello World
-      </a>
-    </h1>
-
-    <span class="post-date">23 Jan 2014</span>
-
-    <h2 id="a-first-toast">A First Toast</h2>
-
-<p>By which, I clearly meant post. I’m now using GitHub pages to serve my blog. Before, it was on a Wordpress site hosted on a laptop in my bedroom.</p>
-
-<p>I’m using a theme engine called <em>Octopress</em>. There’s a link in the footer. It’s a neat little static site generator. Posts are created in markdown (something else I’m trying for the first time), and a ruby Rake (still not sure what that means) file takes the markdown, along with the theme’s SASS, and generates a static site which is committed to the GitHub pages repository.</p>
-
-<p>I spent about 30 minutes installing and configuring Octopress, and another 2 hours trying to figure out how themes work.</p>
-
-<p><a href="http://z3ugma.github.io">Example link</a></p>
-
-<ul>
-  <li>List</li>
-  <li>List element 2</li>
-</ul>
-
-<p>Anyway, here’s where I’ll be keeping track of the fun stuff I come across while learning (mostly) Python and other programming.</p>
-
-<p>-Fred</p>
 
   </div>
   
