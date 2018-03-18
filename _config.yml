@@ -1,27 +1,27 @@
----
-title: Python Monty
-timezone: UTC
-collections:
-  posts:
-    title: Posts
-    output: true
-  uploads:
-    title: Uploads
-    output: true
-markdown: kramdown
-highlighter: rouge
-permalink: pretty
-gems:
-- jekyll-paginate
-tagline: Terrible code, restaurant reviews, and recipes
-description: Explaining the terrible code I write as I go. Mostly in Python. Also
-  some restaurant reviews and recipes.
-url: http://z3ugma.github.io
-baseurl: "/"
+# Dependencies
+markdown:         kramdown
+highlighter:      rouge
+
+# Permalinks
+permalink:        pretty
+#relative_permalinks: true # Removed in Keyll 3
+
+gems:             [jekyll-paginate]
+# Setup
+title:            Python Monty
+tagline:          'Terrible code, restaurant reviews, and recipes'
+description:      'Explaining the terrible code I write as I go. Mostly in Python. Also some restaurant reviews and recipes.'
+url:              http://z3ugma.github.io
+baseurl:          /
+
 author:
-  name: Fred Turkington
-  url: http://z3ugma.github.io
-paginate: 5
-version: 2.1.0
+  name:           'Fred Turkington'
+  url:            http://z3ugma.github.io
+
+paginate:         5
+
+# Custom vars
+version:          2.1.0
+
 github:
-  repo: https://github.com/z3ugma/z3ugma.github.io
+  repo:           https://github.com/z3ugma/z3ugma.github.io
