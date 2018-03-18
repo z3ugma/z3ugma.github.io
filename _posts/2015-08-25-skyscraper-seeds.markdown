@@ -7,7 +7,7 @@ layout: post
 comments: true
 ---
 
-##Acorn, RiNo, Denver##
+## Acorn, RiNo, Denver
 
 The drive to Acorn is unreal compared to other neighborhoods in Denver. Living in Englewood, I get a gradual shift to downtown - suburbs give way to rows of old bungalows, youthful hipster neighborhoods, then sports stadiums and high-rise apartments relective of the explosive urban growth experienced by Denver.
 

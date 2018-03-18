@@ -8,7 +8,7 @@ published: false
 
 A few weeks ago, I embarked on a project to monitor the temperature of my homebrews as they ferment and bottle-age.
 
-###The Data###
+### The Data
 
 In order to record temperatures, I ordered 3 TEMPer temperature-logging modules from eBay. These were recommended by lots of homebrewers on HomeBrewTalk as cheap and effective, although occasionally users reported large variances in temperatures and DOA sensors.
 
@@ -18,7 +18,7 @@ These are manufactured by PCsensor.com, which provides a linux command-line clie
 
 I ordered three, and hooked them up to my brewery server.
 
-###The First Hiccup###
+### The First Hiccup
 
 The problem I encountered is that the pcsensor software was only designed to display one result at a time, and wasn't configured for displaying multiple sensors. Luckily, I found a fork of the project that had been edited to allow that: http://momtchil.momtchev.com/node/6. Here's a good guide I followed: http://www.penguinsunbound.com/User:goeko/Temp_Sensor
 
@@ -33,7 +33,7 @@ make
 
 And moved it into /usr/bin/local.
 
-###Logging Temperatures###
+### Logging Temperatures
 
 At this point, I could enter the pcsensor command and get output:
 
@@ -50,7 +50,7 @@ But I wouldn't be around all day to check out the temperatures. I set up a cron 
 This reads as: ALL minutes (m) of ALL hours (h) of ALL days of the month on ALL days of the week, run the pcsensor program and add the output to the file "temperatures.log".
 So, every minute, the server adds temperature data to the log.
 
-###Graphing the Data###
+### Graphing the Data
 
 ![A Google Chart graph](//images/googlechart.png)
 

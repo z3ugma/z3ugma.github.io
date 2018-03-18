@@ -1,19 +1,27 @@
 ---
-title: Sexy Pizza
-date: 2015-08-24 23:50:55 Z
+title: Sing a Song for Sixpence
+date: 2015-08-22 23:50:55 Z
 tags:
 - restaurantreview
 layout: post
 comments: true
 ---
 
-##Sexy Pizza - South Pearl, Denver##
+I've been wanting to do this for some time, and I think I'm taking the plunge - you'll start seeing restaurant reviews on here as well as code.
 
-I took a 5K sunset hike in Morrison, CO, today, a solid 20 minutes beyond surburban Denver and into the foothills. Afterwards, I was starving for an uncomplicated meal, and my friend Shauna has been after me to try Sexy Pizza for some time. It was right on the way home, so I stopped in. Pearl Street was unusually quiet so late at night, and I sat near the street in front of the wide-open garage door. An aside - it's very awkward to walk into a restaurant that has a normal door adjacent to an open garage door. Which is the right entrance?
+### Four and Twenty, East Johnson, Madison
 
-It was nice seeing all the passersby, and the service staff was, like the restaurant, uncomplicated. They let me walk into the back unannounced to get a box at the end of the meal, they didn't bother me needlessly once my order was placed, and carried on lighthearted, boisterous conversation.
+To start with, I can't believe I've never been here. Well, actually, it stands to reason - Four and Twenty stands in a tiny commercial space amid tightly-knit ranch houses and sandwiched between the thoroughfares of East Wash and Packers Ave, so it's easy to drive right on past and not give it a second thought.
 
-I can't express the same happiness for their product. Thick dough goes into a very hot brick-style oven, and the bottom of the crust takes on a Neapolitan crisp. The top of the dough stayed pillowy, however, and it made for a weird texture - too crunchy on the bottom, but underdone near the toppings. I do confess I ordered a lot of watery toppings in the form of a veggie pie, but the weird duality of the texture turned me off. My goal for my time in Denver is to not eat dinner at the same place twice - here's one I won't regret not visiting again.
+To do so would be a mistake. Mel and I were on our way to an art fair in the neighborhood and she commented that her friend Phil sometimes works here. We were looking for something small and quick to eat, and Four and Twenty fit the bill.
+
+The cafe is small with big windows out onto a soccer field and a concrete patio with planters - in summer it's flooded with light, which illuminates all the imperfections (and the artwork) inside. The swinging doors to the kitchen don't completely block its view, nor that of the supply room, giving it a just-moved in feel.
+
+Mel and I ordered breakfast sandwiches, and they were probably my ideal quick brunch if I could ever describe it. I had an egg and cheddar with spinach and sauteed mushrooms, on the second-best biscuit I've ever had (that honor goes to Third & Hollywood in Columbus). The biscuit was big and firm. It didn't flake off in layers or crumble in little ball-bearings of dough - it held together and didn't stick my tongue to the roof of my mouth. This biscuit is definitely something to write home about. A small cup of fruit accompanied the sandwich and made for a well-priced, well-portioned breakfast that didn't make me want to nap afterward.
+
+I should also mention my drink, since it was even better than my sandwich - props to Phil. An iced chai latte with a rich milkiness that I'm often lacking. It was understated and sweet and I'd like to have another soon.
+
+
 
 
 

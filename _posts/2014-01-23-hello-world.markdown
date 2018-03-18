@@ -5,7 +5,7 @@ layout: post
 comments: true
 ---
 
-## A First Toast ##
+### A First Toast
 
 By which, I clearly meant post. I'm now using GitHub pages to serve my blog. Before, it was on a Wordpress site hosted on a laptop in my bedroom.
 

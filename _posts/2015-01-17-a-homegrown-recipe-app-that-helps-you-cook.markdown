@@ -215,12 +215,10 @@ def recipe(query):
 
 The end result of this is an iPad-optimized recipe database, customizable for your own personal recipes. Not great for importing directly from recipe sites, but great for saving your time-tested recipes in a user-friendly format.
 
-###Futures###
+### Futures
 
 I would like to expand this to being multi-user. I think each user would get their own RethinkDB table, and add a users table with hashed passwords.
 
-###Check It Out###
+### Check It Out
 You can download and set it up for yourself in a virtual machine - see the [Github repo for the project](https://github.com/z3ugma/rethink-recipes)
-
-You can also see my local copy of the app, at [http://z3ugma.zzzz.io:5025](http://z3ugma.zzzz.io:5025). Feel free to add your own recipes, but don't delete mine :)
 
