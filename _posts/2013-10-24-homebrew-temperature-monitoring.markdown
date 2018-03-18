@@ -3,6 +3,7 @@ title: Homebrew Temperature Monitoring
 date: 2013-10-25 01:50:55 Z
 layout: post
 comments: true
+published: false
 ---
 
 A few weeks ago, I embarked on a project to monitor the temperature of my homebrews as they ferment and bottle-age.

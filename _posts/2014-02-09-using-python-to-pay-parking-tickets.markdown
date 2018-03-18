@@ -5,7 +5,7 @@ layout: post
 comments: true
 ---
 
-##Using Python to Pay Parking Tickets ##
+### Using Python to Pay Parking Tickets ###
 
 An enterprising fellow from Milwaukee built a site to automatically pay parking tickets in his city and in Madison. Unfortunately, the city of Madison changed around their ticket-payment website, so the site is not working. I thought it would be a good programing challenge for me.
 

@@ -5,7 +5,7 @@ layout: post
 comments: true
 ---
 
-## Creating an Internal Emailing Wikibot in Python ##
+### Creating an Internal Emailing Wikibot in Python ###
 
 You know how they say that when all you have is a hammer that everything looks like a nail?
 
@@ -19,13 +19,13 @@ Here's a project I'm working on, though: the first end-goal is to:
 2.)   Find its owner
 3.)   Email that owner to notify them that page was chosen
 
-## Part 1: Connecting Python to Exchange Web Services##
+### Part 1: Connecting Python to Exchange Web Services ###
 
 Since this is an internal wiki to my company, there is a lot of benefit to using Exchange to send the emails. Most of all that I am rolling it on my own, and not working with the network admins and therefore don't have access to the SMTP server.
 
 Microsoft Exchange Server has a SOAP API, called Exchange Web Services. This has been a fun experience learning SOAP for the first time.
 
-####What is SOAP?####
+#### What is SOAP? ####
 SOAP stands for Simple Object Access protocol. It's an XML-based messaging system that servers and clients can use to talk to each other with standardized messages.  The client understand what XML tags the server uses by getting a file called the WSDL.
 
 I'll be using a Python SOAP library called Suds  to talk to the Exchange server.

@@ -11,7 +11,7 @@ I have always been a fan of RDP, and my office uses PCs - so to keep the conveni
 
 However, when Mac OS restarts, or after a power failure, the virtual machine is powered off. This won't do.
 
-##Daemons in Mac OS##
+### Daemons in Mac OS ###
 
 Mac OS has the usual suspects like cron, but has a neat daemon launching system, appropriately called [launchd](https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html), introduced in 10.4.
 
@@ -19,7 +19,7 @@ Launchd works by "loading" (think of it like a soft-install) objects called '''p
 
 If you want to play with creating your own plists, head over to [http://launched.zerowidth.com](http://launched.zerowidth.com), where Nathan Witmer has created a plist generator.
 
-##Automatic Tasks in VirtualBox##
+### Automatic Tasks in VirtualBox ###
 
 VirtualBox comes with a command-line interface to automate tasks on VMs. My need is simple - just boot the box:
 
@@ -36,7 +36,7 @@ This follows the syntax for VBoxHeadless:
 
 VRDE is the Virtual Remote Desktop extension, which allows RDP out of the box through a special Oracle tool.
 
-##Booting my VM at Login##
+### Booting my VM at Login ###
 
 launchd has multiple "runlevels" - there are System level daemons, and daemons for whenever a given user logs in. User daemons are stored at ~/Library/LaunchAgents/.
 

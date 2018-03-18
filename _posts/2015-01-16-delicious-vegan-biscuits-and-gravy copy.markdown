@@ -31,7 +31,7 @@ _Serves 4_
 - 1 Tbsp Better than Bouillon No-Beef Base
 - Garlic Naan or vegan english muffins
 
-##Directions##
+## Directions ##
 1. With a little olive oil, brown the chorizo, onions, and peppers in a large skillet. Once browned, move the mixture to one half of the pan.
 2. Melt the earth balance in the empty half of the pan. Add the flour and whisk lightly until a pasty consistency is achieved. Allow this roux to brown for a minute.
 3. Mix bouillon and 1 cup of water. Add to the roux a little bit at a time, whisking constantly until gravy-like. Mix the chorizo mixture in with the broth. Add water to thin to your liking.

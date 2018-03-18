@@ -5,7 +5,7 @@ layout: post
 comments: true
 ---
 
-## Part 2: Getting the Python EWS Client to Send an Email ##
+### Part 2: Getting the Python EWS Client to Send an Email ###
 
 Now that I've got a client connect to the Exchange server, I can actually use the SOAP API methods as documented in the WSDL and on [Microsoft's documentation](http://msdn.microsoft.com/en-us/library/aa580675.aspx).
 
