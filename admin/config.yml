@@ -1,8 +1,11 @@
 backend:
-  name: github
+  name: git-gateway
   repo: z3ugma/z3ugma.github.io   # Path to your Github repository
   branch: master    # Branch to update
-  base_url: http://138.197.175.28:5000  # Path to ext auth provider
+  accept_roles: #optional - accepts all users if left out
+    - admin
+    - editor
+
 
 publish_mode: editorial_workflow
 media_folder: "images" # Media files will be stored in the repo under images
