@@ -2,7 +2,7 @@
 markdown:         kramdown
 highlighter:      rouge
 permalink:        pretty
-gems:             [jekyll-paginate]
+plugins:             [jekyll-paginate]
 title:            Python Monty
 tagline:          'Terrible code, restaurant reviews, and recipes'
 description:      'Explaining the terrible code I write as I go. Mostly in Python. Also some restaurant reviews and recipes.'
