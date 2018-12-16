@@ -28,7 +28,7 @@ _
 
 Since I'm staying in River North, I was excited to try one of "The 18 Best New Restaurants in America" per Eater magazine, Pacific Standard Time. It's west-coast-y, mediterranean fare. The portions are large; I actually wish they were smaller and cheaper so I could taste more! That's just one of the reasons why coming here as a single diner and sitting at one of the out-of-the-way counters is probably not the best way to experience this huge space. I was neglected for long periods of time by my server, most conspicuously when I had finished and was looking to get the check. A bigger party who shares plates will probably get better service.
 
-When the food and drinks \_did\_ arrive, they were prettily executed and at the perfect temperature. Unfortunately, the food was not delivered with attention to rhythm. The small crudo appetizer came last, after the hearty pita and smoked eggplant dip.
+When the food and drinks _did_ arrive, they were prettily executed and at the perfect temperature. Unfortunately, the food was not delivered with attention to rhythm. The small crudo appetizer came last, after the hearty pita and smoked eggplant dip.
 
 ## Two Lights Seafood Co
 
@@ -45,8 +45,6 @@ The clam chowder was soothing and piping hot, with house-made oyster crackers.
 The pow bang shrimp was the highlight of the meal, though. The shrimp are breaded, fried and tossed in sweet chili sauce. On the side is pickled sushi ginger and the best part - sesame sand. Sesame seeds are ground and the oil is pressed out of them, leaving a powdered and crunchy "sand". When you fork a piece of shrimp, dust it with sesame sand, and roll it in a piece of ginger, you get so many textures and flavors in one bite. - Cool and spicy ginger, gritty and drying sesame, sweet and hot and crunchy from the breading, and finally the tender and springy shrimp. A great dish.
 
 The cole slaw is unique and piquant; no sloppy wilted vegetables in mayonnaise. Bright colors and vegetal flavors of apple, celery root, carrot, and fennel make it a good palate cleanser. 
-
-
 
 ## Friends Ramen
 
