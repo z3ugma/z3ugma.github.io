@@ -32,15 +32,11 @@ When the food and drinks \_did\_ arrive, they were prettily executed and at the 
 
 ## Two Lights Seafood Co
 
+_Coromandel oysters; clam chowder; pow bang shrimp; cole slaw_
+
 Old Town is steeped in Chicago history. Sitting inside the long, narrow Two Lights Seafood Co, you can look across the busy street out of the wide, bright plate glass windows at Second City, the comedy club where decades of Saturday Night Live members got their start. Look to your right and find the storied [Old Town Ale House](https://www.thrillist.com/drink/chicago/no-shots-allowed-an-oral-history-of-the-old-town-ale-house), famous as the favorite bar of Roger Ebert, among others. When you walk the residential streets nearby you'll notice fussy Victorian apartments. Here and there, though, they are being replaced by sleek, modern, glass-and-steel two-flats. From my brief stroll, the dining scene looks similarly baroque, but is evolving like the neighborhood: it has a hip, minimalist, honest restaurant in Two Lights Seafood Co. 
 
 The atmosphere is bright and clean with anchors painted on the wall, lofty quotations about the sea, and a bright-white quartz countertop sporting an oyster-shucking station. On this slow Monday night, the staff were jovial and friendly with each other and with patrons and welcomed me with good conversation while they worked. The whimsy in the staff culture carries over to the menu: the design is neat and careful yet it advertises a pickleback shot - which was delicious, by the way.
-
-
-
-
-
-
 
 
 
