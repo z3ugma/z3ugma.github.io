@@ -12,8 +12,7 @@ I have these great stories from all over the country but not its third-largest c
 
 ## Seoul Taco, Hyde Park
 
-_OG kimchi; single corn taco with tofu
-_
+_OG kimchi; single corn taco with tofu_
 
 The sidewalk sandwich board was tucked inside the entryway. It read "GRAND OPENING" in fresh chalk, belying just how much of a newcomer Seoul Taco is to Hyde Park. Starting as a food truck in St. Louis, Seoul Taco embodies the latest craze of cross-cultural fast casual restaurants bringing foreign flavors to Midwestern palates (Indikitch in NYC is another good one).
 
@@ -23,12 +22,14 @@ A corn taco with tofu, spicy mayo, sesame, and scallions gave nice, creamy bites
 
 ## Pacific Standard Time
 
-_aji crudo; avocado & buttermilk salad; warm pita with smoked eggplant and robiniola
-_
+_aji crudo; avocado & buttermilk salad; warm pita with smoked eggplant and robiniola_
 
 Since I'm staying in River North, I was excited to try one of "The 18 Best New Restaurants in America" per Eater magazine, Pacific Standard Time. It's west-coast-y, mediterranean fare. The portions are large; I actually wish they were smaller and cheaper so I could taste more! That's just one of the reasons why coming here as a single diner and sitting at one of the out-of-the-way counters is probably not the best way to experience this huge space. I was neglected for long periods of time by my server, most conspicuously when I had finished and was looking to get the check. A bigger party who shares plates will probably get better service.
 
 When the food and drinks _did_ arrive, they were prettily executed and at the perfect temperature. Unfortunately, the food was not delivered with attention to rhythm. The small crudo appetizer came last, after the hearty pita and smoked eggplant dip.
+
+<img src="/images/pst.jpg" width="300" alt="Pow bang shrimp; with sesame sand and cole slaw" style="margin:auto; display:block" />
+
 
 ## Two Lights Seafood Co
 
@@ -46,13 +47,17 @@ The pow bang shrimp was the highlight of the meal, though. The shrimp are breade
 
 The cole slaw is unique and piquant; no sloppy wilted vegetables in mayonnaise. Bright colors and vegetal flavors of apple, celery root, carrot, and fennel make it a good palate cleanser. 
 
-<div style="text-align: center;"><img src="/images/img_2636.jpg" width="300" alt="Pow bang shrimp; with sesame sand and cole slaw" /> </div>
+<img src="/images/img_2636.jpg" width="300" alt="Pow bang shrimp; with sesame sand and cole slaw" style="margin:auto; display:block" />
 
 
 
 ## Friends Ramen
 
+<img src="/images/friendsramen.jpg" width="300" alt="Pow bang shrimp; with sesame sand and cole slaw" style="margin:auto; display:block" />
+
+
 ## Clever Rabbit
+
 
 ## Acadia
 
