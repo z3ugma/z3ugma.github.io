@@ -46,7 +46,7 @@ The pow bang shrimp was the highlight of the meal, though. The shrimp are breade
 
 The cole slaw is unique and piquant; no sloppy wilted vegetables in mayonnaise. Bright colors and vegetal flavors of apple, celery root, carrot, and fennel make it a good palate cleanser. 
 
-![Pow bang shrimp; with sesame sand and cole slaw](/images/img_2636.jpg)
+<div style="text-align: center;"><img src="/images/img_2636.jpg" width="300" alt="Pow bang shrimp; with sesame sand and cole slaw" /> </div>
 
 
 
