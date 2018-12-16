@@ -34,9 +34,17 @@ When the food and drinks \_did\_ arrive, they were prettily executed and at the 
 
 _Coromandel oysters; clam chowder; pow bang shrimp; cole slaw_
 
-Old Town is steeped in Chicago history. Sitting inside the long, narrow Two Lights Seafood Co, you can look across the busy street out of the wide, bright plate glass windows at Second City, the comedy club where decades of Saturday Night Live members got their start. Look to your right and find the storied [Old Town Ale House](https://www.thrillist.com/drink/chicago/no-shots-allowed-an-oral-history-of-the-old-town-ale-house), famous as the favorite bar of Roger Ebert, among others. When you walk the residential streets nearby you'll notice fussy Victorian apartments. Here and there, though, they are being replaced by sleek, modern, glass-and-steel two-flats. From my brief stroll, the dining scene looks similarly baroque, but is evolving like the neighborhood: it has a hip, minimalist, honest restaurant in Two Lights Seafood Co. 
+Old Town is steeped in Chicago history. Sitting inside the long, narrow [Two Lights Seafood Co](https://www.twolightschicago.com/), you can look across the busy street out of the wide, bright plate glass windows at Second City, the comedy club where decades of Saturday Night Live members got their start. Look to your right and find the storied [Old Town Ale House](https://www.thrillist.com/drink/chicago/no-shots-allowed-an-oral-history-of-the-old-town-ale-house), famous as the favorite bar of Roger Ebert, among others. When you walk the residential streets nearby you'll notice fussy Victorian apartments. Here and there, though, they are being replaced by sleek, modern, glass-and-steel two-flats. From my brief stroll, the dining scene looks similarly baroque, but is evolving like the neighborhood: it has a hip, minimalist, honest restaurant in Two Lights Seafood Co. 
 
-The atmosphere is bright and clean with anchors painted on the wall, lofty quotations about the sea, and a bright-white quartz countertop sporting an oyster-shucking station. On this slow Monday night, the staff were jovial and friendly with each other and with patrons and welcomed me with good conversation while they worked. The whimsy in the staff culture carries over to the menu: the design is neat and careful yet it advertises a pickleback shot - which was delicious, by the way.
+The atmosphere is bright and clean with anchors painted on the wall, lofty quotations about the sea, and a bright-white countertop sporting an oyster-shucking station. On this slow Monday night, the staff were jovial and friendly with each other and with patrons and welcomed me with good conversation while they worked. The whimsy in the staff culture carries over to the menu: the design is neat and careful yet it advertises a pickleback shot - which was delicious, by the way.
+
+Oysters come with a choice of sauce - the rhubarb mignonette was especially tasty on the Coromandels offered as the day's West-Coast choice.
+
+The clam chowder was soothing and piping hot, with house-made oyster crackers. 
+
+The pow bang shrimp was the highlight of the meal, though. The shrimp are breaded, fried and tossed in sweet chili sauce. On the side is pickled sushi ginger and the best part - sesame sand. Sesame seeds are ground and the oil is pressed out of them, leaving a powdered and crunchy "sand". When you fork a piece of shrimp, dust it with sesame sand, and roll it in a piece of ginger, you get so many textures and flavors in one bite. - Cool and spicy ginger, gritty and drying sesame, sweet and hot and crunchy from the breading, and finally the tender and springy shrimp. A great dish.
+
+The cole slaw is unique and piquant; no sloppy wilted vegetables in mayonnaise. Bright colors and vegetal flavors of apple, celery root, carrot, and fennel make it a good palate cleanser. 
 
 
 
