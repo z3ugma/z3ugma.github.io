@@ -6,9 +6,19 @@ published: false
 imageurl: /images/img_2636.jpg
 description: Chicago
 ---
-In six and a half years at Epic, work has taken me to just about every corner of the United States. I have spent 600 days, over a quarter of my working days, visiting hospitals. I do that so I can learn about the people that work there and why they run their practice a certain way. In rural Pennsylvania, telemedicine and weekend clinics are an important way to deliver care to patients that live several hours' drive from a clinic. In the foothills of the Rocky Mountains, people value independence and set pragmatic efficiency goals that they expect their people to meet with few execuses and little oversight.
+In six and a half years at Epic, work has taken me to just about every corner of the United States. I have spent more than a quarter of my days, over 600 in all, traveling to hospitals. I've spent days in Portland, weeks in New York, and months in Denver. 
 
-I have these great stories from all over the country but not its third-largest city that's practically in my backyard. Why do I come to Chicago so rarely?
+And in the country's third-largest city, practically in my backyard? 
+
+...
+
+Nothing. Not a day! 
+
+Lots of Madison twentysomethings spend their weekends in Chicago, and I've been many times to visit friends or attend events, but I was excited to spend a week in Chicago all on my own, getting a chance to appreciate more of what makes in unique.
+
+After a week there, the thing I noticed most was how, more than any other city I know, Chicago is extremely neighborhood-inclined. Just a few blocks can separate rows of skyscrapers from small streets with stop signs or nightclub districts to office buildings.
+
+I made it a point to visit several of these neighborhoods, and here's what I found:
 
 ## Seoul Taco, Hyde Park
 
@@ -20,7 +30,7 @@ They're new enough to not have nailed down the process yet, but give it a couple
 
 A corn taco with tofu, spicy mayo, sesame, and scallions gave nice, creamy bites of relief from the heat.
 
-## Pacific Standard Time
+## Pacific Standard Time, River North
 
 _aji crudo; avocado & buttermilk salad; warm pita with smoked eggplant and robiniola_
 
@@ -31,7 +41,7 @@ When the food and drinks _did_ arrive, they were prettily executed and at the pe
 <img src="/images/pst.jpg" width="300" alt="Pow bang shrimp; with sesame sand and cole slaw" style="margin:auto; display:block" />
 
 
-## Two Lights Seafood Co
+## Two Lights Seafood Co, Old Town
 
 _Coromandel oysters; clam chowder; pow bang shrimp; cole slaw_
 
@@ -51,14 +61,14 @@ The cole slaw is unique and piquant; no sloppy wilted vegetables in mayonnaise. 
 
 
 
-## Friends Ramen
+## Friends Ramen, Near North Side
 
 <img src="/images/friendsramen.jpg" width="300" alt="Pow bang shrimp; with sesame sand and cole slaw" style="margin:auto; display:block" />
 
 
-## Clever Rabbit
+## Clever Rabbit, Ukranian Village
 
 
-## Acadia
+## Acadia, South Loop
 
-## Slurping Turtle
+## Slurping Turtle, River North
