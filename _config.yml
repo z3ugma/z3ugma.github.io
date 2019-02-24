@@ -4,8 +4,8 @@ highlighter:      rouge
 permalink:        pretty
 plugins:             [jekyll-paginate]
 title:            Python Monty
-tagline:          'Terrible code, restaurant reviews, and recipes'
-description:      'Explaining the terrible code I write as I go. Mostly in Python. Also some restaurant reviews and recipes.'
+tagline:          'Leave it better than you found it.'
+description:      'Leave it better than you found it.'
 url:              'http://z3ugma.github.io'
 baseurl:          ''
 author:
