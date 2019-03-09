@@ -33,10 +33,9 @@ Like a good knife that is balanced to require only the tiniest effort from a coo
 You can get one here, and help a charity through Amazon Smile:
 <https://smile.amazon.com/gp/product/B01EBZ0IFQ>
 
-## [Buttermilk Co Indian Food](https://smile.amazon.com/gp/product/B01EBZ0IFQ)
+## [Buttermilk Co - Fresh Indian Food in 5 Minutes](http://buttermilk.refr.cc/frederict)
 
-_Flex-Core Stainless Steel Removable Head, Dishwasher Safe_
+![Buttermilk Co Food](/images/lovespicy_360x.png)
 
-![Tovolo Spatula](/images/611q9pilial._sl1500_.jpg)
-
-I find it easiest to explain why I love this spatula so much by considering the variety of t
+I never had Indian food until I was in college. I loved the richness and flavor-forwardness of the food in Indian restaurants in the U.S., and as I sought out more I learned there's a whole world beyond what you get in those restaurants. Indian food has featured heavily in my Vegan January cooking explorations, and is an extremely versatile cuisine for the Instant Pot that I was recently gifted (for excellent Instant Pot Indian recipes, check out [My Heart Beets](https://myheartbeets.com/tag/instant-pot/)). Buttermilk brings those real flavors of Indian kitchens, not just what's found in restaurants, right to your freezer. The food is packaged fresh but freezes well, is all vegan, and takes around 5 minutes to heat up in a microwave. Their upma has become by weekday breakfast staple. 
+Get some Buttermilk and help me get some more too at <http://buttermilk.refr.cc/frederict>
