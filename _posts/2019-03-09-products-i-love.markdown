@@ -51,3 +51,9 @@ For years, I have used the surface of a desk or the bottom-tier mousepads freely
 ![Macpac boxers](/images/macpac_boxers.png)
 
 I bought these Merino wool boxer briefs while traveling in New Zealand, and they're still my favorite pair after a year of wear. Merino is naturally anti-odor and moisture-wicking. These don't ride up, the elastic in the waist hasn't stretched out, and I can wear them for multiple days of a backpacking trip (ew) and they're still comfortable and far less ripe than a dri-fit T-shirt worn at the same time (I know from experience). You can't get them shipped to the U.S., but maybe ask a friend down under to mule them home for you? (Looking at you, Zac).
+
+## [Onsen Bath Sheet Towel](https://onsentowel.com/products/the-onsen-bath-sheet?variant=50915279755)
+
+![Onsen bath towel](/images/onsen_towels.png)
+
+These towels are outrageously expensive but totally worth it.
