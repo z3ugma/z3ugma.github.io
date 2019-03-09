@@ -39,3 +39,15 @@ You can get one here, and help a charity through Amazon Smile:
 
 I never had Indian food until I was in college. I loved the richness and flavor-forwardness of the food in Indian restaurants in the U.S., and as I sought out more I learned there's a whole world beyond what you get in those restaurants. Indian food has featured heavily in my Vegan January cooking explorations, and is an extremely versatile cuisine for the Instant Pot that I was recently gifted (for excellent Instant Pot Indian recipes, check out [My Heart Beets](https://myheartbeets.com/tag/instant-pot/)). Buttermilk brings those real flavors of Indian kitchens, not just what's found in restaurants, right to your freezer. The food is packaged fresh but freezes well, is all vegan, and takes around 5 minutes to heat up in a microwave. Their upma has become by weekday breakfast staple. 
 Get some Buttermilk and help me get some more too at <http://buttermilk.refr.cc/frederict>
+
+## [MROCO Large Waterproof Mousepad Mouse Mat (14" x 11")](https://smile.amazon.com/gp/product/B07D99QJRS)
+
+![Mouse mat](/images/mousemat.png)
+
+For years, I have used the surface of a desk or the bottom-tier mousepads freely distributed at my office. Spending $7 on a large mouse pat with a proper grip has improved my computer experience more than I ever expected. My mouse glides over the surface, it feels like an air-hockey table. This keeps up with the spatula's theme of a tool helping me expend as little effort as necessary to use it well. It's pretty new to me, so we'll see how well it holds up, but I expect the stitched edges to go a very long way in preventing fraying. Get one at <https://smile.amazon.com/gp/product/B07D99QJRS>.
+
+## [Macpac Merino 150 Boxer Briefs](https://www.macpac.co.nz/clearance/mens/macpac-merino-150-boxers-mens/113508-CLEARANCE.html)
+
+![Macpac boxers](/images/macpac_boxers.png)
+
+I bought these Merino wool boxer briefs while traveling in New Zealand, and they're still my favorite pair after a year of wear. Merino is naturally anti-odor and moisture-wicking. These don't ride up, the elastic in the waist hasn't stretched out, and I can wear them for multiple days of a backpacking trip (ew) and they're still comfortable and far less ripe than a dri-fit T-shirt worn at the same time (I know from experience). You can't get them shipped to the U.S., but maybe ask a friend down under to mule them home for you? (Looking at you, Zac).
