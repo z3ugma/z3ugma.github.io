@@ -2,7 +2,7 @@
 title: Products I Love
 layout: post
 date: '2019-03-09T08:52:15-06:00'
-published: false
+published: true
 imageurl: /images/611q9pilial._sl1500_.jpg
 description: >-
   I don't shill for things very often. These are the products that have earned
