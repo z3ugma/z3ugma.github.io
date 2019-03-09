@@ -14,7 +14,7 @@ The success of Mario Kondo's book _The Life-Changing Magic of Tidying Up_ and it
 
 I fit neatly into the generational shift towards preferring experiences over things, but I'm also a hobbyist with a short attention span. Any time I take on a new hobby, I accumulate the associated stuff. And very occasionally, that stuff doesn't make me feel "stuffocated" - it sparks joy, if you will.
 
-If you're into the same weird combination of stuff as me, and also feel like you have too much crap, give these things a try. Hopefully they'll bring you joy too.
+These are a few of the things that "spark joy" for me, instead of leaving me feeling "stuffocated". Hopefully they'll bring you joy too.
 
 ## [Tovolo Narrow-Handled Jar Spatula](https://smile.amazon.com/gp/product/B01EBZ0IFQ)
 
@@ -56,4 +56,6 @@ I bought these Merino wool boxer briefs while traveling in New Zealand, and they
 
 ![Onsen bath towel](/images/onsen_towels.png)
 
-These towels are outrageously expensive but totally worth it. They are woven with these little waffle pockets that soak up water but are very breathable, so the towel always feels cool and light and always has capacity to soak up more water. <https://onsentowel.com/products/the-onsen-bath-sheet?variant=50915279755>
+These towels are outrageously expensive but totally worth it. They are woven with these little waffle pockets that soak up water but are very breathable, so the towel always feels cool and light and always has capacity to dry more. <https://onsentowel.com/products/the-onsen-bath-sheet?variant=50915279755>
+
+Is there something you love that I should know about? Drop me a line @z3ugma.
