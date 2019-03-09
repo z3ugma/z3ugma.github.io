@@ -14,7 +14,7 @@ The success of Mario Kondo's book _The Life-Changing Magic of Tidying Up_ and it
 
 I fit neatly into the generational shift towards preferring experiences over things, but I'm also a hobbyist with a short attention span. Any time I take on a new hobby, I accumulate the associated stuff. And very occasionally, that stuff doesn't make me feel "stuffocated" - it sparks joy, if you will.
 
-These are a few of the things that "spark joy" for me, instead of leaving me feeling "stuffocated". Hopefully they'll bring you joy too.
+These are a few of the things that "spark joy" for me. Hopefully they'll bring you joy too.
 
 ## [Tovolo Narrow-Handled Jar Spatula](https://smile.amazon.com/gp/product/B01EBZ0IFQ)
 
@@ -37,7 +37,7 @@ You can get one here, and help a charity through Amazon Smile:
 
 ![Buttermilk Co Food](/images/lovespicy_360x.png)
 
-I never had Indian food until I was in college. I loved the richness and flavor-forwardness of the food in Indian restaurants in the U.S., and as I sought out more I learned there's a whole world beyond what you get in those restaurants. Indian food has featured heavily in my Vegan January cooking explorations, and is an extremely versatile cuisine for the Instant Pot that I was recently gifted (for excellent Instant Pot Indian recipes, check out [My Heart Beets](https://myheartbeets.com/tag/instant-pot/)). Buttermilk brings those real flavors of Indian kitchens, not just what's found in restaurants, right to your freezer. The food is packaged fresh but freezes well, is all vegan, and takes around 5 minutes to heat up in a microwave. Their upma has become by weekday breakfast staple. 
+I never had Indian food until I was in college. I loved the richness and flavor-forwardness of the food in Indian restaurants in the U.S., and as I sought out more I learned there's a whole world beyond what you get in those restaurants. Indian food has featured heavily in my Vegan January cooking explorations, and is an extremely versatile cuisine for the Instant Pot that I was recently gifted (for excellent Instant Pot Indian recipes, check out [My Heart Beets](https://myheartbeets.com/tag/instant-pot/)). Buttermilk brings those real flavors of Indian kitchens, not just what's found in restaurants, right to your freezer. The food is packaged fresh but freezes well, is all vegan, and takes around 5 minutes to heat up in a microwave. Their upma has become my weekday breakfast staple. 
 Get some Buttermilk and help me get some more too at <http://buttermilk.refr.cc/frederict>
 
 ## [MROCO Large Waterproof Mousepad Mouse Mat (14" x 11")](https://smile.amazon.com/gp/product/B07D99QJRS)
