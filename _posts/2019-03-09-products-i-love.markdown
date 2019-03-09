@@ -56,4 +56,4 @@ I bought these Merino wool boxer briefs while traveling in New Zealand, and they
 
 ![Onsen bath towel](/images/onsen_towels.png)
 
-These towels are outrageously expensive but totally worth it.
+These towels are outrageously expensive but totally worth it. They are woven with these little waffle pockets that soak up water but are very breathable, so the towel always feels cool and light and always has capacity to soak up more water. <https://onsentowel.com/products/the-onsen-bath-sheet?variant=50915279755>
