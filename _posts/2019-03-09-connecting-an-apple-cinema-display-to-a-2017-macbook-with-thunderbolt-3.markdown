@@ -8,4 +8,8 @@ description: >-
   It took me 4 separate rounds of ordering adapters to find this working
   combination.
 ---
-![](/images/mac_adapter.jpg)
+When I started my new job, 
+
+
+
+![null](/images/mac_adapter.jpg)
