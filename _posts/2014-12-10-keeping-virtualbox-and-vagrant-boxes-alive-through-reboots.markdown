@@ -26,8 +26,7 @@ VirtualBox comes with a command-line interface to automate tasks on VMs. My need
 
 This follows the syntax for VBoxHeadless:
 
-{% highlight text %}   -s, -startvm, --startvm <name|uuid>   Start given VM (required argument)   -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don't change the setting
-{% endhighlight %}
+{% highlight text %}   -s, -startvm, --startvm <name|uuid>   Start given VM (required argument)   -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don't change the setting {% endhighlight %}
 
 VRDE is the Virtual Remote Desktop extension, which allows RDP out of the box through a special Oracle tool.
 
