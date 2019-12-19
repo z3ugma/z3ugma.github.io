@@ -22,13 +22,11 @@ If you want to play with creating your own plists, head over to <http://launched
 
 VirtualBox comes with a command-line interface to automate tasks on VMs. My need is simple - just boot the box:
 
-{% highlight bash %} VBoxHeadless -s Windows -v on
-{% endhighlight %}
+{% highlight bash %} VBoxHeadless -s Windows -v on {% endhighlight %}
 
 This follows the syntax for VBoxHeadless:
 
-{% highlight text %}   -s, -startvm, --startvm <name|uuid>   Start given VM (required argument)
-  -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don't change the setting
+{% highlight text %}   -s, -startvm, --startvm <name|uuid>   Start given VM (required argument)   -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don't change the setting
 {% endhighlight %}
 
 VRDE is the Virtual Remote Desktop extension, which allows RDP out of the box through a special Oracle tool.
