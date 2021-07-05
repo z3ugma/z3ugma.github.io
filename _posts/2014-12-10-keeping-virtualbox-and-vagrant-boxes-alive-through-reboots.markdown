@@ -1,51 +1,47 @@
 ---
 title: Keeping VirtualBox and Vagrant Boxes Alive Through Reboots
-date: 2014-12-10 18:50:55 Z
 layout: post
-comments: true
+date: 2014-12-10T18:50:55.000Z
+published: true
 ---
-
 I recently switched from a dedicated Windows 7 PC for my home server to a Mac Mini, mostly for the better electricity consumption and the fact the the PC was having nightly bluescreen crashes and restarting.
 
 I have always been a fan of RDP, and my office uses PCs - so to keep the convenient RDP access to home, I installed [VirtualBox](www.virtualbox.org) and created a Windows VM. This has a bridged network adapter, so it just looks like another computer on my home network.
 
 However, when Mac OS restarts, or after a power failure, the virtual machine is powered off. This won't do.
 
-### Daemons in Mac OS ###
+### Daemons in Mac OS
 
 Mac OS has the usual suspects like cron, but has a neat daemon launching system, appropriately called [launchd](https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html), introduced in 10.4.
 
 Launchd works by "loading" (think of it like a soft-install) objects called '''plist'''. Plist is a serialized object format like JSON or XML that tells launchd the properties of how to execute a particular daemon.
 
-If you want to play with creating your own plists, head over to [http://launched.zerowidth.com](http://launched.zerowidth.com), where Nathan Witmer has created a plist generator.
+If you want to play with creating your own plists, head over to <http://launched.zerowidth.com>, where Nathan Witmer has created a plist generator.
 
-### Automatic Tasks in VirtualBox ###
+### Automatic Tasks in VirtualBox
 
 VirtualBox comes with a command-line interface to automate tasks on VMs. My need is simple - just boot the box:
 
-{% highlight bash %}
-VBoxHeadless -s Windows -v on
-{% endhighlight %}
+{% highlight bash %} VBoxHeadless -s Windows -v on {% endhighlight %}
 
 This follows the syntax for VBoxHeadless:
 
-{% highlight text %}
-  -s, -startvm, --startvm <name|uuid>   Start given VM (required argument)
-  -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don't change the setting
-{% endhighlight %}
+{% highlight text %}   -s, -startvm, --startvm <name|uuid>   Start given VM (required argument)   -v, -vrde, --vrde on|off|config       Enable (default) or disable the VRDE server or don't change the setting {% endhighlight %}
 
 VRDE is the Virtual Remote Desktop extension, which allows RDP out of the box through a special Oracle tool.
 
-### Booting my VM at Login ###
+### Booting my VM at Login
 
 launchd has multiple "runlevels" - there are System level daemons, and daemons for whenever a given user logs in. User daemons are stored at ~/Library/LaunchAgents/.
 
 With the help of the launched tool, I made a plist for my command:
 
-
 {% highlight xml %}
+
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+
 <plist version="1.0">
 <dict>
 	<key>KeepAlive</key>
@@ -82,11 +78,8 @@ Notable options in here:
 
 This xml is saved into a file in /Library/LaunchAgents. Navigate to that directory, and execute
 
-{% highlight text %}
-launchctl load <name of plist>
-{% endhighlight %}
+{% highlight text %} launchctl load <name of plist> {% endhighlight %}
 
 *launchctl* is the program that Mac OS uses to control launchd processes. Once the plist has been loaded, it should persist after reboot.
 
 A similar plist can be used for the command 'vagrant up' to launch vagrant vms.
-
