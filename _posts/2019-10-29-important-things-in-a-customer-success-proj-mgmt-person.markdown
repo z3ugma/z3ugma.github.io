@@ -3,8 +3,8 @@ title: Important Things in a Customer Success / Proj Mgmt Person
 layout: post
 date: '2019-10-29T10:08:45-05:00'
 published: false
-imageurl: /images/ah-frame.svg
-description: Pending
+imageurl: ''
+description: ''
 ---
 Qualities that are important for someone doing customer relations:
 
