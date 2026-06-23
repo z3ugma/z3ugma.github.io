@@ -1,11 +1,12 @@
 ---
+title: A Flask Application Pattern for Remember Me
 layout: post
-title: "A Flask Application Pattern for Remember Me"
-date: 2018-03-17 17:35:00 -0500
-comments: true
+date: '2018-05-03T17:35:00-05:00'
 published: false
-imageurl: ""
-description: "'Remember Me' is hard to get right, and Flask-Login is too cumbersome for me needs. Here's my pattern for Remember Me functionality in my Flask apps"
+imageurl: /images/graphinterference.png
+description: >-
+  'Remember Me' is hard to get right, and Flask-Login is too cumbersome for my
+  needs. Here's my pattern for Remember Me functionality in my Flask apps
 ---
 
 It's irritating to remember passwords for websites you visit infrequently. Those passwords are not accessible right at the front of your mind, because you rarely need them.
